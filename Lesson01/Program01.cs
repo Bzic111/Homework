@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Lesson01
 {
-    class Program
+    class Program01
     {
         static Dictionary<string, string> DayOfWeek = new Dictionary<string, string>
         {
@@ -21,7 +21,7 @@ namespace Lesson01
         static DateTime currentDateTime = DateTime.Now;
         static void Main(string[] args)
         {
-            
+
             Console.WriteLine("Введите Имя.");
             string name = Console.ReadLine();
             string dayName = DayOfWeek.GetValueOrDefault(currentDateTime.DayOfWeek.ToString());

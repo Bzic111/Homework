@@ -2,7 +2,7 @@
 
 namespace Lesson2_1
 {
-    class Program
+    class Program01
     {
         static void Main(string[] args)
         {
@@ -12,14 +12,15 @@ namespace Lesson2_1
             Console.Clear();                                                            // чистим консоль
             Console.WriteLine("Введите минимальную температуру:");
         GetMinTemp:                                                                     // точка возврата при ошибке ввода 1
-            if (float.TryParse(Console.ReadLine(), out float valMin)) 
+            if (float.TryParse(Console.ReadLine(), out float valMin))
             {
                 minTemp = valMin;
-            }else
+            }
+            else
             {
                 Console.WriteLine("Что-то пошло не так, попробуйте ещё раз.");
                 goto GetMinTemp;
-            } 
+            }
 
 
             Console.WriteLine("Введите максимальную температуру:");
@@ -34,9 +35,9 @@ namespace Lesson2_1
                 goto GetMaxTemp;
             }
             midTemp = (minTemp + maxTemp) / 2;                                           // вычисление средней температуры (a+b)/2
-            
 
-            Console.WriteLine($"Средняя температура: {Math.Round( midTemp,1)}");         // выводим округлённое значение
+
+            Console.WriteLine($"Средняя температура: {Math.Round(midTemp, 1)}");         // выводим округлённое значение
         }
     }
 }

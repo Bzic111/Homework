@@ -2,12 +2,12 @@
 
 namespace Lesson2_3
 {
-    class Program
+    class Program03
     {
         static void Main(string[] args)
         {
             Console.WriteLine($"Введите число");
-            GetValue:
+        GetValue:
             if (int.TryParse(Console.ReadLine(), out int val))
             {
                 if (val % 2 == 0)
