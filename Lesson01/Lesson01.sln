@@ -21,7 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lesson03", "Lesson03", "{6E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lesson2.5", "..\Lesson2.5\Lesson2.5.csproj", "{2562AD30-F39D-44E6-BE03-328DFE4A3029}"
 EndProject
+<<<<<<< Updated upstream
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DopDZ", "..\DopDZ\DopDZ.csproj", "{FF5BD3ED-2E98-4D81-A44B-CD3FF9D22885}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson2.6", "..\Lesson2.6\Lesson2.6.csproj", "{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}"
+>>>>>>> Stashed changes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +57,17 @@ Global
 		{2562AD30-F39D-44E6-BE03-328DFE4A3029}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2562AD30-F39D-44E6-BE03-328DFE4A3029}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2562AD30-F39D-44E6-BE03-328DFE4A3029}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< Updated upstream
 		{FF5BD3ED-2E98-4D81-A44B-CD3FF9D22885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF5BD3ED-2E98-4D81-A44B-CD3FF9D22885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF5BD3ED-2E98-4D81-A44B-CD3FF9D22885}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF5BD3ED-2E98-4D81-A44B-CD3FF9D22885}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,7 +79,11 @@ Global
 		{B23BA8BB-612B-4AE5-A944-FA26E2B3E9C5} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
 		{61E390FB-ABB1-44D2-9AE7-310C680F0CA8} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
 		{2562AD30-F39D-44E6-BE03-328DFE4A3029} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
+<<<<<<< Updated upstream
 		{FF5BD3ED-2E98-4D81-A44B-CD3FF9D22885} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
+=======
+		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9A32B42-475C-43FC-BA8D-89241B591F94}
