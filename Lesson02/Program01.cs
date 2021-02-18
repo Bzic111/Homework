@@ -6,12 +6,10 @@ namespace Lesson2_1
     {
         static void Main(string[] args)
         {
-            float minTemp;                                                              // минимальная температура
-            float maxTemp;                                                              // максимальная температура
-            float midTemp;                                                              // средняя температура
+            float minTemp, maxTemp, midTemp = 0;                                        // Переменные
             Console.Clear();                                                            // чистим консоль
-            Console.WriteLine("Введите минимальную температуру:");
         GetMinTemp:                                                                     // точка возврата при ошибке ввода 1
+            Console.WriteLine("Введите минимальную температуру:");
             if (float.TryParse(Console.ReadLine(), out float valMin))
             {
                 minTemp = valMin;
@@ -34,9 +32,22 @@ namespace Lesson2_1
                 Console.WriteLine("Что-то пошло не так, попробуйте ещё раз.");
                 goto GetMaxTemp;
             }
-            midTemp = (minTemp + maxTemp) / 2;                                           // вычисление средней температуры (a+b)/2
-
-
+            if (minTemp<maxTemp)
+            {
+                midTemp = (minTemp + maxTemp) / 2;                                           // вычисление средней температуры (a+b)/2
+            }
+            else
+            {
+                Console.WriteLine("Значение минимальной температуры выше значения максимально температуры.\n Хотите начать заново? y|n");
+                switch (Console.ReadLine())
+                {
+                    case "Y":
+                    case "y":
+                        goto GetMinTemp;
+                    default:
+                        break;
+                }
+            }
             Console.WriteLine($"Средняя температура: {Math.Round(midTemp, 1)}");         // выводим округлённое значение
         }
     }

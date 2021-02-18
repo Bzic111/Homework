@@ -29,7 +29,7 @@ namespace Lesson2_4
         static void Main(string[] args)
         {
             int a;
-            var season = Months.Error;                                                  // Сезоны
+            Months mon = Months.Error;                                                  // Месяца
             float minTemp;                                                              // минимальная температура
             float maxTemp;                                                              // максимальная температура
             float midTemp;                                                              // средняя температура
@@ -50,73 +50,73 @@ namespace Lesson2_4
             switch (a)
             {
                 case 1:
-                    season = Months.Зима;
+                    mon = Months.Январь;
                     normalMidTempDay = -8f;
                     normalMidTempNight = -9f;
                     month = "Январе";
                     break;
                 case 2:
-                    season = Months.Зима;
+                    mon = Months.Февраль;
                     normalMidTempDay = -8f;
                     normalMidTempNight = -10f;
                     month = "Феврале";
                     break;
                 case 3:
-                    season = Months.Весна;
+                    mon = Months.Март;
                     normalMidTempDay = 0f;
                     normalMidTempNight = -3f;
                     month = "Марте";
                     break;
                 case 4:
-                    season = Months.Весна;
+                    mon = Months.Апрель;
                     normalMidTempDay = 8f;
                     normalMidTempNight = 5f;
                     month = "Апреле";
                     break;
                 case 5:
-                    season = Months.Весна;
+                    mon = Months.Май;
                     normalMidTempDay = 16f;
                     normalMidTempNight = 13f;
                     month = "Мае";
                     break;
                 case 6:
-                    season = Months.Лето;
+                    mon = Months.Июнь;
                     normalMidTempDay = 19f;
                     normalMidTempNight = 16f;
                     month = "Июне";
                     break;
                 case 7:
-                    season = Months.Лето;
+                    mon = Months.Июль;
                     normalMidTempDay = 23f;
                     normalMidTempNight = 19f;
                     month = "Июле";
                     break;
                 case 8:
-                    season = Months.Лето;
+                    mon = Months.Август;
                     normalMidTempDay = 21f;
                     normalMidTempNight = 16f;
                     month = "Августе";
                     break;
                 case 9:
-                    season = Months.Осень;
+                    mon = Months.Сентябрь;
                     normalMidTempDay = 15f;
                     normalMidTempNight = 11f;
                     month = "Сентябре";
                     break;
                 case 10:
-                    season = Months.Осень;
+                    mon = Months.Октябрь;
                     normalMidTempDay = 7f;
                     normalMidTempNight = 4f;
                     month = "Октябре";
                     break;
                 case 11:
-                    season = Months.Осень;
+                    mon = Months.Ноябрь;
                     normalMidTempDay = 0f;
                     normalMidTempNight = -1f;
                     month = "Ноябре";
                     break;
                 case 12:
-                    season = Months.Зима;
+                    mon = Months.Декабрь;
                     normalMidTempDay = -6f;
                     normalMidTempNight = -6f;
                     month = "Декабре";
@@ -148,7 +148,7 @@ namespace Lesson2_4
             }
             midTemp = (minTemp + maxTemp) / 2;                                          // вычисление средней температуры (a+b)/2
             Console.Clear();
-            if (season == Months.Зима)
+            if (( mon |Months.Зима) == Months.Зима)
             {
                 Console.WriteLine($"В Костроме средняя температура зимой в {month} должна быть {normalMidTempDay} днём и {normalMidTempNight} ночью.");
                 if (midTemp > 0 & midTemp < 10)
@@ -168,7 +168,7 @@ namespace Lesson2_4
                     Console.WriteLine($"Средняя температура воздуха сейчас составляет {Math.Round(midTemp, 2)}. Холодная Зима");
                 }
             }
-            else if (season == Months.Весна)
+            else if ((mon | Months.Весна) == Months.Весна)
             {
                 Console.WriteLine($"В Костроме средняя температура Весной в {month} должна быть {normalMidTempDay} днём и {normalMidTempNight} ночью.");
                 if (midTemp > ((normalMidTempDay + normalMidTempNight) / 2))
@@ -188,7 +188,7 @@ namespace Lesson2_4
                     Console.WriteLine($"Средняя температура воздуха сейчас составляет {Math.Round(midTemp, 2)}. Нормальная Весна");
                 }
             }
-            else if (season == Months.Лето)
+            else if ((mon | Months.Лето) == Months.Лето)
             {
                 Console.WriteLine($"В Костроме средняя температура Летом в {month} должна быть {normalMidTempDay} днём и {normalMidTempNight} ночью.");
                 if (midTemp > ((normalMidTempDay + normalMidTempNight) / 2))
@@ -208,7 +208,7 @@ namespace Lesson2_4
                     Console.WriteLine($"Средняя температура воздуха сейчас составляет {Math.Round(midTemp, 2)}. Нормальное Лето");
                 }
             }
-            else if (season == Months.Осень)
+            else if ((mon | Months.Осень)== Months.Осень)
             {
                 Console.WriteLine($"В Костроме средняя температура Осенью в {month} должна быть {normalMidTempDay} днём и {normalMidTempNight} ночью.");
                 if (midTemp > ((normalMidTempDay + normalMidTempNight) / 2))
@@ -228,7 +228,7 @@ namespace Lesson2_4
                     Console.WriteLine($"Средняя температура воздуха сейчас составляет {Math.Round(midTemp, 2)}. Нормальная Осень");
                 }
             }
-            else
+            else                                                                        // Что-то пошло не так.
             {
                 Console.WriteLine($"Что-то пошло не так....");
             }

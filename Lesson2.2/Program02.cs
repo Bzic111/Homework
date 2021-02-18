@@ -30,7 +30,7 @@ namespace Lesson2_2
                     Console.WriteLine($" {(Months)DateTime.Now.Month}");
                     break;
                 default:
-                    if (byte.TryParse(str, out byte value))
+                    if (Int32.TryParse(str, out int value))
                     {
                         if (value > 0 & value <= 12)
                         {
