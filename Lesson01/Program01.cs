@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 
 namespace Lesson01
-{
+{    
     class Program01
     {
         static Dictionary<string, string> DayOfWeek = new Dictionary<string, string>
