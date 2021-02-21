@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DopDZ", "..\DopDZ\DopDZ.csp
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lesson2.6", "..\Lesson2.6\Lesson2.6.csproj", "{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}"
 >>>>>>> Stashed changes
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Тест", "..\Тест\Тест.csproj", "{EC4694F0-73E2-4C36-9839-3D0F1A7DB405}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,7 +67,10 @@ Global
 		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> Stashed changes
+		{EC4694F0-73E2-4C36-9839-3D0F1A7DB405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC4694F0-73E2-4C36-9839-3D0F1A7DB405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC4694F0-73E2-4C36-9839-3D0F1A7DB405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC4694F0-73E2-4C36-9839-3D0F1A7DB405}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,7 +84,7 @@ Global
 		{2562AD30-F39D-44E6-BE03-328DFE4A3029} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
 		{FF5BD3ED-2E98-4D81-A44B-CD3FF9D22885} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
 		{A5B7D629-2DD1-4759-9E26-AF5B8CBA79B8} = {C81AC5F5-8C24-4B51-A05B-DE222BDF25AE}
->>>>>>> Stashed changes
+		{EC4694F0-73E2-4C36-9839-3D0F1A7DB405} = {B5094353-67E8-4A9E-BA43-0A301BDE2CCF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9A32B42-475C-43FC-BA8D-89241B591F94}
