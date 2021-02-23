@@ -333,19 +333,19 @@ namespace MenuSpace
             } while (selected != entryes[entryes.Length - 1]);
         }
     }
-    public interface IWork
+    public abstract class Work
     {
         public string Name { get; }
         string Code { get; }
-        public virtual void GetCode() { Console.WriteLine(Code); }
-        public string GetName() { return Name; }
-        public void Start();
+        public virtual void GetCode() { Console.WriteLine(this.Code); }
+        public virtual string GetName() { return this.Name; }
+        public abstract void Start();
     }
 
 }
 namespace Lesson01
 {
-    public class Work01 : MenuSpace.IWork
+    public class Work01 : MenuSpace.Work
     {
         public string Name { get; } = "Программа приветствие.";
         public string Code { get; } = @"Dictionary<string, string> DayOfWeek = new Dictionary<string, string>
@@ -380,18 +380,18 @@ namespace Lesson01
             {"Saturday","Суббота" },
             {"Sunday","Воскресенье" }
         };
-        public void GetCode()
+        public override void GetCode()
         {
             Console.WriteLine(Code);
         }
-        public string GetName()
+        public override string GetName()
         {
             return Name;
         }
 
 
         static DateTime currentDateTime = DateTime.Now;
-        public void Start()
+        public override void Start()
         {
 
             Console.WriteLine("Введите Имя.");
@@ -405,9 +405,9 @@ namespace Lesson02
 {
 
 
-    public class Work01 : MenuSpace.IWork
+    public class Work01 : MenuSpace.Work
     {
-        public string Name { get; } = "Номер месяца";
+        public  string Name { get; } = "Номер месяца";
         public string Code { get; } = @"[Flags]
 public enum Months
 {
@@ -449,7 +449,14 @@ public void Start()
             break;
     }
 }";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         [Flags]
         public enum Months
         {
@@ -466,7 +473,7 @@ public void Start()
             Ноябрь,
             Декабрь,
         }
-        public void Start()
+        public override void Start()
         {
             Console.WriteLine($"Введите номер месяца или Now:");
             string str = Console.ReadLine();
@@ -492,7 +499,7 @@ public void Start()
             }
         }
     }
-    public class Work02 : MenuSpace.IWork
+    public class Work02 : MenuSpace.Work
     {
         public string Name { get; } = "Средняя температура";
         public string Code { get; } = @"static void Start()
@@ -541,8 +548,15 @@ GetMaxTemp:                                                                     
     }
     Console.WriteLine($""Средняя температура: {Math.Round(midTemp, 1)}"");         // выводим округлённое значение
 }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             float minTemp, maxTemp, midTemp = 0;                                        // Переменные
             Console.Clear();                                                            // чистим консоль
@@ -589,7 +603,7 @@ GetMaxTemp:                                                                     
             Console.WriteLine($"Средняя температура: {Math.Round(midTemp, 1)}");         // выводим округлённое значение
         }
     }
-    public class Work03 : MenuSpace.IWork
+    public class Work03 : MenuSpace.Work
     {
         public string Name { get; } = "Чётное или нечётное число.";
 
@@ -614,8 +628,15 @@ GetValue:
         goto GetValue;
     }
 }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             Console.WriteLine($"Введите число");
         GetValue:
@@ -636,8 +657,8 @@ GetValue:
                 goto GetValue;
             }
         }
-    }
-    public class Work04 : MenuSpace.IWork
+    }    
+    public class Work04 : MenuSpace.Work
     {
         public string Name { get; } = "Температура, сезоны, месяца";
 
@@ -758,7 +779,14 @@ else                                                                            
     Console.WriteLine($""Что-то пошло не так...."");
 }
         }";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         [Flags]
         public enum Months
         {
@@ -781,7 +809,7 @@ else                                                                            
             Осень = Сентябрь | Октябрь | Ноябрь
         }
 
-        public void Start()
+        public override void Start()
         {
             int a;
             Months mon = Months.Error;                                                  // Месяца
@@ -988,9 +1016,8 @@ else                                                                            
                 Console.WriteLine($"Что-то пошло не так....");
             }
         }
-
-    }
-    public class Work05 : MenuSpace.IWork
+    }    
+    public class Work05 : MenuSpace.Work
     {
         public string Name { get; } = "Режим работы Офисов";
         public string Code { get; } = @"[Flags]
@@ -1103,7 +1130,14 @@ Start:                                                                          
                                                                                         // Остальные выполнены по аналогии
     Console.ReadKey();                                                                  // Задержка.
     goto Start;                                                                         // Возврат к меню";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         [Flags]
         enum Days
         {
@@ -1125,7 +1159,7 @@ Start:                                                                          
             Обед = 0b_0100,
             Сутки = 0b_1000
         }
-        public void Start()
+        public override void Start()
         {
             Days workWeek = Days.Понедельник | Days.Вторник | Days.Среда | Days.Четверг | Days.Пятница;
             Days weekEnd = Days.Суббота | Days.Воскресенье;
@@ -1269,7 +1303,7 @@ Start:                                                                          
             goto Start;
         }
     }
-    public class Work06 : MenuSpace.IWork
+    public class Work06 : MenuSpace.Work
     {
         public string Name { get; } = "Вывод \"чек\".";
         public string Code { get; } = @"public void Start()
@@ -1303,8 +1337,15 @@ Start:                                                                          
             Console.WriteLine($""{endLine}{("""").PadRight(15, '.')}{total.ToString(""F"").PadLeft(6, '.')}\n"");
             Console.WriteLine((""Спасибо за покупку"").PadLeft(22));
         }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             string shopName, address, openName, moneyType, name1, name2, name3, endLine, commision;
             decimal line1, line2, line3, tax, summ, total;
@@ -1336,7 +1377,7 @@ Start:                                                                          
             Console.WriteLine(("Спасибо за покупку").PadLeft(22));
         }
     }
-    public class WorkDop1 : MenuSpace.IWork
+    public class WorkDop1 : MenuSpace.Work
     {
         public string Name { get; } = "Определение високосного года.";
         public string Code { get; } = @"// Константы ограничения диапазона
@@ -1529,11 +1570,18 @@ Start:
             break;
     }
 }";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         // Константы ограничения диапазона
         const int GregorianCalendarStartYear = 1582;
         const int GregorianCalendar10k = 11582;
-        public void Start()
+        public override void Start()
         {
 
             // Переменные
@@ -2285,7 +2333,7 @@ namespace Lesson03
         }
     }
 
-    public class Work01 : MenuSpace.IWork
+    public class Work01 : MenuSpace.Work
     {
         public string Name { get; } = "Вывод массива по диагонали.";
 
@@ -2302,8 +2350,15 @@ namespace Lesson03
                 }
             }
         }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             int[,] arr = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
             int count = 0;
@@ -2316,9 +2371,44 @@ namespace Lesson03
                 }
             }
         }
+
+        /// <summary>
+        /// Выводит значения массива <paramref name="arr"/> в консоль по диагонали Слева сверху направо, с отступом ввиде пробелов.
+        /// </summary>
+        /// <param name="arr">Двумерный массив</param>
+        public void DiagonalLR()
+        {
+            int[,] arr = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
+            int count = 0;
+            for (int i = 0; i < arr.GetLength(0); i++)
+            {
+                for (int j = 0; j < arr.GetLength(1); j++)
+                {
+                    Console.WriteLine($"{("").PadLeft(count)}{arr[i, j]}");
+                    count++;
+                }
+            }
+        }
+        /// <summary>
+        /// Выводит значения массива <paramref name="arr"/> в консоль по диагонали Справа сверху налево, с отступом ввиде пробелов.
+        /// </summary>
+        /// <param name="arr">Двумерный массив</param>
+        public void DiagonalRL()
+        {
+            int[,] arr = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
+            int count = arr.Length - 1;
+            for (int j = arr.GetLength(1) - 1; j >= 0; j--)
+            {
+                for (int i = arr.GetLength(0) - 1; i >= 0; i--)
+                {
+                    Console.WriteLine($"{("").PadLeft(count)}{arr[i, j]}");
+                    count--;
+                }
+            }
+        }
     }
 
-    public class Work02 : MenuSpace.IWork
+    public class Work02 : MenuSpace.Work
     {
         public string Name { get; } = "Прототип списка контактов.";
 
@@ -2373,8 +2463,15 @@ public void Start()
         }
     } while (selected != ""exit"") ;
 }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             int cursor = 0;
             string selected = null;
@@ -2427,7 +2524,7 @@ public void Start()
         }
     }
 
-    public class Work03 : MenuSpace.IWork
+    public class Work03 : MenuSpace.Work
     {
         public string Name { get; } = "Вывод строки в обратном порядке.";
         public string Code { get; } = @"public void Start()
@@ -2439,7 +2536,15 @@ public void Start()
                 Console.Write(str[i]);
             }
         }";
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             Console.WriteLine("Введите текст.");
             string str = Console.ReadLine();
@@ -2450,7 +2555,7 @@ public void Start()
         }
     }
 
-    public class Work04 : MenuSpace.IWork
+    public class Work04 : MenuSpace.Work
     {
         public string Name { get; } = "Морской бой";
         public string Code { get; } = @" Вывод сгенерированного игрового поля осуществляется циклом в методе Show(int[] moverUDRL, string[,] str) класса SelectorUDRL,
@@ -2483,8 +2588,15 @@ for (int i = 0; i < str.GetLength(0); i++)
 Console.Write(""\n"");
 }";
 
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             bool[,] boolField;
             string[,] field = Ships.GetField(out boolField);
@@ -2533,7 +2645,7 @@ Console.Write(""\n"");
 
         }
     }
-    public class WorkDop1 : MenuSpace.IWork
+    public class WorkDop1 : MenuSpace.Work
     {
         public string Name { get; } = "Сдвиг массива";
 
@@ -2610,8 +2722,15 @@ Console.Write(""\n"");
     }
 }
 ";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {                                                                               // Переменные
             string[] arr;                                                               // Массив
             string str;                                                                 // Строка для заполнения массива
@@ -2685,3 +2804,10 @@ Console.Write(""\n"");
         }
     }
 }
+    
+    
+    
+    
+
+
+
