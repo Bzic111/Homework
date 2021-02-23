@@ -18,15 +18,15 @@ namespace MainProgramHomework
             Menu MainMenu = new Menu();
 
             // Объявление массивов
-            List<IWork> Lesson01 = new List<IWork>();
-            List<IWork> Lesson02 = new List<IWork>();
-            List<IWork> Lesson03 = new List<IWork>();
+            List<Work> Lesson01 = new List<Work>();
+            List<Work> Lesson02 = new List<Work>();
+            List<Work> Lesson03 = new List<Work>();
             Dictionary<string, Menu.Cycler> Lesson01Cycle = new Dictionary<string, Menu.Cycler>(); 
             Dictionary<string, Menu.Cycler> Lesson02Cycle = new Dictionary<string, Menu.Cycler>();
             Dictionary<string, Menu.Cycler> Lesson03Cycle = new Dictionary<string, Menu.Cycler>();
 
 
-            // Заполнение массивов с инициализацией объектов
+            // Заполнение коллекций List<IWork>Lesson с инициализацией объектов
             Lesson01.Add(new Lesson01.Work01());
             Lesson02.Add(new Lesson02.Work01());
             Lesson02.Add(new Lesson02.Work02());
@@ -48,7 +48,7 @@ namespace MainProgramHomework
             List<Dictionary<string, Menu.Runner>[]> SubmenuLessons = new List<Dictionary<string, Menu.Runner>[]>();
             Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[3];
 
-            // Заполнение сложных массивов
+            // Заполнение массивов Submenu, методы Start() и GetCode()
             for (int i = 0; i < Lesson01.Count; i++)
             {
                 SubmenuLesson01[i] = new Dictionary<string, Menu.Runner>
@@ -73,6 +73,15 @@ namespace MainProgramHomework
                     { MenuNames[1],Lesson03[i].GetCode }
                 };
             }
+            
+            // Переопределяем пункты в подменю
+            Lesson03.Work01 wrk = new Lesson03.Work01();            
+            SubmenuLesson03[0] = new Dictionary<string, Menu.Runner> 
+            { { "Слева направо, сверху вниз", wrk.DiagonalLR },
+                {"Справа налево, снизу вверх",wrk.DiagonalRL },
+                { MenuNames[1], wrk.GetCode } };
+            
+            // Заполнение массива Lesson__Cycle
             for (int i = 0; i < Lesson01.Count; i++)
             {
                 Lesson01Cycle.Add(Lesson01[i].GetName(), MainMenu.Cycle);
@@ -85,13 +94,17 @@ namespace MainProgramHomework
             {
                 Lesson03Cycle.Add(Lesson03[i].GetName(), MainMenu.Cycle);
             }
+            
+            // Заполнение коллекции List<T>Submenu
             SubmenuLessons.Add(SubmenuLesson01);
             SubmenuLessons.Add(SubmenuLesson02);
             SubmenuLessons.Add(SubmenuLesson03);
+            
+            // Заполнение массива MainMenuCycle
             MainMenuCycle[0] = Lesson01Cycle;
             MainMenuCycle[1] = Lesson02Cycle;
             MainMenuCycle[2] = Lesson03Cycle;
-
+            
             Console.Clear();
             MainMenu.Cycle(MainMenuCycle, SubmenuLessons);
         }
