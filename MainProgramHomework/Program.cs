@@ -92,8 +92,6 @@ namespace MainProgramHomework
             MainMenuCycle[1] = Lesson02Cycle;
             MainMenuCycle[2] = Lesson03Cycle;
 
-
-
             Console.Clear();
             MainMenu.Cycle(MainMenuCycle, SubmenuLessons);
         }

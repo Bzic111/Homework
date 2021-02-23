@@ -10,12 +10,77 @@ namespace MenuSpace
         public delegate void Runner();
 
         /// <summary>
-        /// Селектор для меню ввиде массива строк. Управляется стрелками клавиатуры Вверх, Вниз и Ввод.
+        /// Селектор для меню ввиде массива строк. Управляется стрелками клавиатуры и Ввод. Escape - назад или выход.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="inCursorUDRL"></param>
+        /// <param name="mod"></param>
+        /// <returns></returns>
+        public string Selector(in string[,] str, ref int[] inCursorUDRL, string mod)
+        {
+            string selected = null;
+            var move = Console.ReadKey(false);
+
+            if (move.Key == ConsoleKey.DownArrow)
+            {
+                if (inCursorUDRL[0] < str.GetLength(0) - 1)
+                {
+                    ++inCursorUDRL[0];
+                }
+
+            }
+            else if (move.Key == ConsoleKey.UpArrow)
+            {
+                if (inCursorUDRL[0] > 0)
+                {
+                    --inCursorUDRL[0];
+                }
+            }
+            else if (move.Key == ConsoleKey.LeftArrow)
+            {
+                if (inCursorUDRL[1] > 0)
+                {
+                    --inCursorUDRL[1];
+                }
+            }
+            else if (move.Key == ConsoleKey.RightArrow)
+            {
+                if (inCursorUDRL[1] < str.GetLength(1) - 1)
+                {
+                    ++inCursorUDRL[1];
+                }
+            }
+            else if (move.Key == ConsoleKey.Enter)
+            {
+                if ((inCursorUDRL[0] == 0) | (inCursorUDRL[1] == 0))
+                {
+                    selected = str[inCursorUDRL[0], inCursorUDRL[1]];
+                }
+                else
+                {
+                    str[inCursorUDRL[0], inCursorUDRL[1]] = mod;
+                    selected = str[inCursorUDRL[0], inCursorUDRL[1]];
+                }
+            }
+            else if (move.Key == ConsoleKey.Escape)
+            {
+                selected = "Exit";
+            }
+            else if (move.Key == ConsoleKey.Spacebar)
+            {
+                selected = str[inCursorUDRL[0], inCursorUDRL[1]];
+            }
+            return selected;
+        }
+
+        /// <summary>
+        /// Селектор для меню ввиде массива строк. Управляется стрелками клавиатуры Вверх, Вниз и Ввод. Escape - назад или выход.
         /// </summary>
         /// <param name="str">Массив строк</param>
         /// <param name="inCursor">Индекс массива</param>
+        /// <param name="selected">Ссылка на строку d массиве <paramref name="str"/>[]</param>
         /// <returns>Строка массива</returns>
-        static void Selector(string[] str, ref int inCursor, out string selected)
+        void Selector(string[] str, ref int inCursor, out string selected)
         {
             selected = null;
             var move = Console.ReadKey(true);
@@ -37,27 +102,103 @@ namespace MenuSpace
             {
                 selected = str[inCursor];
             }
+            else if (move.Key == ConsoleKey.Escape)
+            {
+                selected = str[str.Length - 1];
+            }
         }
 
         /// <summary>
-        /// Отображает массив строк <paramref name="str"/> ввиде меню с выделенным элементом массива по индексу <paramref name="mover"/>.
+        /// Выводит массив строк <paramref name="str"/> в консоль ввиде меню с выделенным элементом массива по индексу <paramref name="mover"/>.
         /// </summary>
-        /// <param name="mover">Индекс массива</param>
+        /// <param name="mover">Индекс массива для выделения</param>
         /// <param name="str">Массив строк</param>
-        static void Show(int mover, string[] str)
+        /// <param name="entryColor">Цвет выделения строки</param>
+        /// <param name="textColor">Цвет выделенного текста</param>
+        void Show(int mover, string[] str, ConsoleColor entryColor = ConsoleColor.White, ConsoleColor textColor = ConsoleColor.Black)
         {
             for (int i = 0; i < str.Length; i++)
             {
                 if (i == mover)
                 {
-                    Console.BackgroundColor = ConsoleColor.White;
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = entryColor;
+                    Console.ForegroundColor = textColor;
                     Console.WriteLine(str[i]);
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.BackgroundColor = ConsoleColor.Black;
                     continue;
                 }
                 Console.WriteLine(str[i]);
+            }
+        }
+
+        /// <summary>
+        /// Выводит массив строк <paramref name="str"/> в консоль ввиде таблицы с выделенным элементом массива по индексу <paramref name="moverUDRL"/>.
+        /// Выделяет строку массива цветом <paramref name="entryColor"/> и текст этой строки <paramref name="textColor"/>
+        /// </summary>
+        /// <param name="mover">Одномерныый массив индексов [Y,X]</param>
+        /// <param name="str">Массив строк</param>
+        /// <param name="entryColor">Цвет выделения строки</param>
+        /// <param name="textColor">Цвет выделенного текста</param>
+        public void Show(int[] mover, string[,] str, ConsoleColor entryColor = ConsoleColor.White, ConsoleColor textColor = ConsoleColor.Black)
+        {
+            for (int i = 0; i < str.GetLength(0); i++)
+            {
+                for (int j = 0; j < str.GetLength(1); j++)
+                {
+
+                    if (i == mover[0] & j == mover[1])
+                    {
+                        Console.BackgroundColor = entryColor;
+                        Console.ForegroundColor = textColor;
+                        Console.Write(str[i, j]);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        continue;
+                    }
+                }
+                Console.Write("\n");
+            }
+        }
+
+        /// <summary>
+        /// Выводит массив строк <paramref name="str"/> в консоль ввиде таблицы с выделенным элементом массива по индексу <paramref name="mover"/>.
+        /// Выделяет строку массива цветом <paramref name="colors" index="[0]"/> и текст этой строки <paramref name="colors" index="[1]"/>.
+        /// Так же выделяет строку массива равную <paramref name="entryName"/>. Цвет особой строки <paramref name="colors" index="[2]"/>
+        /// и текст <paramref name="colors" index="[3]"/>
+        /// </summary>
+        /// <param name="mover">Одномерныый массив индексов [Y,X]</param>
+        /// <param name="str">Массив строк</param>
+        /// <param name="entryName">Особая строка</param>
+        /// <param name="colors">Массив цветов</param>
+        public void Show(int[] mover, string[,] str, string entryName, ConsoleColor[] colors)
+        {
+            for (int i = 0; i < str.GetLength(0); i++)
+            {
+                for (int j = 0; j < str.GetLength(1); j++)
+                {
+
+                    if (i == mover[0] & j == mover[1])
+                    {
+                        Console.BackgroundColor = colors[0];
+                        Console.ForegroundColor = colors[1];
+                        Console.Write(str[i, j]);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        continue;
+                    }
+                    if (str[i, j] == entryName)
+                    {
+                        Console.BackgroundColor = colors[2];
+                        Console.ForegroundColor = colors[3];
+                        Console.Write(str[i, j]);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        continue;
+                    }
+                    Console.Write(str[i, j]);
+                }
+                Console.Write("\n");
             }
         }
 
@@ -87,8 +228,8 @@ namespace MenuSpace
             do
             {
                 Console.Clear();
-                Menu.Show(cursor, entryes);
-                Menu.Selector(entryes, ref cursor, out selected);
+                this.Show(cursor, entryes);
+                this.Selector(entryes, ref cursor, out selected);
                 if (selected == entryes[entryes.Length - 1])
                 {
                     continue;
@@ -104,11 +245,12 @@ namespace MenuSpace
         }
 
         /// <summary>
-        /// Цикл для вывода главного меню.
+        /// Цикл для вывода массива делегатов объектов ввиде меню.
         /// </summary>
         /// <param name="Dict">Массив меню</param>
         /// <param name="List">Массив подменю</param>
-        public void Cycle(Dictionary<string, Cycler>[] Dict, List<Dictionary<string, Runner>[]> List)
+        /// <param name="entryName">Название для строк меню</param>
+        public void Cycle(Dictionary<string, Cycler>[] Dict, List<Dictionary<string, Runner>[]> List, string entryName = "Homework ")
         {
             int cursor = 0;
             string[] entryes = new string[Dict.Length + 1];
@@ -119,7 +261,7 @@ namespace MenuSpace
                 if (i < entryes.Length - 1)
                 {
 
-                    entryes[i] = "Домашняя работа " + (i + 1);
+                    entryes[i] = entryName + (i + 1);
                 }
                 else if (i == entryes.Length - 1)
                 {
@@ -129,15 +271,17 @@ namespace MenuSpace
             string selected;
             do
             {
+                Console.Title = "MainMenu";
                 Console.Clear();
-                Menu.Show(cursor, entryes);
-                Menu.Selector(entryes, ref cursor, out selected);
+                this.Show(cursor, entryes);
+                this.Selector(entryes, ref cursor, out selected);
                 if (selected == entryes[entryes.Length - 1])
                 {
                     continue;
                 }
                 else if (selected == entryes[cursor])
                 {
+                    Console.Title = entryes[cursor];
                     Console.Clear();
                     MainCycle(Dict[cursor], List[cursor]);
                 }
@@ -156,6 +300,7 @@ namespace MenuSpace
             string[] entryes = new string[Dict.Count + 1];
             string[] keys = new string[Dict.Count];
             Dict.Keys.CopyTo(keys, 0);
+            string Title = Console.Title;
             for (int i = 0; i < entryes.Length; i++)
             {
                 if (i < entryes.Length - 1)
@@ -171,10 +316,10 @@ namespace MenuSpace
             string selected;
             do
             {
-                Console.Title = "MainMenu";
+                Console.Title = Title;
                 Console.Clear();
-                Menu.Show(cursor, entryes);
-                Menu.Selector(entryes, ref cursor, out selected);
+                this.Show(cursor, entryes);
+                this.Selector(entryes, ref cursor, out selected);
                 if (selected == entryes[entryes.Length - 1])
                 {
                     continue;
@@ -1580,7 +1725,7 @@ namespace Lesson03
 {
     class SelectorUDRL
     {
-        static public string Selecting(in string[,] str, ref int[] inCursorUDRL, string mod)
+        public string Selecting(in string[,] str, ref int[] inCursorUDRL, string mod)
         {
             string selected = null;
             var move = Console.ReadKey(false);
@@ -1636,11 +1781,11 @@ namespace Lesson03
             }
             return selected;
         }
-        static public string Selector(int[] inCursorUDRL, string[,] str, bool modify = false)
+        public string Selector(int[] inCursorUDRL, string[,] str, bool modify = false)
         {
             return str[inCursorUDRL[0], inCursorUDRL[1]];
         }
-        static public void Show(int[] moverUDRL, string[,] str)
+        public void Show(int[] moverUDRL, string[,] str)
         {
             for (int i = 0; i < str.GetLength(0); i++)
             {
@@ -1674,11 +1819,7 @@ namespace Lesson03
     }
     class Ships
     {
-        static int x = 11, y = 11;
-        static bool[,] boolField = new bool[y + 1, x + 1];
-        static string[,] field = new string[y, x];
-
-        static public string Shot(string str)
+        public string Shot(string str)
         {
             string result = null;
             return result;
@@ -1686,6 +1827,9 @@ namespace Lesson03
         static public string[,] GetField(out bool[,] bfld)
         {
             char letter = 'A';
+            int x = 11, y = 11;
+            string[,] field = new string[y, x];
+            bool[,] boolField = new bool[12, 12];
 
             for (int i = 0; i < field.GetLength(0); i++)
             {
@@ -1730,12 +1874,12 @@ namespace Lesson03
             return field;
         }
 
-        static public bool FindShipInRange(string[,] str, int pointerY, int pointerX)
+        static public bool FindShipInRange(string[,] str, int[] pointer)
         {
             bool result = false;
-            for (int i = pointerY - 1; (i <= pointerY + 1) & (i < str.GetLength(0)); i++)
+            for (int i = pointer[0] - 1; (i <= pointer[0] + 1) & (i < str.GetLength(0)); i++)
             {
-                for (int j = pointerX - 1; (j <= pointerX + 1) & (j < str.GetLength(1)); j++)
+                for (int j = pointer[1] - 1; (j <= pointer[1] + 1) & (j < str.GetLength(1)); j++)
                 {
                     if (str[i, j] == "X")
                     {
@@ -1749,19 +1893,16 @@ namespace Lesson03
         {
             bool result = false;
             direction = null;
-            int rangeStartY = pointerY - 1;
-            int rangeEndY = pointerY + 1;
-            int rangeStartX = pointerX - 1;
-            int raneEndX = pointerX + 1;
             bool[,] canMap = new bool[3, 3];
+            int[] pointer = { pointerY, pointerX };
 
-            if (FindShipInRange(str, pointerY, pointerX) == false)
+            if (FindShipInRange(str, pointer) == false)
             {
 
 
-                for (int i = rangeStartY, mapI = 0; i <= rangeEndY; i++, mapI++)
+                for (int i = pointer[0] - 1, mapI = 0; i <= pointer[0] + 1; i++, mapI++)
                 {
-                    for (int j = rangeStartX, mapJ = 0; j <= raneEndX; j++, mapJ++)
+                    for (int j = pointer[1] - 1, mapJ = 0; j <= pointer[1] + 1; j++, mapJ++)
                     {
                         canMap[mapI, mapJ] = blfld[i, j];
                     }
@@ -1798,9 +1939,9 @@ namespace Lesson03
             }
             return result;
         }
+
         static public int GetShipOne(ref string[,] str, ref bool[,] blfld)
         {
-            string direction;
             int count = 0;
             int tryes = 0;
             bool[,] newblfld;
@@ -1812,7 +1953,7 @@ namespace Lesson03
                 newblfld = blfld;
                 pointerY = num.Next(1, 10);
                 pointerX = num.Next(1, 10);
-                if (CanGo(str, newblfld, pointerY, pointerX, out direction))
+                if (CanGo(str, newblfld, pointerY, pointerX, out _))
                 {
                     str[pointerY, pointerX] = "X";
                     for (int i = pointerY - 1; i <= pointerY + 1; i++)
@@ -1839,16 +1980,15 @@ namespace Lesson03
             int count = 0;
             int tryes = 0;
             Random num = new Random();
-            int pointerX = num.Next(1, 10);
-            int pointerY = num.Next(1, 10);
+            int[] pointer = { num.Next(1, 10), num.Next(1, 10) };
             do
             {
-                pointerY = num.Next(1, 10);
-                pointerX = num.Next(1, 10);
+                int pointerY = num.Next(1, 10);
+                int pointerX = num.Next(1, 10);
                 if (CanGo(str, blfld, pointerY, pointerX, out direction) & (direction == "Up"))
                 {
 
-                    if (CanGo(str, blfld, pointerY - 1, pointerX, out direction))
+                    if (CanGo(str, blfld, pointerY, pointerX, out _))
                     {
                         str[pointerY - 1, pointerX] = "X";
                         str[pointerY, pointerX] = "X";
@@ -1864,7 +2004,8 @@ namespace Lesson03
                 }
                 else if (CanGo(str, blfld, pointerY, pointerX, out direction) & (direction == "Down"))
                 {
-                    if (CanGo(str, blfld, pointerY + 1, pointerX, out direction))
+
+                    if (CanGo(str, blfld, pointerY, pointerX, out _))
                     {
                         str[pointerY, pointerX] = "X";
                         str[pointerY + 1, pointerX] = "X";
@@ -1880,7 +2021,7 @@ namespace Lesson03
                 }
                 else if (CanGo(str, blfld, pointerY, pointerX, out direction) & (direction == "Left"))
                 {
-                    if (CanGo(str, blfld, pointerY, pointerX - 1, out direction))
+                    if (CanGo(str, blfld, pointerY, pointerX - 1, out _))
                     {
                         str[pointerY, pointerX - 1] = "X";
                         str[pointerY, pointerX] = "X";
@@ -1896,7 +2037,7 @@ namespace Lesson03
                 }
                 else if (CanGo(str, blfld, pointerY, pointerX, out direction) & (direction == "Right"))
                 {
-                    if (CanGo(str, blfld, pointerY, pointerX + 1, out direction))
+                    if (CanGo(str, blfld, pointerY, pointerX + 1, out _))
                     {
                         str[pointerY, pointerX + 1] = "X";
                         str[pointerY, pointerX] = "X";
@@ -1910,8 +2051,6 @@ namespace Lesson03
                     }
                     count++;
                 }
-
-                Console.Write("|");
                 if (tryes == 100)
                 {
                     return 0;
@@ -2343,6 +2482,8 @@ for (int i = 0; i < str.GetLength(0); i++)
     }
 Console.Write(""\n"");
 }";
+
+
         public void Start()
         {
             bool[,] boolField;
@@ -2353,6 +2494,8 @@ Console.Write(""\n"");
             string mod = "X";
             string selected = null;
             int good1 = 0;
+            SelectorUDRL Selector = new SelectorUDRL();
+
 
             do
             {
@@ -2383,8 +2526,8 @@ Console.Write(""\n"");
             do
             {
                 Console.Clear();
-                SelectorUDRL.Show(UDRL, fld);
-                selected = SelectorUDRL.Selecting(fld, ref UDRL, mod);
+                Selector.Show(UDRL, fld);
+                selected = Selector.Selecting(fld, ref UDRL, mod);
             } while (selected != "Exit");
 
 
