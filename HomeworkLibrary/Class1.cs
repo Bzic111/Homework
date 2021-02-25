@@ -412,7 +412,7 @@ namespace MenuSpace
     }
     public abstract class Work
     {
-        public string Name { get; }
+        string Name { get; }
         string Code { get; }
         public virtual void GetCode() { Console.WriteLine(this.Code); }
         public virtual string GetName() { return this.Name; }
@@ -485,7 +485,7 @@ namespace Lesson02
     public class Work01 : MenuSpace.Work
     {
         public  string Name { get; } = "Номер месяца";
-        public string Code { get; } = @"[Flags]
+        public  string Code { get; } = @"[Flags]
 public enum Months
 {
     Январь = 1,
@@ -578,8 +578,8 @@ public void Start()
     }
     public class Work02 : MenuSpace.Work
     {
-        public string Name { get; } = "Средняя температура";
-        public string Code { get; } = @"static void Start()
+        public  string Name { get; } = "Средняя температура";
+        public  string Code { get; } = @"static void Start()
 {
     float minTemp, maxTemp, midTemp = 0;                                        // Переменные
     Console.Clear();                                                            // чистим консоль
@@ -682,7 +682,7 @@ GetMaxTemp:                                                                     
     }
     public class Work03 : MenuSpace.Work
     {
-        public string Name { get; } = "Чётное или нечётное число.";
+        public  string Name { get; } = "Чётное или нечётное число.";
 
         public string Code { get; } = @"public void Start()
 {
@@ -2881,3 +2881,297 @@ Console.Write(""\n"");
         }
     }
 }
+    
+namespace Lesson04
+{
+    public class Work01 : MenuSpace.Work
+    {
+        string Name { get; } = "Метод GetFullName();";
+        string Code { get; } = @"void GetFullName(string firstName, string lastName, string patronymic)
+{
+    Console.WriteLine($""{lastName} {firstName} {patronymic}"");
+}
+    
+public override void Start()
+{
+    string firstName;   // 
+    string lastName;    // 
+    string patronymic;  //             
+
+    Console.WriteLine(""Введите имя: "");
+    firstName = Console.ReadLine();
+    
+    Console.WriteLine(""Введите фамилию: "");
+    lastName = Console.ReadLine();
+
+    Console.WriteLine(""Введите отчество: "");
+    patronymic = Console.ReadLine();
+
+    GetFullName(firstName, lastName, patronymic);
+
+    string[] firstNames = { ""Иван"", ""Дмитрий"", ""Андрей"", ""Александр"", ""Евгений"" };
+    string[] lastNames = { ""Сикорский"", ""Менделеев"", ""Троцкий"", ""Рязанов"", ""Перельман"" };
+    string[] patronymics = { ""Евгеньевич"", ""Иванович"", ""Дмитриевич"", ""Андреевич"", ""Александрович"" };
+    string[,] theNames = new string[3, 5];
+
+    for (int i = 0; i<theNames.GetLength(1); i++)
+    {
+        theNames[0, i] = firstNames[i];
+        theNames[1, i] = lastNames[i];
+        theNames[2, i] = patronymics[i];
+    }
+
+    for (int i = 0; i<theNames.GetLength(1); i++)
+    {
+        GetFullName(theNames[0, i], theNames[1, i], theNames[2, i]);
+    }
+}";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+
+        public override void Start()
+        {
+            string firstName;   // 
+            string lastName;    // 
+            string patronymic;  //             
+
+            Console.WriteLine("Введите имя: ");
+            firstName = Console.ReadLine();
+
+            Console.WriteLine("Введите фамилию: ");
+            lastName = Console.ReadLine();
+
+            Console.WriteLine("Введите отчество: ");
+            patronymic = Console.ReadLine();
+
+            GetFullName(firstName, lastName, patronymic);
+
+            string[] firstNames = { "Иван", "Дмитрий", "Андрей", "Александр", "Евгений" };
+            string[] lastNames = { "Сикорский", "Менделеев", "Троцкий", "Рязанов", "Перельман" };
+            string[] patronymics = { "Евгеньевич", "Иванович", "Дмитриевич", "Андреевич", "Александрович" };
+            string[,] theNames = new string[3, 5];
+
+            for (int i = 0; i < theNames.GetLength(1); i++)
+            {
+                theNames[0, i] = firstNames[i];
+                theNames[1, i] = lastNames[i];
+                theNames[2, i] = patronymics[i];
+            }
+
+            for (int i = 0; i < theNames.GetLength(1); i++)
+            {
+                GetFullName(theNames[0, i], theNames[1, i], theNames[2, i]);
+            }
+        }
+        void GetFullName(string firstName, string lastName, string patronymic)
+        {
+            Console.WriteLine($"{lastName} {firstName} {patronymic}");
+        }
+    }
+
+    public class Work02 : MenuSpace.Work
+    {
+        string Name { get; } = "Метод возврата суммы чисел массива";
+        string Code { get; } = @"public override void Start()
+{
+    Console.WriteLine(""Введите значения для массива через пробел."");
+    string str = Console.ReadLine();
+    Console.WriteLine(ArraySum(str));
+}
+    // Основной метод
+    int ArraySum(string str)
+{
+    int sum = 0;
+    str = str.Trim();
+    string[] temp = str.Split("" "", StringSplitOptions.RemoveEmptyEntries);
+
+    for (int i = 0; i<temp.Length; i++)
+    {
+        if (Int32.TryParse(temp[i], out int num))
+        {
+            sum += num;
+        }
+    }
+return sum;
+}";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+        public override void Start()
+        {
+            Console.WriteLine("Введите значения для массива через пробел.");
+            string str = Console.ReadLine();
+            Console.WriteLine(ArraySum(str));
+        }
+        int ArraySum(string str)
+        {
+            int sum = 0;
+            str = str.Trim();
+            string[] temp = str.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < temp.Length; i++)
+            {
+                if (Int32.TryParse(temp[i], out int num))
+                {
+                    sum += num;
+                }
+            }
+            return sum;
+        }
+    }
+
+    public class Work03 : MenuSpace.Work
+    {
+        string Name { get; } = "Метод по определению времени года";
+        string Code { get; } = @"public override void Start() 
+{
+    Console.WriteLine(""Введите значени: "");
+    int month = 0;
+    do
+    {
+        if (Int32.TryParse(Console.ReadLine(), out month))
+        {
+            if (month > 0 & month <= 12)
+            {
+                break;
+            }
+        }
+        Console.WriteLine(""Ошибка: введите число от 1 до 12"");
+    } while (!((month > 0) & (month <= 12))) ;
+    Console.WriteLine(GetSeason(GetMonth(month)));
+}
+Months GetMonth(int num)
+{
+    byte b = 0b_000_000_000_001;
+
+    if (num > 0 & num <= 12)
+    {
+        b = (byte)(b << num - 1);
+        return (Months)b;
+    }
+    else
+    {
+        return Months.Error;
+    }
+}
+string GetSeason(Months month)
+{
+    if ((month | Months.Зима) == Months.Зима)
+    {
+        return Months.Зима.ToString();
+    }
+    else if ((month | Months.Весна) == Months.Весна)
+    {
+        return Months.Весна.ToString();
+    }
+    else if ((month | Months.Лето) == Months.Лето)
+    {
+        return Months.Лето.ToString();
+    }
+    else if ((month | Months.Осень) == Months.Осень)
+    {
+        return Months.Осень.ToString();
+    }
+    else
+    {
+        return Months.Error.ToString();
+    }
+}
+";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+
+        [Flags]
+        enum Months
+        {
+            Error = 0b000000000000,
+            Январь = 0b_000_000_000_001,
+            Февраль = 0b_000_000_000_010,
+            Март = 0b_000_000_000_100,
+            Апрель = 0b_000_000_001_000,
+            Май = 0b_000_000_010_000,
+            Июнь = 0b_000_000_100_000,
+            Июль = 0b_000_001_000_000,
+            Август = 0b_000_010_000_000,
+            Сентябрь = 0b_000_100_000_000,
+            Октябрь = 0b_001_000_000_000,
+            Ноябрь = 0b_010_000_000_000,
+            Декабрь = 0b_100_000_000_000,
+            Зима = Январь | Февраль | Декабрь,
+            Весна = Март | Апрель | Май,
+            Лето = Июнь | Июль | Август,
+            Осень = Сентябрь | Октябрь | Ноябрь
+        }
+        public override void Start() 
+        {
+            Console.WriteLine("Введите значени: ");
+            int month = 0;
+            do
+            {
+                if (Int32.TryParse(Console.ReadLine(), out month))
+                {
+                    if (month > 0 & month <= 12)
+                    {
+                        break;
+                    }
+                }
+                Console.WriteLine("Ошибка: введите число от 1 до 12");
+            } while (!((month > 0) & (month <= 12)));
+            Console.WriteLine(GetSeason(GetMonth(month)));
+        }
+        Months GetMonth(int num)
+        {
+            byte b = 0b_000_000_000_001;
+
+            if (num > 0 & num <= 12)
+            {
+                b = (byte)(b << num - 1);
+                return (Months)b;
+            }
+            else
+            {
+                return Months.Error;
+            }
+        }
+        string GetSeason(Months month)
+        {
+            if ((month | Months.Зима) == Months.Зима)
+            {
+                return Months.Зима.ToString();
+            }
+            else if ((month | Months.Весна) == Months.Весна)
+            {
+                return Months.Весна.ToString();
+            }
+            else if ((month | Months.Лето) == Months.Лето)
+            {
+                return Months.Лето.ToString();
+            }
+            else if ((month | Months.Осень) == Months.Осень)
+            {
+                return Months.Осень.ToString();
+            }
+            else
+            {
+                return Months.Error.ToString();
+            }
+        }
+    }
+
+    public class Work04: MenuSpace.Work
+    {
+        string Name { get; } = "";
+        string Code { get; } = @"";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+        public override void Start() 
+        {
+            
+        }
+
+    }
+}
+    
+    
+
+
+

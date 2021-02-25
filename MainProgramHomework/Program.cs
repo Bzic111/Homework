@@ -21,9 +21,12 @@ namespace MainProgramHomework
             List<Work> Lesson01 = new List<Work>();
             List<Work> Lesson02 = new List<Work>();
             List<Work> Lesson03 = new List<Work>();
+            List<Work> Lesson04 = new List<Work>();
+
             Dictionary<string, Menu.Cycler> Lesson01Cycle = new Dictionary<string, Menu.Cycler>(); 
             Dictionary<string, Menu.Cycler> Lesson02Cycle = new Dictionary<string, Menu.Cycler>();
             Dictionary<string, Menu.Cycler> Lesson03Cycle = new Dictionary<string, Menu.Cycler>();
+            Dictionary<string, Menu.Cycler> Lesson04Cycle = new Dictionary<string, Menu.Cycler>();
 
 
             // Заполнение коллекций List<IWork>Lesson с инициализацией объектов
@@ -40,11 +43,14 @@ namespace MainProgramHomework
             Lesson03.Add(new Lesson03.Work03());
             Lesson03.Add(new Lesson03.Work04());
             Lesson03.Add(new Lesson03.WorkDop1());
+            Lesson04.Add(new Lesson04.Work01());
 
             // Объявление сложных массивов
             Dictionary<string, Menu.Runner>[] SubmenuLesson01 = new Dictionary<string, Menu.Runner>[Lesson01.Count];
             Dictionary<string, Menu.Runner>[] SubmenuLesson02 = new Dictionary<string, Menu.Runner>[Lesson02.Count];
             Dictionary<string, Menu.Runner>[] SubmenuLesson03 = new Dictionary<string, Menu.Runner>[Lesson03.Count];
+            Dictionary<string, Menu.Runner>[] SubmenuLesson04 = new Dictionary<string, Menu.Runner>[Lesson03.Count];
+
             List<Dictionary<string, Menu.Runner>[]> SubmenuLessons = new List<Dictionary<string, Menu.Runner>[]>();
             Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[3];
 
@@ -73,6 +79,14 @@ namespace MainProgramHomework
                     { MenuNames[1],Lesson03[i].GetCode }
                 };
             }
+            for (int i = 0; i < Lesson03.Count; i++)
+            {
+                SubmenuLesson04[i] = new Dictionary<string, Menu.Runner>
+                {
+                    { MenuNames[0],Lesson04[i].Start },
+                    { MenuNames[1],Lesson04[i].GetCode }
+                };
+            }
             
             // Переопределяем пункты в подменю
             Lesson03.Work01 wrk = new Lesson03.Work01();            
@@ -94,16 +108,22 @@ namespace MainProgramHomework
             {
                 Lesson03Cycle.Add(Lesson03[i].GetName(), MainMenu.Cycle);
             }
+            for (int i = 0; i < Lesson04.Count; i++)
+            {
+                Lesson04Cycle.Add(Lesson04[i].GetName(), MainMenu.Cycle);
+            }
             
             // Заполнение коллекции List<T>Submenu
             SubmenuLessons.Add(SubmenuLesson01);
             SubmenuLessons.Add(SubmenuLesson02);
             SubmenuLessons.Add(SubmenuLesson03);
+            SubmenuLessons.Add(SubmenuLesson04);
             
             // Заполнение массива MainMenuCycle
             MainMenuCycle[0] = Lesson01Cycle;
             MainMenuCycle[1] = Lesson02Cycle;
             MainMenuCycle[2] = Lesson03Cycle;
+            MainMenuCycle[3] = Lesson04Cycle;
             
             Console.Clear();
             MainMenu.Cycle(MainMenuCycle, SubmenuLessons);
