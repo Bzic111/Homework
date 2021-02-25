@@ -1,77 +1,55 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Threading;
 
 namespace TestQuick1
 {
     class Program
     {
         static void Main(string[] args)
-        {                                                                               // Переменные
-            string[] arr;                                                               // Массив
-            string str;                                                                 // Строка для заполнения массива
-            string mover;                                                               // Число индекса сдвига
-            
-            Console.WriteLine("Введите значения для массива через пробел.");
-            str = Console.ReadLine();
-            Console.WriteLine("Введите число сдвига массива");
-            mover = Console.ReadLine();
+        {
+            Console.CursorVisible = false;
 
-            if (Int32.TryParse(mover, out int move))
-            {
-                Console.WriteLine("move = " + move);
-            }
-            else
-            {
-                move = 0;
-                Console.WriteLine("Error. move = " + move);
-            }
-            str = str.Trim();                                                           // Очистка строки от пробелов в начале и в конце строки
-            arr = str.Split(" ", StringSplitOptions.RemoveEmptyEntries);                // Заполнение массива значениями
-            if (move < 0)                                                               // Цикл сдвига "влево"
-            {
-                string temp = arr[0];                                                   // временная переменная
-                do
-                {
-                    for (int i = 0; i < arr.Length; i++)
-                    {
-                        if (i < arr.Length - 1)
-                        {
-                            arr[i] = arr[i + 1];
-                        }
-                        else
-                        {
-                            arr[i] = temp;
-                        }
-                    }
-                } while (move != 0);
-            }
-            else if (move > 0)                                                          // Цикл сдвига "вправо"
-            {
-                string temp = arr[arr.Length - 1];                                      // временная переменная
-                do
-                {
-                    for (int i = arr.Length - 1; i >= 0; i--)
-                    {
-                        if (i > 0)
-                        {
-                            arr[i] = arr[i - 1];
-                        }
-                        else
-                        {
-                            arr[i] = temp;
-                        }
-                    }
-                    move--;
-                } while (move != 0);
-            }
-            else                                                                        // Сдвиг не производится
-            {
-                Console.WriteLine("move = " + move + " сдвиг не произведён.");
-            }
+            Console.WriteLine("Loading... ");
+            Print("Loading system...", 1000);
+            Print("Всякая фигня", 500);
+            Print("И т.д.", 2000);
 
-            for (int i = 0; i < arr.Length; i++)                                        // Вывод цикла в консоль
+            int pos = Console.CursorTop;
+            Console.SetCursorPosition(11, 0);
+            Console.Write("OK");
+            Console.SetCursorPosition(0, pos);
+
+            var rand = new Random();
+
+            for (int i = 0; i <= 100; i++)
             {
-                Console.Write(arr[i] + " ");
+                if (i < 25)
+                    Console.ForegroundColor = ConsoleColor.Red;
+                else if (i < 50)
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                else if (i < 75)
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                else if (i < 100)
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                else
+                    Console.ForegroundColor = ConsoleColor.Green;
+
+                string pct = string.Format("{0,-30} {1,3}%", new string((char)0x2592, i * 30 / 100), i);
+                Console.CursorLeft = 0;
+                Console.Write(pct);
+                Thread.Sleep(rand.Next(0, 50));
             }
+            Console.WriteLine();
+            Console.ResetColor();
+        }
+
+        static void Print(string message, int delay)
+        {
+            Thread.Sleep(delay);
+            Console.WriteLine(message);
         }
     }
-}
+    }
+

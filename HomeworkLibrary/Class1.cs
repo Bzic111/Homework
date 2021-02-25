@@ -10,6 +10,22 @@ namespace MenuSpace
         public delegate void Runner();
 
         /// <summary>
+        /// Метод вывода текста с определённой позиции.
+        /// </summary>
+        /// <param name="text">Текст</param>
+        /// <param name="row">позиция строки</param>
+        /// <param name="col">позиция столбца</param>
+        public void Print(string text,int row, int col)
+        {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(col, row);
+            Console.Write(text);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        
+        /// <summary>
         /// Селектор для меню ввиде массива строк. Управляется стрелками клавиатуры и Ввод. Escape - назад или выход.
         /// </summary>
         /// <param name="str"></param>
@@ -80,7 +96,7 @@ namespace MenuSpace
         /// <param name="inCursor">Индекс массива</param>
         /// <param name="selected">Ссылка на строку d массиве <paramref name="str"/>[]</param>
         /// <returns>Строка массива</returns>
-        void Selector(string[] str, ref int inCursor, out string selected)
+        public void Selector(string[] str, ref int inCursor, out string selected)
         {
             selected = null;
             var move = Console.ReadKey(true);
@@ -108,6 +124,54 @@ namespace MenuSpace
             }
         }
 
+        public string Selector(string[] str) 
+        {
+
+            string selected = null;
+            var move = Console.ReadKey(false);
+            Console.CursorVisible = false;
+            int cursorRow = 0;
+
+            if (move.Key == ConsoleKey.DownArrow)
+            {
+                if (cursorRow < str.Length)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(str[cursorRow]);
+                    ++cursorRow;
+                    Print(str[cursorRow], cursorRow,0);
+                }
+
+            }
+            else if (move.Key == ConsoleKey.UpArrow)
+            {
+                if (cursorRow > 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(str[cursorRow]);
+                    --cursorRow;
+                    Print(str[cursorRow], cursorRow, 0);
+                }
+            }            
+            else if (move.Key == ConsoleKey.Enter)
+            {
+                
+                    selected = str[cursorRow];
+                
+            }
+            else if (move.Key == ConsoleKey.Escape)
+            {
+                selected = "Exit";
+            }
+            else if (move.Key == ConsoleKey.Spacebar)
+            {
+                selected = str[cursorRow];
+            }
+            return selected;
+        }
+        
         /// <summary>
         /// Выводит массив строк <paramref name="str"/> в консоль ввиде меню с выделенным элементом массива по индексу <paramref name="mover"/>.
         /// </summary>
@@ -202,6 +266,19 @@ namespace MenuSpace
             }
         }
 
+        
+        /// <summary>
+        /// Цикл вывода массива строк
+        /// </summary>
+        /// <param name="str">массив строк</param>
+        public void ShowOnce(string[] str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                Console.WriteLine(str[i]);
+            }
+        }
+        
         /// <summary>
         /// Цикл для отображения и выбора метода из колекции <paramref name="Dict"/>.
         /// </summary>
@@ -2804,10 +2881,3 @@ Console.Write(""\n"");
         }
     }
 }
-    
-    
-    
-    
-
-
-
