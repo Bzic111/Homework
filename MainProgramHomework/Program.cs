@@ -87,7 +87,7 @@ namespace MainProgramHomework
                     { MenuNames[1],Lesson04[i].GetCode }
                 };
             }
-
+            
             // Переопределяем пункты в подменю
             Lesson03.Work01 wrk = new Lesson03.Work01();            
             SubmenuLesson03[0] = new Dictionary<string, Menu.Runner> 
@@ -118,13 +118,13 @@ namespace MainProgramHomework
             SubmenuLessons.Add(SubmenuLesson02);
             SubmenuLessons.Add(SubmenuLesson03);
             SubmenuLessons.Add(SubmenuLesson04);
-
+            
             // Заполнение массива MainMenuCycle
             MainMenuCycle[0] = Lesson01Cycle;
             MainMenuCycle[1] = Lesson02Cycle;
             MainMenuCycle[2] = Lesson03Cycle;
             MainMenuCycle[3] = Lesson04Cycle;
-
+            
             Console.Clear();
             MainMenu.Cycle(MainMenuCycle, SubmenuLessons);
         }

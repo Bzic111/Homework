@@ -2814,7 +2814,7 @@ namespace Lesson04
 {
     Console.WriteLine($""{lastName} {firstName} {patronymic}"");
 }
-
+    
 public override void Start()
 {
     string firstName;   // 
@@ -2823,7 +2823,7 @@ public override void Start()
 
     Console.WriteLine(""Введите имя: "");
     firstName = Console.ReadLine();
-
+    
     Console.WriteLine(""Введите фамилию: "");
     lastName = Console.ReadLine();
 
