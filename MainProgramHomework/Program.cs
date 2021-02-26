@@ -44,6 +44,10 @@ namespace MainProgramHomework
             Lesson03.Add(new Lesson03.Work04());
             Lesson03.Add(new Lesson03.WorkDop1());
             Lesson04.Add(new Lesson04.Work01());
+            Lesson04.Add(new Lesson04.Work02());
+            Lesson04.Add(new Lesson04.Work03());
+            Lesson04.Add(new Lesson04.Work04());
+
 
             // Объявление сложных массивов
             Dictionary<string, Menu.Runner>[] SubmenuLesson01 = new Dictionary<string, Menu.Runner>[Lesson01.Count];
@@ -52,7 +56,7 @@ namespace MainProgramHomework
             Dictionary<string, Menu.Runner>[] SubmenuLesson04 = new Dictionary<string, Menu.Runner>[Lesson03.Count];
 
             List<Dictionary<string, Menu.Runner>[]> SubmenuLessons = new List<Dictionary<string, Menu.Runner>[]>();
-            Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[3];
+            Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[4];
 
             // Заполнение массивов Submenu, методы Start() и GetCode()
             for (int i = 0; i < Lesson01.Count; i++)
@@ -79,7 +83,7 @@ namespace MainProgramHomework
                     { MenuNames[1],Lesson03[i].GetCode }
                 };
             }
-            for (int i = 0; i < Lesson03.Count; i++)
+            for (int i = 0; i < Lesson04.Count; i++)
             {
                 SubmenuLesson04[i] = new Dictionary<string, Menu.Runner>
                 {

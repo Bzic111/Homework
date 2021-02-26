@@ -15,7 +15,7 @@ namespace MenuSpace
         /// <param name="text">Текст</param>
         /// <param name="row">позиция строки</param>
         /// <param name="col">позиция столбца</param>
-        public void Print(string text,int row, int col)
+        public void Print(string text, int row, int col)
         {
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -24,7 +24,7 @@ namespace MenuSpace
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
         }
-        
+
         /// <summary>
         /// Селектор для меню ввиде массива строк. Управляется стрелками клавиатуры и Ввод. Escape - назад или выход.
         /// </summary>
@@ -124,7 +124,7 @@ namespace MenuSpace
             }
         }
 
-        public string Selector(string[] str) 
+        public string Selector(string[] str)
         {
 
             string selected = null;
@@ -140,7 +140,7 @@ namespace MenuSpace
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.Write(str[cursorRow]);
                     ++cursorRow;
-                    Print(str[cursorRow], cursorRow,0);
+                    Print(str[cursorRow], cursorRow, 0);
                 }
 
             }
@@ -154,12 +154,12 @@ namespace MenuSpace
                     --cursorRow;
                     Print(str[cursorRow], cursorRow, 0);
                 }
-            }            
+            }
             else if (move.Key == ConsoleKey.Enter)
             {
-                
-                    selected = str[cursorRow];
-                
+
+                selected = str[cursorRow];
+
             }
             else if (move.Key == ConsoleKey.Escape)
             {
@@ -171,7 +171,7 @@ namespace MenuSpace
             }
             return selected;
         }
-        
+
         /// <summary>
         /// Выводит массив строк <paramref name="str"/> в консоль ввиде меню с выделенным элементом массива по индексу <paramref name="mover"/>.
         /// </summary>
@@ -266,7 +266,7 @@ namespace MenuSpace
             }
         }
 
-        
+
         /// <summary>
         /// Цикл вывода массива строк
         /// </summary>
@@ -278,7 +278,7 @@ namespace MenuSpace
                 Console.WriteLine(str[i]);
             }
         }
-        
+
         /// <summary>
         /// Цикл для отображения и выбора метода из колекции <paramref name="Dict"/>.
         /// </summary>
@@ -484,8 +484,8 @@ namespace Lesson02
 
     public class Work01 : MenuSpace.Work
     {
-        public  string Name { get; } = "Номер месяца";
-        public  string Code { get; } = @"[Flags]
+        public string Name { get; } = "Номер месяца";
+        public string Code { get; } = @"[Flags]
 public enum Months
 {
     Январь = 1,
@@ -578,8 +578,8 @@ public void Start()
     }
     public class Work02 : MenuSpace.Work
     {
-        public  string Name { get; } = "Средняя температура";
-        public  string Code { get; } = @"static void Start()
+        public string Name { get; } = "Средняя температура";
+        public string Code { get; } = @"static void Start()
 {
     float minTemp, maxTemp, midTemp = 0;                                        // Переменные
     Console.Clear();                                                            // чистим консоль
@@ -682,7 +682,7 @@ GetMaxTemp:                                                                     
     }
     public class Work03 : MenuSpace.Work
     {
-        public  string Name { get; } = "Чётное или нечётное число.";
+        public string Name { get; } = "Чётное или нечётное число.";
 
         public string Code { get; } = @"public void Start()
 {
@@ -734,7 +734,7 @@ GetValue:
                 goto GetValue;
             }
         }
-    }    
+    }
     public class Work04 : MenuSpace.Work
     {
         public string Name { get; } = "Температура, сезоны, месяца";
@@ -1093,7 +1093,7 @@ else                                                                            
                 Console.WriteLine($"Что-то пошло не так....");
             }
         }
-    }    
+    }
     public class Work05 : MenuSpace.Work
     {
         public string Name { get; } = "Режим работы Офисов";
@@ -2881,7 +2881,6 @@ Console.Write(""\n"");
         }
     }
 }
-    
 namespace Lesson04
 {
     public class Work01 : MenuSpace.Work
@@ -3101,7 +3100,7 @@ string GetSeason(Months month)
             Лето = Июнь | Июль | Август,
             Осень = Сентябрь | Октябрь | Ноябрь
         }
-        public override void Start() 
+        public override void Start()
         {
             Console.WriteLine("Введите значени: ");
             int month = 0;
@@ -3157,21 +3156,63 @@ string GetSeason(Months month)
         }
     }
 
-    public class Work04: MenuSpace.Work
+    public class Work04 : MenuSpace.Work
     {
-        string Name { get; } = "";
-        string Code { get; } = @"";
-        public override void GetCode() { Console.WriteLine(this.Code); }
-        public override string GetName() { return this.Name; }
-        public override void Start() 
-        {
-            
-        }
-
+        string Name { get; } = "Рекурсия Фибоначчи";
+        string Code { get; } = @"public override void Start() 
+{
+    Console.WriteLine(""Введите порядковый номер последовательности Фибоначчи"");
+    if (Int32.TryParse(Console.ReadLine(), out int n))
+    {
+        Console.WriteLine($""Fibonachi({n}) = {Fibonachi(n)}"");
+    }
+    else
+    {
+        Console.WriteLine(""Error"");
     }
 }
-    
-    
+int Fibonachi(int n)
+    {
+        if (n > 0)
+    {
+        return (Fibonachi(n - 1) + Fibonachi(n - 2));
+    }
+    else if (n<0)
+    {
+        return -n;
+    }
+    return n;
+}";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+        public override void Start()
+        {
+            Console.WriteLine("Введите порядковый номер последовательности Фибоначчи");
+            if (Int32.TryParse(Console.ReadLine(), out int n))
+            {
+                Console.WriteLine($"Fibonachi({n}) = {Fibonachi(n)}");
+            }
+            else
+            {
+                Console.WriteLine("Error");
+            }
+        }
+        int Fibonachi(int n)
+        {
+            if (n > 0)
+            {
+                return (Fibonachi(n - 1) + Fibonachi(n - 2));
+            }
+            else if (n<0)
+            {
+                return -n;
+            }
+            return n;
+        }
+    }
+}
+
+
 
 
 
