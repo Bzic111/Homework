@@ -9,8 +9,7 @@ using MenuSpace;
 namespace MainProgramHomework
 {
     class Program
-    {
-        
+    {        
         static void Main(string[] args)
         {
             // Объявление переменных
