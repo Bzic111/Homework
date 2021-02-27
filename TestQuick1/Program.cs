@@ -12,7 +12,7 @@ namespace TestQuick1
             string[] arr;                                                               // Массив
             string str;                                                                 // Строка для заполнения массива
             string mover;                                                               // Число индекса сдвига
-            
+
             Console.WriteLine("Введите значения для массива через пробел.");
             str = Console.ReadLine();
             Console.WriteLine("Введите число сдвига массива");
@@ -20,18 +20,19 @@ namespace TestQuick1
 
             if (Int32.TryParse(mover, out int move))
             {
-            Console.WriteLine(Fibonachi(10));
+                Console.WriteLine(Fibonachi(10));
             }
-        static int Fibonachi(int n)
+            static int Fibonachi(int n)
             {
-            if (n>1)
-            {
-                Console.WriteLine(n);
-                return (Fibonachi(n - 1) + Fibonachi(n - 2));
-                        }
-                        else
-                        {
-                return n;
+                if (n > 1)
+                {
+                    Console.WriteLine(n);
+                    return (Fibonachi(n - 1) + Fibonachi(n - 2));
+                }
+                else
+                {
+                    return n;
+                }
             }
         }
     }

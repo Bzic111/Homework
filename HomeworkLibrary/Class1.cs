@@ -2880,8 +2880,7 @@ Console.Write(""\n"");
             }
         }
     }
-}
-    
+}    
 namespace Lesson04
 {
     public class Work01 : MenuSpace.Work
@@ -3170,8 +3169,4 @@ string GetSeason(Months month)
 
     }
 }
-    
-    
-
-
 
