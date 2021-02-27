@@ -131,8 +131,8 @@ namespace MenuSpace
         {
             int cursor = 0;                                                             // Устанавливаем курсор выделения текста на 0 (верхняя строка и первый элемент в массиве)
             string[] keys = new string[Dict.Count];                                     // Создание массива для ключей из списка ключей словаря Dict
-            string[] entryes = CreateMenu(keys);                                        // Создание массива для вывода пунктов меню
             Dict.Keys.CopyTo(keys, 0);                                                  // Заполнение массива ключей Dict
+            string[] entryes = CreateMenu(keys);                                        // Создание массива для вывода пунктов меню
             string selected;                                                            // Переменная для возврата строки пункта меню
             Console.Clear();                                                            // Очистка консоли
             this.Show(entryes);                                                         // Вывод массива пунктов меню
@@ -202,8 +202,8 @@ namespace MenuSpace
         {
             int cursor = 0;                                                             // Устанавливаем курсор выделения текста на 0 (верхняя строка и первый элемент в массиве)
             string[] keys = new string[Dict.Count];                                     // Создание массива для ключей из списка ключей словаря SubDict
-            string[] entryes = CreateMenu(keys);                                        // Создание массива для вывода пунктов меню
             Dict.Keys.CopyTo(keys, 0);                                                  // Заполнение массива ключей SubDict
+            string[] entryes = CreateMenu(keys);                                        // Создание массива для вывода пунктов меню
             string Title = Console.Title;                                               // Сохранение названия окна
             string selected;                                                            // Переменная для возврата строки пункта меню
             Console.Title = Title;                                                      // Установка названия окна
