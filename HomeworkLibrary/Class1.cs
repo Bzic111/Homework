@@ -10,6 +10,238 @@ namespace MenuSpace
         public delegate void Runner();
 
         /// <summary>
+        /// Метод вывода текста с определённой позиции.
+        /// </summary>
+        /// <param name="text">Текст</param>
+        /// <param name="row">позиция строки</param>
+        /// <param name="col">позиция столбца</param>
+        public void Print(string text, int row, int col)
+        {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(col, row);
+            Console.Write(text);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        /// <summary>
+        /// Метод создания массива строк меню на основе массива строк <paramref name="str"/>. Массив строк копируется в пункты меню.
+        /// </summary>
+        /// <param name="str">Массива строк</param>
+        /// <returns>Массива строк для меню, последний элемент "Exit"</returns>
+        string[] CreateMenu(string[] str)
+        {
+            string[] menu = new string[str.Length + 1];
+            for (int i = 0; i < menu.Length; i++)
+            {
+                if (i < menu.Length - 1)
+                {
+
+                    menu[i] = str[i];
+                }
+                else if (i == menu.Length - 1)
+                {
+                    menu[i] = "Exit";
+                }
+            }
+            return menu;
+        }
+
+        /// <summary>
+        /// Метод создания массива строк меню. 
+        /// </summary>
+        /// <param name="length">Число основных пунктов</param>
+        /// <param name="name">Имя пункта. По умоляанию "Defaul name"</param>
+        /// <returns>Массив строк с именами <paramref name="name"/> и номером, последний элемент "Exit"</returns>
+        string[] CreateMenu(int length, string name = "Defaul name")
+        {
+            string[] menu = new string[length + 1];
+            for (int i = 0; i < length+1; i++)
+            {
+                if (i < menu.Length - 1)
+                {
+
+                    menu[i] = name+$" {i+1}";
+                }
+                else if (i == menu.Length - 1)
+                {
+                    menu[i] = "Exit";
+                }
+            }
+            return menu;
+        }
+
+        /// <summary>
+        /// Селектор для меню ввиде массива строк. Управляется стрелками клавиатуры Вверх, Вниз и Ввод или Пробел. Escape - назад или выход.
+        /// </summary>
+        /// <param name="str">Массив строк меню</param>
+        /// <param name="selected">Выбранный пункт меню</param>
+        public void Selector(string[] str, out string selected, ref int cursorRow)
+        {
+            Console.CursorVisible = false;
+            selected = null;
+            Print(str[cursorRow], cursorRow, 0);
+            var move = Console.ReadKey(false);
+            if ((move.Key == ConsoleKey.DownArrow) & (cursorRow < str.Length - 1))
+            {
+                Console.SetCursorPosition(0, cursorRow);
+                Console.Write(str[cursorRow]);
+                cursorRow++;
+                Print(str[cursorRow], cursorRow, 0);
+            }
+            else if ((move.Key == ConsoleKey.UpArrow) & (cursorRow > 0))
+            {
+                Console.SetCursorPosition(0, cursorRow);
+                Console.Write(str[cursorRow]);
+                cursorRow--;
+                Print(str[cursorRow], cursorRow, 0);
+            }
+            else if (move.Key == ConsoleKey.Enter)
+            {
+                selected = str[cursorRow];
+            }
+            else if (move.Key == ConsoleKey.Escape)
+            {
+                selected = "Exit";
+            }
+            else if (move.Key == ConsoleKey.Spacebar)
+            {
+                selected = str[cursorRow];
+            }
+        }
+
+        /// <summary>
+        /// Цикл вывода массива строк
+        /// </summary>
+        /// <param name="str">массив строк</param>
+        public void Show(string[] str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                Console.WriteLine(str[i]);
+            }
+        }
+
+        /// <summary>
+        /// Цикл для отображения меню и выбора метода из колекции <paramref name="Dict"/>.
+        /// </summary>
+        /// <param name="Dict">Коллекция строка + метод для меню, </param>
+        public void Cycle(Dictionary<string, Runner> Dict)
+        {
+            int cursor = 0;                                                             // Устанавливаем курсор выделения текста на 0 (верхняя строка и первый элемент в массиве)
+            string[] keys = new string[Dict.Count];                                     // Создание массива для ключей из списка ключей словаря Dict
+            Dict.Keys.CopyTo(keys, 0);                                                  // Заполнение массива ключей Dict
+            string[] entryes = CreateMenu(keys);                                        // Создание массива для вывода пунктов меню
+            string selected;                                                            // Переменная для возврата строки пункта меню
+            Console.Clear();                                                            // Очистка консоли
+            this.Show(entryes);                                                         // Вывод массива пунктов меню
+
+            do
+            {
+                this.Selector(entryes, out selected, ref cursor);                       // Метод селектора для меню
+                if (selected == entryes[entryes.Length - 1])                            // Условие выхода из меню - последний элемент
+                {
+                    continue;
+                }
+                else if (selected == entryes[cursor])                                   // Условие выбора пункта меню
+                {
+                    Console.Clear();
+                    Dict.GetValueOrDefault(entryes[cursor])();                          // Выполнение метода из словаря
+                    Console.ReadKey(true);                                              // Ожидание клавиши возврата в меню
+                    Console.Clear();                                                    // Очистка консоли
+                    this.Show(entryes);                                                 // Вывод массива пунктов меню
+                }
+
+            } while (selected != entryes[entryes.Length - 1]);
+        }
+
+        /// <summary>
+        /// Цикл для вывода массива делегатов объектов ввиде меню.
+        /// </summary>
+        /// <param name="Dict">Массив меню</param>
+        /// <param name="List">Массив подменю</param>
+        /// <param name="entryName">Название для строк меню</param>
+        public void Cycle(Dictionary<string, Cycler>[] Dict, List<Dictionary<string, Runner>[]> List, string entryName = "Homework ")
+        {
+            int cursor = 0;                                                             // Устанавливаем курсор выделения текста на 0 (верхняя строка и первый элемент в массиве)
+            string[] entryes = CreateMenu(Dict.Length, entryName);                      // Создание массива для вывода пунктов меню
+            string selected;                                                            // Переменная для возврата строки пункта меню
+
+            Console.Title = "MainMenu";                                                 // Установка названия окна
+            Console.Clear();                                                            // Очистка консоли
+            this.Show(entryes);                                                         // Вывод массива пунктов меню
+
+            do
+            {
+                this.Selector(entryes, out selected, ref cursor);                       // Метод селектора для меню
+
+                if (selected == entryes[entryes.Length - 1])                            // Условие выхода из меню - последний элемент
+                {
+                    continue;
+                }
+                else if (selected == entryes[cursor])                                   // Условие выбора пункта меню
+                {
+                    Console.Title = entryes[cursor];                                    // Установка названия окна
+                    Console.Clear();                                                    // Очистка консоли
+                    MainCycle(Dict[cursor], List[cursor]);                              // Переход к подменю
+                    Console.Title = "MainMenu";                                         // Установка названия окна
+                    Console.Clear();                                                    // Очистка консоли
+                    this.Show(entryes);                                                 // Вывод массива пунктов меню
+                }
+
+            } while (selected != entryes[entryes.Length - 1]);
+        }
+
+        /// <summary>
+        /// Цикл для отображения основной коллекции методов с названиями ввиде меню. и выбора набора методов 
+        /// </summary>
+        /// <param name="Dict">Коллекция методов <c>Cycle()</c> для выбора коллеции методов класса <c>IWork</c></param>
+        /// <param name="SubDict">Коллекция методов класса <c>IWork</c></param>
+        public void MainCycle(Dictionary<string, Cycler> Dict, Dictionary<string, Menu.Runner>[] SubDict)
+        {
+            int cursor = 0;                                                             // Устанавливаем курсор выделения текста на 0 (верхняя строка и первый элемент в массиве)
+            string[] keys = new string[Dict.Count];                                     // Создание массива для ключей из списка ключей словаря SubDict
+            Dict.Keys.CopyTo(keys, 0);                                                  // Заполнение массива ключей SubDict
+            string[] entryes = CreateMenu(keys);                                        // Создание массива для вывода пунктов меню
+            string Title = Console.Title;                                               // Сохранение названия окна
+            string selected;                                                            // Переменная для возврата строки пункта меню
+            Console.Title = Title;                                                      // Установка названия окна
+            Console.Clear();                                                            // Очистка консоли
+            this.Show(entryes);                                                         // Вывод массива пунктов меню
+
+            do                                                                          // Цикл переключения между пунктами меню
+            {
+                this.Selector(entryes, out selected, ref cursor);                       // Метод селектора для меню
+
+                if (selected == entryes[entryes.Length - 1])                            // Условие выхода из меню - последний элемент
+                {
+                    continue;
+                }
+                if (selected == entryes[cursor])                                        // Условие выбора пункта меню
+                {
+                    Console.Title = entryes[cursor];                                    // Установка названия окна ключом словаря Dict
+                    Dict.GetValueOrDefault(entryes[cursor])(SubDict[cursor]);           // Выполнение метода из словаря
+                    Console.Title = Title;                                              // Установка названия окна
+                    Console.Clear();                                                    // Очистка консоли
+                    this.Show(entryes);                                                 // Вывод массива пунктов меню
+                }
+
+            } while (selected != entryes[entryes.Length - 1]);
+        }
+    }
+    public abstract class Work
+    {
+        string Name { get; }
+        string Code { get; }
+        public virtual void GetCode() { Console.WriteLine(this.Code); }
+        public virtual string GetName() { return this.Name; }
+        public abstract void Start();
+    }
+
+    public class DoNotUse
+    {
+        /// <summary>
         /// Селектор для меню ввиде массива строк. Управляется стрелками клавиатуры и Ввод. Escape - назад или выход.
         /// </summary>
         /// <param name="str"></param>
@@ -80,7 +312,7 @@ namespace MenuSpace
         /// <param name="inCursor">Индекс массива</param>
         /// <param name="selected">Ссылка на строку d массиве <paramref name="str"/>[]</param>
         /// <returns>Строка массива</returns>
-        void Selector(string[] str, ref int inCursor, out string selected)
+        public void Selector(string[] str, ref int inCursor, out string selected)
         {
             selected = null;
             var move = Console.ReadKey(true);
@@ -202,150 +434,12 @@ namespace MenuSpace
             }
         }
 
-        /// <summary>
-        /// Цикл для отображения и выбора метода из колекции <paramref name="Dict"/>.
-        /// </summary>
-        /// <param name="Dict">Коллекция строка + метод для меню, </param>
-        public void Cycle(Dictionary<string, Runner> Dict)
-        {
-            int cursor = 0;
-            string[] entryes = new string[Dict.Count + 1];
-            string[] keys = new string[Dict.Count];
-            Dict.Keys.CopyTo(keys, 0);
-            for (int i = 0; i < entryes.Length; i++)
-            {
-                if (i < entryes.Length - 1)
-                {
-
-                    entryes[i] = keys[i];
-                }
-                else if (i == entryes.Length - 1)
-                {
-                    entryes[i] = "Exit";
-                }
-            }
-            string selected;
-            do
-            {
-                Console.Clear();
-                this.Show(cursor, entryes);
-                this.Selector(entryes, ref cursor, out selected);
-                if (selected == entryes[entryes.Length - 1])
-                {
-                    continue;
-                }
-                else if (selected == entryes[cursor])
-                {
-                    Console.Clear();
-                    Dict.GetValueOrDefault(entryes[cursor])();
-                    Console.ReadKey(true);
-                }
-
-            } while (selected != entryes[entryes.Length - 1]);
-        }
-
-        /// <summary>
-        /// Цикл для вывода массива делегатов объектов ввиде меню.
-        /// </summary>
-        /// <param name="Dict">Массив меню</param>
-        /// <param name="List">Массив подменю</param>
-        /// <param name="entryName">Название для строк меню</param>
-        public void Cycle(Dictionary<string, Cycler>[] Dict, List<Dictionary<string, Runner>[]> List, string entryName = "Homework ")
-        {
-            int cursor = 0;
-            string[] entryes = new string[Dict.Length + 1];
-            string[] keys = new string[Dict.Length];
-
-            for (int i = 0; i < entryes.Length; i++)
-            {
-                if (i < entryes.Length - 1)
-                {
-
-                    entryes[i] = entryName + (i + 1);
-                }
-                else if (i == entryes.Length - 1)
-                {
-                    entryes[i] = "Exit";
-                }
-            }
-            string selected;
-            do
-            {
-                Console.Title = "MainMenu";
-                Console.Clear();
-                this.Show(cursor, entryes);
-                this.Selector(entryes, ref cursor, out selected);
-                if (selected == entryes[entryes.Length - 1])
-                {
-                    continue;
-                }
-                else if (selected == entryes[cursor])
-                {
-                    Console.Title = entryes[cursor];
-                    Console.Clear();
-                    MainCycle(Dict[cursor], List[cursor]);
-                }
-
-            } while (selected != entryes[entryes.Length - 1]);
-        }
-
-        /// <summary>
-        /// Цикл для отображения основной коллекции методов с названиями ввиде меню. и выбора набора методов 
-        /// </summary>
-        /// <param name="Dict">Коллекция методов <c>Cycle()</c> для выбора коллеции методов класса <c>IWork</c></param>
-        /// <param name="SubDict">Коллекция методов класса <c>IWork</c></param>
-        public void MainCycle(Dictionary<string, Cycler> Dict, Dictionary<string, Menu.Runner>[] SubDict)
-        {
-            int cursor = 0;
-            string[] entryes = new string[Dict.Count + 1];
-            string[] keys = new string[Dict.Count];
-            Dict.Keys.CopyTo(keys, 0);
-            string Title = Console.Title;
-            for (int i = 0; i < entryes.Length; i++)
-            {
-                if (i < entryes.Length - 1)
-                {
-
-                    entryes[i] = keys[i];
-                }
-                else if (i == entryes.Length - 1)
-                {
-                    entryes[i] = "Exit";
-                }
-            }
-            string selected;
-            do
-            {
-                Console.Title = Title;
-                Console.Clear();
-                this.Show(cursor, entryes);
-                this.Selector(entryes, ref cursor, out selected);
-                if (selected == entryes[entryes.Length - 1])
-                {
-                    continue;
-                }
-                if (selected == entryes[cursor])
-                {
-                    Console.Title = entryes[cursor];
-                    Dict.GetValueOrDefault(entryes[cursor])(SubDict[cursor]);
-                }
-
-            } while (selected != entryes[entryes.Length - 1]);
-        }
-    }
-    public interface IWork
-    {
-        public string Name { get; }
-        string Code { get; }
-        public virtual void GetCode() { Console.WriteLine(Code); }
-        public string GetName() { return Name; }
-        public void Start();
     }
 
 }
 namespace Lesson01
 {
-    public class Work01 : MenuSpace.IWork
+    public class Work01 : MenuSpace.Work
     {
         public string Name { get; } = "Программа приветствие.";
         public string Code { get; } = @"Dictionary<string, string> DayOfWeek = new Dictionary<string, string>
@@ -380,18 +474,18 @@ namespace Lesson01
             {"Saturday","Суббота" },
             {"Sunday","Воскресенье" }
         };
-        public void GetCode()
+        public override void GetCode()
         {
             Console.WriteLine(Code);
         }
-        public string GetName()
+        public override string GetName()
         {
             return Name;
         }
 
 
         static DateTime currentDateTime = DateTime.Now;
-        public void Start()
+        public override void Start()
         {
 
             Console.WriteLine("Введите Имя.");
@@ -405,7 +499,7 @@ namespace Lesson02
 {
 
 
-    public class Work01 : MenuSpace.IWork
+    public class Work01 : MenuSpace.Work
     {
         public string Name { get; } = "Номер месяца";
         public string Code { get; } = @"[Flags]
@@ -449,7 +543,14 @@ public void Start()
             break;
     }
 }";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         [Flags]
         public enum Months
         {
@@ -466,7 +567,7 @@ public void Start()
             Ноябрь,
             Декабрь,
         }
-        public void Start()
+        public override void Start()
         {
             Console.WriteLine($"Введите номер месяца или Now:");
             string str = Console.ReadLine();
@@ -492,7 +593,7 @@ public void Start()
             }
         }
     }
-    public class Work02 : MenuSpace.IWork
+    public class Work02 : MenuSpace.Work
     {
         public string Name { get; } = "Средняя температура";
         public string Code { get; } = @"static void Start()
@@ -541,8 +642,15 @@ GetMaxTemp:                                                                     
     }
     Console.WriteLine($""Средняя температура: {Math.Round(midTemp, 1)}"");         // выводим округлённое значение
 }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             float minTemp, maxTemp, midTemp = 0;                                        // Переменные
             Console.Clear();                                                            // чистим консоль
@@ -589,7 +697,7 @@ GetMaxTemp:                                                                     
             Console.WriteLine($"Средняя температура: {Math.Round(midTemp, 1)}");         // выводим округлённое значение
         }
     }
-    public class Work03 : MenuSpace.IWork
+    public class Work03 : MenuSpace.Work
     {
         public string Name { get; } = "Чётное или нечётное число.";
 
@@ -614,8 +722,15 @@ GetValue:
         goto GetValue;
     }
 }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             Console.WriteLine($"Введите число");
         GetValue:
@@ -637,7 +752,7 @@ GetValue:
             }
         }
     }
-    public class Work04 : MenuSpace.IWork
+    public class Work04 : MenuSpace.Work
     {
         public string Name { get; } = "Температура, сезоны, месяца";
 
@@ -758,7 +873,14 @@ else                                                                            
     Console.WriteLine($""Что-то пошло не так...."");
 }
         }";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         [Flags]
         public enum Months
         {
@@ -781,7 +903,7 @@ else                                                                            
             Осень = Сентябрь | Октябрь | Ноябрь
         }
 
-        public void Start()
+        public override void Start()
         {
             int a;
             Months mon = Months.Error;                                                  // Месяца
@@ -988,9 +1110,8 @@ else                                                                            
                 Console.WriteLine($"Что-то пошло не так....");
             }
         }
-
     }
-    public class Work05 : MenuSpace.IWork
+    public class Work05 : MenuSpace.Work
     {
         public string Name { get; } = "Режим работы Офисов";
         public string Code { get; } = @"[Flags]
@@ -1103,7 +1224,14 @@ Start:                                                                          
                                                                                         // Остальные выполнены по аналогии
     Console.ReadKey();                                                                  // Задержка.
     goto Start;                                                                         // Возврат к меню";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         [Flags]
         enum Days
         {
@@ -1125,7 +1253,7 @@ Start:                                                                          
             Обед = 0b_0100,
             Сутки = 0b_1000
         }
-        public void Start()
+        public override void Start()
         {
             Days workWeek = Days.Понедельник | Days.Вторник | Days.Среда | Days.Четверг | Days.Пятница;
             Days weekEnd = Days.Суббота | Days.Воскресенье;
@@ -1269,7 +1397,7 @@ Start:                                                                          
             goto Start;
         }
     }
-    public class Work06 : MenuSpace.IWork
+    public class Work06 : MenuSpace.Work
     {
         public string Name { get; } = "Вывод \"чек\".";
         public string Code { get; } = @"public void Start()
@@ -1303,8 +1431,15 @@ Start:                                                                          
             Console.WriteLine($""{endLine}{("""").PadRight(15, '.')}{total.ToString(""F"").PadLeft(6, '.')}\n"");
             Console.WriteLine((""Спасибо за покупку"").PadLeft(22));
         }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             string shopName, address, openName, moneyType, name1, name2, name3, endLine, commision;
             decimal line1, line2, line3, tax, summ, total;
@@ -1336,7 +1471,7 @@ Start:                                                                          
             Console.WriteLine(("Спасибо за покупку").PadLeft(22));
         }
     }
-    public class WorkDop1 : MenuSpace.IWork
+    public class WorkDop1 : MenuSpace.Work
     {
         public string Name { get; } = "Определение високосного года.";
         public string Code { get; } = @"// Константы ограничения диапазона
@@ -1529,11 +1664,18 @@ Start:
             break;
     }
 }";
-
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
         // Константы ограничения диапазона
         const int GregorianCalendarStartYear = 1582;
         const int GregorianCalendar10k = 11582;
-        public void Start()
+        public override void Start()
         {
 
             // Переменные
@@ -2285,7 +2427,7 @@ namespace Lesson03
         }
     }
 
-    public class Work01 : MenuSpace.IWork
+    public class Work01 : MenuSpace.Work
     {
         public string Name { get; } = "Вывод массива по диагонали.";
 
@@ -2302,8 +2444,15 @@ namespace Lesson03
                 }
             }
         }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             int[,] arr = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
             int count = 0;
@@ -2316,9 +2465,44 @@ namespace Lesson03
                 }
             }
         }
+
+        /// <summary>
+        /// Выводит значения массива <paramref name="arr"/> в консоль по диагонали Слева сверху направо, с отступом ввиде пробелов.
+        /// </summary>
+        /// <param name="arr">Двумерный массив</param>
+        public void DiagonalLR()
+        {
+            int[,] arr = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
+            int count = 0;
+            for (int i = 0; i < arr.GetLength(0); i++)
+            {
+                for (int j = 0; j < arr.GetLength(1); j++)
+                {
+                    Console.WriteLine($"{("").PadLeft(count)}{arr[i, j]}");
+                    count++;
+                }
+            }
+        }
+        /// <summary>
+        /// Выводит значения массива <paramref name="arr"/> в консоль по диагонали Справа сверху налево, с отступом ввиде пробелов.
+        /// </summary>
+        /// <param name="arr">Двумерный массив</param>
+        public void DiagonalRL()
+        {
+            int[,] arr = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
+            int count = arr.Length - 1;
+            for (int j = arr.GetLength(1) - 1; j >= 0; j--)
+            {
+                for (int i = arr.GetLength(0) - 1; i >= 0; i--)
+                {
+                    Console.WriteLine($"{("").PadLeft(count)}{arr[i, j]}");
+                    count--;
+                }
+            }
+        }
     }
 
-    public class Work02 : MenuSpace.IWork
+    public class Work02 : MenuSpace.Work
     {
         public string Name { get; } = "Прототип списка контактов.";
 
@@ -2373,8 +2557,15 @@ public void Start()
         }
     } while (selected != ""exit"") ;
 }";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             int cursor = 0;
             string selected = null;
@@ -2427,7 +2618,7 @@ public void Start()
         }
     }
 
-    public class Work03 : MenuSpace.IWork
+    public class Work03 : MenuSpace.Work
     {
         public string Name { get; } = "Вывод строки в обратном порядке.";
         public string Code { get; } = @"public void Start()
@@ -2439,7 +2630,15 @@ public void Start()
                 Console.Write(str[i]);
             }
         }";
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             Console.WriteLine("Введите текст.");
             string str = Console.ReadLine();
@@ -2450,7 +2649,7 @@ public void Start()
         }
     }
 
-    public class Work04 : MenuSpace.IWork
+    public class Work04 : MenuSpace.Work
     {
         public string Name { get; } = "Морской бой";
         public string Code { get; } = @" Вывод сгенерированного игрового поля осуществляется циклом в методе Show(int[] moverUDRL, string[,] str) класса SelectorUDRL,
@@ -2483,8 +2682,15 @@ for (int i = 0; i < str.GetLength(0); i++)
 Console.Write(""\n"");
 }";
 
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {
             bool[,] boolField;
             string[,] field = Ships.GetField(out boolField);
@@ -2533,7 +2739,7 @@ Console.Write(""\n"");
 
         }
     }
-    public class WorkDop1 : MenuSpace.IWork
+    public class WorkDop1 : MenuSpace.Work
     {
         public string Name { get; } = "Сдвиг массива";
 
@@ -2610,8 +2816,15 @@ Console.Write(""\n"");
     }
 }
 ";
-
-        public void Start()
+        public override void GetCode()
+        {
+            Console.WriteLine(Code);
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+        public override void Start()
         {                                                                               // Переменные
             string[] arr;                                                               // Массив
             string str;                                                                 // Строка для заполнения массива
@@ -2682,6 +2895,336 @@ Console.Write(""\n"");
             {
                 Console.Write(arr[i] + " ");
             }
+        }
+    }
+}
+namespace Lesson04
+{
+    public class Work01 : MenuSpace.Work
+    {
+        string Name { get; } = "Метод GetFullName();";
+        string Code { get; } = @"void GetFullName(string firstName, string lastName, string patronymic)
+{
+    Console.WriteLine($""{lastName} {firstName} {patronymic}"");
+}
+    
+public override void Start()
+{
+    string firstName;   // 
+    string lastName;    // 
+    string patronymic;  //             
+
+    Console.WriteLine(""Введите имя: "");
+    firstName = Console.ReadLine();
+    
+    Console.WriteLine(""Введите фамилию: "");
+    lastName = Console.ReadLine();
+
+    Console.WriteLine(""Введите отчество: "");
+    patronymic = Console.ReadLine();
+
+    GetFullName(firstName, lastName, patronymic);
+
+    string[] firstNames = { ""Иван"", ""Дмитрий"", ""Андрей"", ""Александр"", ""Евгений"" };
+    string[] lastNames = { ""Сикорский"", ""Менделеев"", ""Троцкий"", ""Рязанов"", ""Перельман"" };
+    string[] patronymics = { ""Евгеньевич"", ""Иванович"", ""Дмитриевич"", ""Андреевич"", ""Александрович"" };
+    string[,] theNames = new string[3, 5];
+
+    for (int i = 0; i<theNames.GetLength(1); i++)
+    {
+        theNames[0, i] = firstNames[i];
+        theNames[1, i] = lastNames[i];
+        theNames[2, i] = patronymics[i];
+    }
+
+    for (int i = 0; i<theNames.GetLength(1); i++)
+    {
+        GetFullName(theNames[0, i], theNames[1, i], theNames[2, i]);
+    }
+}";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+
+        public override void Start()
+        {
+            string firstName;   // 
+            string lastName;    // 
+            string patronymic;  //             
+
+            Console.WriteLine("Введите имя: ");
+            firstName = Console.ReadLine();
+
+            Console.WriteLine("Введите фамилию: ");
+            lastName = Console.ReadLine();
+
+            Console.WriteLine("Введите отчество: ");
+            patronymic = Console.ReadLine();
+
+            GetFullName(firstName, lastName, patronymic);
+
+            string[] firstNames = { "Иван", "Дмитрий", "Андрей", "Александр", "Евгений" };
+            string[] lastNames = { "Сикорский", "Менделеев", "Троцкий", "Рязанов", "Перельман" };
+            string[] patronymics = { "Евгеньевич", "Иванович", "Дмитриевич", "Андреевич", "Александрович" };
+            string[,] theNames = new string[3, 5];
+
+            for (int i = 0; i < theNames.GetLength(1); i++)
+            {
+                theNames[0, i] = firstNames[i];
+                theNames[1, i] = lastNames[i];
+                theNames[2, i] = patronymics[i];
+            }
+
+            for (int i = 0; i < theNames.GetLength(1); i++)
+            {
+                GetFullName(theNames[0, i], theNames[1, i], theNames[2, i]);
+            }
+        }
+        void GetFullName(string firstName, string lastName, string patronymic)
+        {
+            Console.WriteLine($"{lastName} {firstName} {patronymic}");
+        }
+    }
+
+    public class Work02 : MenuSpace.Work
+    {
+        string Name { get; } = "Метод возврата суммы чисел массива";
+        string Code { get; } = @"public override void Start()
+{
+    Console.WriteLine(""Введите значения для массива через пробел."");
+    string str = Console.ReadLine();
+    Console.WriteLine(ArraySum(str));
+}
+    // Основной метод
+    int ArraySum(string str)
+{
+    int sum = 0;
+    str = str.Trim();
+    string[] temp = str.Split("" "", StringSplitOptions.RemoveEmptyEntries);
+
+    for (int i = 0; i<temp.Length; i++)
+    {
+        if (Int32.TryParse(temp[i], out int num))
+        {
+            sum += num;
+        }
+    }
+return sum;
+}";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+        public override void Start()
+        {
+            Console.WriteLine("Введите значения для массива через пробел.");
+            string str = Console.ReadLine();
+            Console.WriteLine(ArraySum(str));
+        }
+        int ArraySum(string str)
+        {
+            int sum = 0;
+            str = str.Trim();
+            string[] temp = str.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < temp.Length; i++)
+            {
+                if (Int32.TryParse(temp[i], out int num))
+                {
+                    sum += num;
+                }
+            }
+            return sum;
+        }
+    }
+
+    public class Work03 : MenuSpace.Work
+    {
+        string Name { get; } = "Метод по определению времени года";
+        string Code { get; } = @"public override void Start() 
+{
+    Console.WriteLine(""Введите значени: "");
+    int month = 0;
+    do
+    {
+        if (Int32.TryParse(Console.ReadLine(), out month))
+        {
+            if (month > 0 & month <= 12)
+            {
+                break;
+            }
+        }
+        Console.WriteLine(""Ошибка: введите число от 1 до 12"");
+    } while (!((month > 0) & (month <= 12))) ;
+    Console.WriteLine(GetSeason(GetMonth(month)));
+}
+Months GetMonth(int num)
+{
+    byte b = 0b_000_000_000_001;
+
+    if (num > 0 & num <= 12)
+    {
+        b = (byte)(b << num - 1);
+        return (Months)b;
+    }
+    else
+    {
+        return Months.Error;
+    }
+}
+string GetSeason(Months month)
+{
+    if ((month | Months.Зима) == Months.Зима)
+    {
+        return Months.Зима.ToString();
+    }
+    else if ((month | Months.Весна) == Months.Весна)
+    {
+        return Months.Весна.ToString();
+    }
+    else if ((month | Months.Лето) == Months.Лето)
+    {
+        return Months.Лето.ToString();
+    }
+    else if ((month | Months.Осень) == Months.Осень)
+    {
+        return Months.Осень.ToString();
+    }
+    else
+    {
+        return Months.Error.ToString();
+    }
+}
+";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+
+        [Flags]
+        enum Months
+        {
+            Error = 0b000000000000,
+            Январь = 0b_000_000_000_001,
+            Февраль = 0b_000_000_000_010,
+            Март = 0b_000_000_000_100,
+            Апрель = 0b_000_000_001_000,
+            Май = 0b_000_000_010_000,
+            Июнь = 0b_000_000_100_000,
+            Июль = 0b_000_001_000_000,
+            Август = 0b_000_010_000_000,
+            Сентябрь = 0b_000_100_000_000,
+            Октябрь = 0b_001_000_000_000,
+            Ноябрь = 0b_010_000_000_000,
+            Декабрь = 0b_100_000_000_000,
+            Зима = Январь | Февраль | Декабрь,
+            Весна = Март | Апрель | Май,
+            Лето = Июнь | Июль | Август,
+            Осень = Сентябрь | Октябрь | Ноябрь
+        }
+        public override void Start()
+        {
+            Console.WriteLine("Введите значени: ");
+            int month = 0;
+            do
+            {
+                if (Int32.TryParse(Console.ReadLine(), out month))
+                {
+                    if (month > 0 & month <= 12)
+                    {
+                        break;
+                    }
+                }
+                Console.WriteLine("Ошибка: введите число от 1 до 12");
+            } while (!((month > 0) & (month <= 12)));
+            Console.WriteLine(GetSeason(GetMonth(month)));
+        }
+        Months GetMonth(int num)
+        {
+            byte b = 0b_000_000_000_001;
+
+            if (num > 0 & num <= 12)
+            {
+                b = (byte)(b << num - 1);
+                return (Months)b;
+            }
+            else
+            {
+                return Months.Error;
+            }
+        }
+        string GetSeason(Months month)
+        {
+            if ((month | Months.Зима) == Months.Зима)
+            {
+                return Months.Зима.ToString();
+            }
+            else if ((month | Months.Весна) == Months.Весна)
+            {
+                return Months.Весна.ToString();
+            }
+            else if ((month | Months.Лето) == Months.Лето)
+            {
+                return Months.Лето.ToString();
+            }
+            else if ((month | Months.Осень) == Months.Осень)
+            {
+                return Months.Осень.ToString();
+            }
+            else
+            {
+                return Months.Error.ToString();
+            }
+        }
+    }
+
+    public class Work04 : MenuSpace.Work
+    {
+        string Name { get; } = "Рекурсия Фибоначчи";
+        string Code { get; } = @"public override void Start() 
+{
+    Console.WriteLine(""Введите порядковый номер последовательности Фибоначчи"");
+    if (Int32.TryParse(Console.ReadLine(), out int n))
+    {
+        Console.WriteLine($""Fibonachi({n}) = {Fibonachi(n)}"");
+    }
+    else
+    {
+        Console.WriteLine(""Error"");
+    }
+}
+int Fibonachi(int n)
+    {
+        if (n > 0)
+    {
+        return (Fibonachi(n - 1) + Fibonachi(n - 2));
+    }
+    else if (n<0)
+    {
+        return -n;
+    }
+    return n;
+}";
+        public override void GetCode() { Console.WriteLine(this.Code); }
+        public override string GetName() { return this.Name; }
+        public override void Start()
+        {
+            Console.WriteLine("Введите порядковый номер последовательности Фибоначчи");
+            if (Int32.TryParse(Console.ReadLine(), out int n))
+            {
+                Console.WriteLine($"Fibonachi({n}) = {Fibonachi(n)}");
+            }
+            else
+            {
+                Console.WriteLine("Error");
+            }
+        }
+        int Fibonachi(int n)
+        {
+            if (n > 0)
+            {
+                return (Fibonachi(n - 1) + Fibonachi(n - 2));
+            }
+            else if (n < 0)
+            {
+                return -n;
+            }
+            return n;
         }
     }
 }
