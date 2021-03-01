@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 
 namespace MenuSpace
 {
-
     public class DoNotUse
     {
         /// <summary>
@@ -200,17 +198,4 @@ namespace MenuSpace
         }
 
     }
-
-}
-namespace Lesson01
-{
-}
-namespace Lesson02
-{
-}
-namespace Lesson03
-{
-}
-namespace Lesson04
-{
 }
