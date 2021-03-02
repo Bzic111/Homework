@@ -56,12 +56,12 @@ namespace MenuSpace
         string[] CreateMenu(int length, string name = "Defaul name")
         {
             string[] menu = new string[length + 1];
-            for (int i = 0; i < length+1; i++)
+            for (int i = 0; i < length + 1; i++)
             {
                 if (i < menu.Length - 1)
                 {
 
-                    menu[i] = name+$" {i+1}";
+                    menu[i] = name + $" {i + 1}";
                 }
                 else if (i == menu.Length - 1)
                 {
@@ -229,5 +229,44 @@ namespace MenuSpace
             } while (selected != entryes[entryes.Length - 1]);
         }
     }
+
+    public class Collection
+    {
+        public Dictionary<string, Menu.Runner>[] SetSubmenu(List<Work> List, string[] menuNames)
+        {
+            Dictionary<string, Menu.Runner>[] dict = new Dictionary<string, Menu.Runner>[List.Count];
+            for (int i = 0; i < List.Count; i++)
+            {
+                dict[i] = new Dictionary<string, Menu.Runner>
+                {
+                    { menuNames[0],List[i].Start },
+                    { menuNames[1],List[i].GetCode }
+                };
+            }
+            return dict;
+        }
+
+        public Dictionary<string, Menu.Cycler> SetCycler(List<Work> List, Menu Menu)
+        {
+            Dictionary<string, Menu.Cycler> Cycler = new Dictionary<string, Menu.Cycler>();
+            for (int i = 0; i < List.Count; i++)
+            {
+                Cycler.Add(List[i].GetName(), Menu.Cycle);
+            }
+            return Cycler;
+        }
+        public void ReSetRunner(ref List<Dictionary<string, Menu.Runner>[]> dict, int entry, string[] menuNames, Menu.Runner[] runner)
+        {
+            Dictionary<string, Menu.Runner>[] newDict = new Dictionary<string, Menu.Runner>[runner.Length];
+            int i = 0;
+            for ( i = 0; i < runner.Length; i++)
+            {
+                //dict[entry - 1][i].Clear();
+                dict[entry - 1][i].Add(menuNames[i], runner[i]);                
+            }
+        }
+        
+    }
+
 
 }

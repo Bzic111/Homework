@@ -9,24 +9,26 @@ using MenuSpace;
 namespace MainProgramHomework
 {
     class Program
-    {        
+    {
         static void Main(string[] args)
         {
             // Объявление переменных
             string[] MenuNames = { "Начать", "Показать основной код" };
             Menu MainMenu = new Menu();
+            Collection Collection = new Collection();
 
             // Объявление массивов
             List<Work> Lesson01 = new List<Work>();
             List<Work> Lesson02 = new List<Work>();
             List<Work> Lesson03 = new List<Work>();
             List<Work> Lesson04 = new List<Work>();
+            List<Work> Lesson05 = new List<Work>();
 
-            Dictionary<string, Menu.Cycler> Lesson01Cycle = new Dictionary<string, Menu.Cycler>(); 
+            Dictionary<string, Menu.Cycler> Lesson01Cycle = new Dictionary<string, Menu.Cycler>();
             Dictionary<string, Menu.Cycler> Lesson02Cycle = new Dictionary<string, Menu.Cycler>();
             Dictionary<string, Menu.Cycler> Lesson03Cycle = new Dictionary<string, Menu.Cycler>();
             Dictionary<string, Menu.Cycler> Lesson04Cycle = new Dictionary<string, Menu.Cycler>();
-
+            Dictionary<string, Menu.Cycler> Lesson05Cycle = new Dictionary<string, Menu.Cycler>();
 
             // Заполнение коллекций List<IWork>Lesson с инициализацией объектов
             Lesson01.Add(new Lesson01.Work01());
@@ -46,88 +48,50 @@ namespace MainProgramHomework
             Lesson04.Add(new Lesson04.Work02());
             Lesson04.Add(new Lesson04.Work03());
             Lesson04.Add(new Lesson04.Work04());
+            Lesson05.Add(new Lesson05.Work01());
+            Lesson05.Add(new Lesson05.Work02());
+            Lesson05.Add(new Lesson05.Work03());
+
+            // Объявление и Заполнение массивов, методы Start() и GetCode()
+            //Dictionary<string, Menu.Runner>[] SubmenuLesson01 = Collection.SetSubmenu(Lesson01, MenuNames);
+            //Dictionary<string, Menu.Runner>[] SubmenuLesson02 = Collection.SetSubmenu(Lesson02, MenuNames);
+            //Dictionary<string, Menu.Runner>[] SubmenuLesson03 = Collection.SetSubmenu(Lesson03, MenuNames);
+            //Dictionary<string, Menu.Runner>[] SubmenuLesson04 = Collection.SetSubmenu(Lesson04, MenuNames);
+            //Dictionary<string, Menu.Runner>[] SubmenuLesson05 = Collection.SetSubmenu(Lesson05, MenuNames);
 
 
-            // Объявление сложных массивов
-            Dictionary<string, Menu.Runner>[] SubmenuLesson01 = new Dictionary<string, Menu.Runner>[Lesson01.Count];
-            Dictionary<string, Menu.Runner>[] SubmenuLesson02 = new Dictionary<string, Menu.Runner>[Lesson02.Count];
-            Dictionary<string, Menu.Runner>[] SubmenuLesson03 = new Dictionary<string, Menu.Runner>[Lesson03.Count];
-            Dictionary<string, Menu.Runner>[] SubmenuLesson04 = new Dictionary<string, Menu.Runner>[Lesson03.Count];
+            Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[5];
 
-            List<Dictionary<string, Menu.Runner>[]> SubmenuLessons = new List<Dictionary<string, Menu.Runner>[]>();
-            Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[4];
-
-            // Заполнение массивов Submenu, методы Start() и GetCode()
-            for (int i = 0; i < Lesson01.Count; i++)
-            {
-                SubmenuLesson01[i] = new Dictionary<string, Menu.Runner>
-                {
-                    { MenuNames[0],Lesson01[i].Start },
-                    { MenuNames[1],Lesson01[i].GetCode }
-                };
-            }
-            for (int i = 0; i < Lesson02.Count; i++)
-            {
-                SubmenuLesson02[i] = new Dictionary<string, Menu.Runner>
-                {
-                    { MenuNames[0],Lesson02[i].Start },
-                    { MenuNames[1],Lesson02[i].GetCode }
-                };
-            }
-            for (int i = 0; i < Lesson03.Count; i++)
-            {
-                SubmenuLesson03[i] = new Dictionary<string, Menu.Runner>
-                {
-                    { MenuNames[0],Lesson03[i].Start },
-                    { MenuNames[1],Lesson03[i].GetCode }
-                };
-            }
-            for (int i = 0; i < Lesson04.Count; i++)
-            {
-                SubmenuLesson04[i] = new Dictionary<string, Menu.Runner>
-                {
-                    { MenuNames[0],Lesson04[i].Start },
-                    { MenuNames[1],Lesson04[i].GetCode }
-                };
-            }
-            
             // Переопределяем пункты в подменю
-            Lesson03.Work01 wrk = new Lesson03.Work01();            
-            SubmenuLesson03[0] = new Dictionary<string, Menu.Runner> 
-            { { "Слева направо, сверху вниз", wrk.DiagonalLR },
-                {"Справа налево, снизу вверх",wrk.DiagonalRL },
-                { MenuNames[1], wrk.GetCode } };
-            
-            // Заполнение массива Lesson__Cycle
-            for (int i = 0; i < Lesson01.Count; i++)
-            {
-                Lesson01Cycle.Add(Lesson01[i].GetName(), MainMenu.Cycle);
-            }
-            for (int i = 0; i < Lesson02.Count; i++)
-            {
-                Lesson02Cycle.Add(Lesson02[i].GetName(), MainMenu.Cycle);
-            }
-            for (int i = 0; i < Lesson03.Count; i++)
-            {
-                Lesson03Cycle.Add(Lesson03[i].GetName(), MainMenu.Cycle);
-            }
-            for (int i = 0; i < Lesson04.Count; i++)
-            {
-                Lesson04Cycle.Add(Lesson04[i].GetName(), MainMenu.Cycle);
-            }
-            
+            Lesson03.Work01 wrk = new Lesson03.Work01();
+
+            string[] newEntryes = { "Слева направо, сверху вниз", "Справа налево, снизу вверх", MenuNames[1] };
+
+            Menu.Runner[] newRuner = { wrk.DiagonalLR, wrk.DiagonalRL, wrk.GetCode };
+
+            //SubmenuLesson03[0] = new Dictionary<string, Menu.Runner>
+            //{ { "Слева направо, сверху вниз", wrk.DiagonalLR },
+            //    {"Справа налево, снизу вверх",wrk.DiagonalRL },
+            //    { MenuNames[1], wrk.GetCode } };
+
             // Заполнение коллекции List<T>Submenu
-            SubmenuLessons.Add(SubmenuLesson01);
-            SubmenuLessons.Add(SubmenuLesson02);
-            SubmenuLessons.Add(SubmenuLesson03);
-            SubmenuLessons.Add(SubmenuLesson04);
-            
+            List<Dictionary<string, Menu.Runner>[]> SubmenuLessons = new List<Dictionary<string, Menu.Runner>[]>
+            {
+                Collection.SetSubmenu(Lesson01, MenuNames),
+                Collection.SetSubmenu(Lesson02, MenuNames),
+                Collection.SetSubmenu(Lesson03, MenuNames),
+                Collection.SetSubmenu(Lesson04, MenuNames),
+                Collection.SetSubmenu(Lesson05, MenuNames)
+            };
+            Collection.ReSetRunner(ref SubmenuLessons,3, newEntryes, newRuner);
+
             // Заполнение массива MainMenuCycle
-            MainMenuCycle[0] = Lesson01Cycle;
-            MainMenuCycle[1] = Lesson02Cycle;
-            MainMenuCycle[2] = Lesson03Cycle;
-            MainMenuCycle[3] = Lesson04Cycle;
-            
+            MainMenuCycle[0] = Collection.SetCycler(Lesson01, MainMenu);
+            MainMenuCycle[1] = Collection.SetCycler(Lesson02, MainMenu);
+            MainMenuCycle[2] = Collection.SetCycler(Lesson03, MainMenu);
+            MainMenuCycle[3] = Collection.SetCycler(Lesson04, MainMenu);
+            MainMenuCycle[4] = Collection.SetCycler(Lesson05, MainMenu);
+
             Console.Clear();
             MainMenu.Cycle(MainMenuCycle, SubmenuLessons);
         }

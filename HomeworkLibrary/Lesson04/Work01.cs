@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Lesson04
 {
     public class Work01 : MenuSpace.Work
