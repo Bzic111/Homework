@@ -15,7 +15,7 @@ namespace MainProgramHomework
             // Объявление переменных
             string[] MenuNames = { "Начать", "Показать основной код" };
             Menu MainMenu = new Menu();
-            Collection Collection = new Collection();
+            Collection collection = new Collection();
 
             // Объявление массивов
             List<Work> Lesson01 = new List<Work>();
@@ -56,11 +56,11 @@ namespace MainProgramHomework
             // Переопределяем пункты в подменю
             List<Dictionary<string, Menu.Runner>[]> SubmenuLessons = new List<Dictionary<string, Menu.Runner>[]>
             {
-                Collection.SetSubmenu(Lesson01, MenuNames),
-                Collection.SetSubmenu(Lesson02, MenuNames),
-                Collection.SetSubmenu(Lesson03, MenuNames),
-                Collection.SetSubmenu(Lesson04, MenuNames),
-                Collection.SetSubmenu(Lesson05, MenuNames)
+                collection.SetSubmenu(Lesson01, MenuNames),
+                collection.SetSubmenu(Lesson02, MenuNames),
+                collection.SetSubmenu(Lesson03, MenuNames),
+                collection.SetSubmenu(Lesson04, MenuNames),
+                collection.SetSubmenu(Lesson05, MenuNames)
             };
             
             Lesson03.Work01 wrk = new Lesson03.Work01();
@@ -68,15 +68,15 @@ namespace MainProgramHomework
             string[] newEntryes = { "Слева направо, сверху вниз", "Справа налево, снизу вверх", MenuNames[1] };
             Menu.Runner[] newRuner = { wrk.DiagonalLR, wrk.DiagonalRL, wrk.GetCode };
             
-            Collection.ReSetRunner(ref SubmenuLessons,3,0, newEntryes, newRuner);
+            collection.ReSetRunner(ref SubmenuLessons,3,0, newEntryes, newRuner);
 
             Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[5]
             { 
-                Collection.SetCycler(Lesson01, MainMenu),
-                Collection.SetCycler(Lesson02, MainMenu),
-                Collection.SetCycler(Lesson03, MainMenu),
-                Collection.SetCycler(Lesson04, MainMenu),
-                Collection.SetCycler(Lesson05, MainMenu)
+                collection.SetCycler(Lesson01, MainMenu),
+                collection.SetCycler(Lesson02, MainMenu),
+                collection.SetCycler(Lesson03, MainMenu),
+                collection.SetCycler(Lesson04, MainMenu),
+                collection.SetCycler(Lesson05, MainMenu)
             };
 
             Console.Clear();

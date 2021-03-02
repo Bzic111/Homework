@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MenuSpace
 {
@@ -244,8 +245,15 @@ namespace MenuSpace
 
             } while (selected != entryes[entryes.Length - 1]);
         }
+        public void SaveToFile(string path,string text)
+        {
+            File.AppendAllText(path, text);
+        }
+        public void SaveToFile(string path, string[] text)
+        {
+            File.AppendAllLines(path, text);
+        }
     }
-
     public class Collection
     {
         public Dictionary<string, Menu.Runner>[] SetSubmenu(List<Work> List, string[] menuNames)
@@ -281,9 +289,6 @@ namespace MenuSpace
                 //dict[entry - 1][i].Clear();
                 dict[entry - 1][subEntry].Add(menuNames[i], runner[i]);                
             }
-        }
-        
+        }        
     }
-
-
 }
