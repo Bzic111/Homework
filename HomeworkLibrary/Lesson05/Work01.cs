@@ -25,6 +25,6 @@ namespace Lesson05
             string path = "Lesson5_Work01_text_file.txt";
             Console.WriteLine($"Файл {path} сохранён с содержимым {text}");
             File.WriteAllText(path, text);
-        }        
+        }
     }
 }

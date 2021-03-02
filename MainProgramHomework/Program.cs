@@ -52,29 +52,8 @@ namespace MainProgramHomework
             Lesson05.Add(new Lesson05.Work02());
             Lesson05.Add(new Lesson05.Work03());
 
-            // Объявление и Заполнение массивов, методы Start() и GetCode()
-            //Dictionary<string, Menu.Runner>[] SubmenuLesson01 = Collection.SetSubmenu(Lesson01, MenuNames);
-            //Dictionary<string, Menu.Runner>[] SubmenuLesson02 = Collection.SetSubmenu(Lesson02, MenuNames);
-            //Dictionary<string, Menu.Runner>[] SubmenuLesson03 = Collection.SetSubmenu(Lesson03, MenuNames);
-            //Dictionary<string, Menu.Runner>[] SubmenuLesson04 = Collection.SetSubmenu(Lesson04, MenuNames);
-            //Dictionary<string, Menu.Runner>[] SubmenuLesson05 = Collection.SetSubmenu(Lesson05, MenuNames);
-
-
-            Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[5];
 
             // Переопределяем пункты в подменю
-            Lesson03.Work01 wrk = new Lesson03.Work01();
-
-            string[] newEntryes = { "Слева направо, сверху вниз", "Справа налево, снизу вверх", MenuNames[1] };
-
-            Menu.Runner[] newRuner = { wrk.DiagonalLR, wrk.DiagonalRL, wrk.GetCode };
-
-            //SubmenuLesson03[0] = new Dictionary<string, Menu.Runner>
-            //{ { "Слева направо, сверху вниз", wrk.DiagonalLR },
-            //    {"Справа налево, снизу вверх",wrk.DiagonalRL },
-            //    { MenuNames[1], wrk.GetCode } };
-
-            // Заполнение коллекции List<T>Submenu
             List<Dictionary<string, Menu.Runner>[]> SubmenuLessons = new List<Dictionary<string, Menu.Runner>[]>
             {
                 Collection.SetSubmenu(Lesson01, MenuNames),
@@ -83,14 +62,22 @@ namespace MainProgramHomework
                 Collection.SetSubmenu(Lesson04, MenuNames),
                 Collection.SetSubmenu(Lesson05, MenuNames)
             };
-            Collection.ReSetRunner(ref SubmenuLessons,3, newEntryes, newRuner);
+            
+            Lesson03.Work01 wrk = new Lesson03.Work01();
+            
+            string[] newEntryes = { "Слева направо, сверху вниз", "Справа налево, снизу вверх", MenuNames[1] };
+            Menu.Runner[] newRuner = { wrk.DiagonalLR, wrk.DiagonalRL, wrk.GetCode };
+            
+            Collection.ReSetRunner(ref SubmenuLessons,3,0, newEntryes, newRuner);
 
-            // Заполнение массива MainMenuCycle
-            MainMenuCycle[0] = Collection.SetCycler(Lesson01, MainMenu);
-            MainMenuCycle[1] = Collection.SetCycler(Lesson02, MainMenu);
-            MainMenuCycle[2] = Collection.SetCycler(Lesson03, MainMenu);
-            MainMenuCycle[3] = Collection.SetCycler(Lesson04, MainMenu);
-            MainMenuCycle[4] = Collection.SetCycler(Lesson05, MainMenu);
+            Dictionary<string, Menu.Cycler>[] MainMenuCycle = new Dictionary<string, Menu.Cycler>[5]
+            { 
+                Collection.SetCycler(Lesson01, MainMenu),
+                Collection.SetCycler(Lesson02, MainMenu),
+                Collection.SetCycler(Lesson03, MainMenu),
+                Collection.SetCycler(Lesson04, MainMenu),
+                Collection.SetCycler(Lesson05, MainMenu)
+            };
 
             Console.Clear();
             MainMenu.Cycle(MainMenuCycle, SubmenuLessons);

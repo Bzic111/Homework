@@ -123,6 +123,22 @@ namespace MenuSpace
         }
 
         /// <summary>
+        /// Новый вид отображения меню.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        public void Show(string[] str, int col,int row)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                Console.SetCursorPosition(col, row);
+                Console.Write(str[i]);
+            }
+        }
+
+
+        /// <summary>
         /// Цикл для отображения меню и выбора метода из колекции <paramref name="Dict"/>.
         /// </summary>
         /// <param name="Dict">Коллекция строка + метод для меню, </param>
@@ -255,14 +271,15 @@ namespace MenuSpace
             }
             return Cycler;
         }
-        public void ReSetRunner(ref List<Dictionary<string, Menu.Runner>[]> dict, int entry, string[] menuNames, Menu.Runner[] runner)
+        public void ReSetRunner(ref List<Dictionary<string, Menu.Runner>[]> dict, int entry, int subEntry, string[] menuNames, Menu.Runner[] runner)
         {
             Dictionary<string, Menu.Runner>[] newDict = new Dictionary<string, Menu.Runner>[runner.Length];
             int i = 0;
+            dict[entry - 1][subEntry].Clear();
             for ( i = 0; i < runner.Length; i++)
             {
                 //dict[entry - 1][i].Clear();
-                dict[entry - 1][i].Add(menuNames[i], runner[i]);                
+                dict[entry - 1][subEntry].Add(menuNames[i], runner[i]);                
             }
         }
         
