@@ -8,13 +8,20 @@ namespace Lesson05
     public class HomeWork : MenuSpace.Work
     {
         public new MenuSpace.Menu.Runner[] AllRuns { get; }
-
+        public override MenuSpace.Menu.Runner[] GetRunners()
+        {
+            return AllRuns;
+        }
         string[] Names { get; } = 
         {
             "Сохранение введённой строки в файл",
             "Запись времени запуска в файл",
             "Запись чисел в бинарный файл"
         };
+        public override string[] GetNames()
+        {
+            return Names;
+        }
         public HomeWork()
         {
             AllRuns = new MenuSpace.Menu.Runner[]
@@ -24,10 +31,6 @@ namespace Lesson05
                 SaveToBinary
             };
         }
-        public override string[] GetNames()
-        {
-            return Names;
-        }
 
         void SaveToTxtFile()
         {
@@ -36,6 +39,8 @@ namespace Lesson05
             string path = "Lesson5_Work01_text_file.txt";
             Console.WriteLine($"Файл {path} сохранён с содержимым {text}");
             File.WriteAllText(path, text);
+
+            Console.ReadKey(true);
         }
         void LogWriteTime()
         {
@@ -44,6 +49,8 @@ namespace Lesson05
             dateTime = DateTime.Now;
             File.WriteAllText(path, dateTime.ToString());
             Console.WriteLine($"В файл {path} записано {dateTime}");
+
+            Console.ReadKey(true);
         }
         void SaveToBinary()
         {
@@ -62,6 +69,8 @@ namespace Lesson05
             }
             File.WriteAllBytes(path, bytes);
             Console.WriteLine($"Введённые числа записаны в файл {path}");
+
+            Console.ReadKey(true);
         }
     }
 }

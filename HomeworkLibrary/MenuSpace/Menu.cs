@@ -30,7 +30,50 @@ namespace MenuSpace
         /// </summary>
         /// <param name="str">Массива строк</param>
         /// <returns>Массива строк для меню, последний элемент "Exit"</returns>
-        string[] CreateMenu(string[] str)
+
+        public void HomeworkMenu(Work wrk, ref int cursor)
+        {
+            cursor = 0;
+            string selected;
+            string[] menuHomework2 = CreateMenu(wrk.GetNames());
+            Console.Clear();
+            Show(menuHomework2);
+            do
+            {
+                Selector(menuHomework2, out selected, ref cursor);
+                if ((selected == menuHomework2[cursor])&(selected != "Exit"))
+                {
+                    wrk.GetRunners()[cursor]();
+                    cursor = 0;
+                    Console.Clear();
+                    Show(menuHomework2);
+                }
+            } while (selected != "Exit");
+        }
+
+        public void MainMenu(Work[] works, string entryName = "Default name")
+        {
+            string selected;
+            int cursor = 0;
+            string[] mainMenu = CreateMenu(works.Length, entryName);
+            Console.Clear();
+            Show(mainMenu);
+            do
+            {
+                Selector(mainMenu, out selected, ref cursor);
+                if ((selected == mainMenu[cursor])&(selected != "Exit"))
+                {
+                    HomeworkMenu(works[cursor], ref cursor);
+                    cursor = 0;
+                    Console.Clear();
+                    Show(mainMenu);
+                }
+            } while (selected != "Exit");
+
+            Print("Programm End...", mainMenu.Length+2, 0);
+        }
+
+        public string[] CreateMenu(string[] str)
         {
             string[] menu = new string[str.Length + 1];
             for (int i = 0; i < menu.Length; i++)
@@ -47,6 +90,7 @@ namespace MenuSpace
             }
             return menu;
         }
+
 
         /// <summary>
         /// Метод создания массива строк меню. 
@@ -90,11 +134,25 @@ namespace MenuSpace
                 cursorRow++;
                 Print(str[cursorRow], cursorRow, 0);
             }
+            else if ((move.Key == ConsoleKey.DownArrow) & (cursorRow == str.Length - 1))
+            {
+                Console.SetCursorPosition(0, cursorRow);
+                Console.Write(str[cursorRow]);
+                cursorRow = 0;
+                Print(str[cursorRow], cursorRow, 0);
+            }
             else if ((move.Key == ConsoleKey.UpArrow) & (cursorRow > 0))
             {
                 Console.SetCursorPosition(0, cursorRow);
                 Console.Write(str[cursorRow]);
                 cursorRow--;
+                Print(str[cursorRow], cursorRow, 0);
+            }
+            else if ((move.Key == ConsoleKey.UpArrow) & (cursorRow == 0))
+            {
+                Console.SetCursorPosition(0, cursorRow);
+                Console.Write(str[cursorRow]);                
+                cursorRow = str.Length - 1;
                 Print(str[cursorRow], cursorRow, 0);
             }
             else if (move.Key == ConsoleKey.Enter)
@@ -129,7 +187,7 @@ namespace MenuSpace
         /// <param name="str"></param>
         /// <param name="col"></param>
         /// <param name="row"></param>
-        public void Show(string[] str, int col,int row)
+        public void Show(string[] str, int col, int row)
         {
             for (int i = 0; i < str.Length; i++)
             {
@@ -245,7 +303,7 @@ namespace MenuSpace
 
             } while (selected != entryes[entryes.Length - 1]);
         }
-        public void SaveToFile(string path,string text)
+        public void SaveToFile(string path, string text)
         {
             File.AppendAllText(path, text);
         }
@@ -284,11 +342,11 @@ namespace MenuSpace
             Dictionary<string, Menu.Runner>[] newDict = new Dictionary<string, Menu.Runner>[runner.Length];
             int i = 0;
             dict[entry - 1][subEntry].Clear();
-            for ( i = 0; i < runner.Length; i++)
+            for (i = 0; i < runner.Length; i++)
             {
                 //dict[entry - 1][i].Clear();
-                dict[entry - 1][subEntry].Add(menuNames[i], runner[i]);                
+                dict[entry - 1][subEntry].Add(menuNames[i], runner[i]);
             }
-        }        
+        }
     }
 }

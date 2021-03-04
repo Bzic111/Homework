@@ -4,6 +4,10 @@ namespace Lesson02
     public class HomeWork : MenuSpace.Work
     {
         public MenuSpace.Menu.Runner[] AllRuns { get; }
+        public override MenuSpace.Menu.Runner[] GetRunners()
+        {
+            return AllRuns;
+        }
         public string[] Name { get; } =
             {
             "Номер месяца",
@@ -117,6 +121,8 @@ namespace Lesson02
                     }
                     break;
             }
+
+            Console.ReadKey(true);
         }
         void MiddleTemperature()
         {
@@ -163,6 +169,8 @@ namespace Lesson02
                 }
             }
             Console.WriteLine($"Средняя температура: {Math.Round(midTemp, 1)}");         // выводим округлённое значение
+
+            Console.ReadKey(true);
         }
         void EvenOrOdd()
         {
@@ -184,6 +192,8 @@ namespace Lesson02
                 Console.WriteLine("Что-то пошло не так, попробуйте ещё раз.");
                 goto GetValue;
             }
+
+            Console.ReadKey(true);
         }
         void MiddleTempInSeason()
         {
@@ -391,6 +401,8 @@ namespace Lesson02
             {
                 Console.WriteLine($"Что-то пошло не так....");
             }
+
+            Console.ReadKey(true);
         }
         void OfficeTime()
         {
@@ -565,6 +577,8 @@ namespace Lesson02
             Console.WriteLine(("").PadRight(26, '_'));
             Console.WriteLine($"{endLine}{("").PadRight(15, '.')}{total.ToString("F").PadLeft(6, '.')}\n");
             Console.WriteLine(("Спасибо за покупку").PadLeft(22));
+
+            Console.ReadKey(true);
         }
         void LeapYear()
         {
@@ -751,6 +765,8 @@ namespace Lesson02
                 default:
                     break;
             }
+
+            Console.ReadKey(true);
         }
     }
 }

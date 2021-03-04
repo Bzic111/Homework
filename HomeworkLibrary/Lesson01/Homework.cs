@@ -7,6 +7,10 @@ namespace Lesson01
     {
         string[] Names { get; } = { "Программа приветствие." };
         public new MenuSpace.Menu.Runner[] AllRuns { get; }
+        public override MenuSpace.Menu.Runner[] GetRunners()
+        {
+            return AllRuns;
+        }
 
         Dictionary<string, string> DayOfWeek = new Dictionary<string, string>
         {
@@ -32,6 +36,8 @@ namespace Lesson01
             DateTime currentDateTime = DateTime.Now;
             string dayName = DayOfWeek.GetValueOrDefault(currentDateTime.DayOfWeek.ToString());
             Console.WriteLine($"Здравствуйте! {name} Сегодня {currentDateTime.ToString("D")} {dayName}");
+
+            Console.ReadKey(true);
         }
     }
 }

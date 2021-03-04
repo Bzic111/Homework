@@ -11,8 +11,11 @@ namespace Lesson04
             "Метод по определению времени года",
             "Рекурсия Фибоначчи"
             };
-        public MenuSpace.Menu.Runner[] AllRuns;
-
+        public new MenuSpace.Menu.Runner[] AllRuns;
+        public override MenuSpace.Menu.Runner[] GetRunners()
+        {
+            return AllRuns;
+        }
         public HomeWork()
         {
             AllRuns = new MenuSpace.Menu.Runner[]
@@ -80,12 +83,16 @@ namespace Lesson04
             {
                 GetFullName(theNames[0, i], theNames[1, i], theNames[2, i]);
             }
+
+            Console.ReadKey(true);
         }
         void ArrPlaySum()
         {
             Console.WriteLine("Введите значения для массива через пробел.");
             string str = Console.ReadLine();
             Console.WriteLine(ArraySum(str));
+
+            Console.ReadKey(true);
         }
         void SeasonCheck()
         {
@@ -103,6 +110,8 @@ namespace Lesson04
                 Console.WriteLine("Ошибка: введите число от 1 до 12");
             } while (!((month > 0) & (month <= 12)));
             Console.WriteLine(GetSeason(GetMonth(month)));
+
+            Console.ReadKey(true);
         }
         void ReFibonachi()
         {
@@ -115,6 +124,8 @@ namespace Lesson04
             {
                 Console.WriteLine("Error");
             }
+
+            Console.ReadKey(true);
         }
         void GetFullName(string firstName, string lastName, string patronymic)
         {

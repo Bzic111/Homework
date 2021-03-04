@@ -11,8 +11,20 @@ namespace Lesson03
             "SeaBattle",
             "Сдвиг массива"
             };
-        public MenuSpace.Menu.Runner[] AllRuns;
+        public new MenuSpace.Menu.Runner[] AllRuns;
         public MenuSpace.Menu.Runner[] ArrPlayDiagonal;
+        public override MenuSpace.Menu.Runner[] GetRunners()
+        {
+            return AllRuns;
+        }
+        public MenuSpace.Menu.Runner[] GetArrPlays()
+        {
+            return ArrPlayDiagonal;
+        }
+        public override string[] GetNames()
+        {
+            return Names;
+        }
         public HomeWork()
         {
             ArrPlayDiagonal = new MenuSpace.Menu.Runner[]
@@ -29,10 +41,6 @@ namespace Lesson03
                 ArrPlayMove
             };
         }
-        public override string[] GetNames()
-        {
-            return Names;
-        }
         void ArrToDiagonal()
         {
             int[,] arr = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
@@ -45,6 +53,8 @@ namespace Lesson03
                     count++;
                 }
             }
+
+            Console.ReadKey(true);
         }
 
         /// <summary>
@@ -63,6 +73,8 @@ namespace Lesson03
                     count++;
                 }
             }
+
+            Console.ReadKey(true);
         }
         /// <summary>
         /// Выводит значения массива <paramref name="arr"/> в консоль по диагонали Справа сверху налево, с отступом ввиде пробелов.
@@ -80,6 +92,8 @@ namespace Lesson03
                     count--;
                 }
             }
+
+            Console.ReadKey(true);
         }
         void ContactList()
         {
@@ -131,6 +145,8 @@ namespace Lesson03
                     move = Console.ReadKey(false);
                 }
             } while (selected != "exit");
+
+            Console.ReadKey(true);
         }
         void RewindString()
         {
@@ -140,6 +156,8 @@ namespace Lesson03
             {
                 Console.Write(str[i]);
             }
+
+            Console.ReadKey(true);
         }
         void SeaBattle()
         {
@@ -187,7 +205,7 @@ namespace Lesson03
                 selected = Selector.Selecting(fld, ref UDRL, mod);
             } while (selected != "Exit");
 
-
+            Console.ReadKey(true);
         }
         void ArrPlayMove()
         {                                                                               // Переменные
@@ -260,6 +278,8 @@ namespace Lesson03
             {
                 Console.Write(arr[i] + " ");
             }
+
+            Console.ReadKey(true);
         }
     }
 }
