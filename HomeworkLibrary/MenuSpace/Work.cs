@@ -4,11 +4,8 @@ namespace MenuSpace
 {
     public abstract class Work
     {
-        string Name { get; }
-        string Code { get; }
-        public virtual void GetCode() { Console.WriteLine(this.Code); }
-        public virtual string GetName() { return this.Name; }
-        public abstract void Start();
+        string[] Names { get; }
+        public virtual string[] GetNames() { return this.Names; }
     }
 
 }

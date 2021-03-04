@@ -256,29 +256,29 @@ namespace MenuSpace
     }
     public class Collection
     {
-        public Dictionary<string, Menu.Runner>[] SetSubmenu(List<Work> List, string[] menuNames)
-        {
-            Dictionary<string, Menu.Runner>[] dict = new Dictionary<string, Menu.Runner>[List.Count];
-            for (int i = 0; i < List.Count; i++)
-            {
-                dict[i] = new Dictionary<string, Menu.Runner>
-                {
-                    { menuNames[0],List[i].Start },
-                    { menuNames[1],List[i].GetCode }
-                };
-            }
-            return dict;
-        }
+        //public Dictionary<string, Menu.Runner>[] SetSubmenu(List<Work> List, string[] menuNames)
+        //{
+        //    Dictionary<string, Menu.Runner>[] dict = new Dictionary<string, Menu.Runner>[List.Count];
+        //    for (int i = 0; i < List.Count; i++)
+        //    {
+        //        dict[i] = new Dictionary<string, Menu.Runner>
+        //        {
+        //            { menuNames[0],List[i].Start },
+        //            { menuNames[1],List[i].GetCode }
+        //        };
+        //    }
+        //    return dict;
+        //}
 
-        public Dictionary<string, Menu.Cycler> SetCycler(List<Work> List, Menu Menu)
-        {
-            Dictionary<string, Menu.Cycler> Cycler = new Dictionary<string, Menu.Cycler>();
-            for (int i = 0; i < List.Count; i++)
-            {
-                Cycler.Add(List[i].GetName(), Menu.Cycle);
-            }
-            return Cycler;
-        }
+        //public Dictionary<string, Menu.Cycler> SetCycler(List<Work> List, Menu Menu)
+        //{
+        //    Dictionary<string, Menu.Cycler> Cycler = new Dictionary<string, Menu.Cycler>();
+        //    for (int i = 0; i < List.Count; i++)
+        //    {
+        //        Cycler.Add(List[i].GetName(), Menu.Cycle);
+        //    }
+        //    return Cycler;
+        //}
         public void ReSetRunner(ref List<Dictionary<string, Menu.Runner>[]> dict, int entry, int subEntry, string[] menuNames, Menu.Runner[] runner)
         {
             Dictionary<string, Menu.Runner>[] newDict = new Dictionary<string, Menu.Runner>[runner.Length];
