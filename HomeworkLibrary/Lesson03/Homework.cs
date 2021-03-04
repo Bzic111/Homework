@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Lesson03
 {
-    public class Homework : MenuSpace.Work
+    public class HomeWork : MenuSpace.Work
     {
         public string[] Names { get; } =
             {
@@ -13,7 +13,7 @@ namespace Lesson03
             };
         public MenuSpace.Menu.Runner[] AllRuns;
         public MenuSpace.Menu.Runner[] ArrPlayDiagonal;
-        public Homework()
+        public HomeWork()
         {
             ArrPlayDiagonal = new MenuSpace.Menu.Runner[]
             {

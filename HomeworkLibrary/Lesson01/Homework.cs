@@ -5,9 +5,10 @@ namespace Lesson01
 {
     public class HomeWork : MenuSpace.Work
     {
-        public string Name { get; } = "Программа приветствие.";
-        public MenuSpace.Menu.Runner Runner;
-        static Dictionary<string, string> DayOfWeek = new Dictionary<string, string>
+        string[] Names { get; } = { "Программа приветствие." };
+        public new MenuSpace.Menu.Runner[] AllRuns { get; }
+
+        Dictionary<string, string> DayOfWeek = new Dictionary<string, string>
         {
             { "Monday" , "Понедельник" },
             {"Tuesday","Вторник" },
@@ -20,16 +21,15 @@ namespace Lesson01
 
         public HomeWork()
         {
-            Runner = HelloNameDate;
+            AllRuns = new MenuSpace.Menu.Runner[] { HelloNameDate };
         }
+        public override string[] GetNames() { return this.Names; }
 
-
-        static DateTime currentDateTime = DateTime.Now;
         void HelloNameDate()
         {
-
             Console.WriteLine("Введите Имя.");
             string name = Console.ReadLine();
+            DateTime currentDateTime = DateTime.Now;
             string dayName = DayOfWeek.GetValueOrDefault(currentDateTime.DayOfWeek.ToString());
             Console.WriteLine($"Здравствуйте! {name} Сегодня {currentDateTime.ToString("D")} {dayName}");
         }

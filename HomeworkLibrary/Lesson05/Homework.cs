@@ -7,7 +7,7 @@ namespace Lesson05
 {
     public class HomeWork : MenuSpace.Work
     {
-        public MenuSpace.Menu.Runner[] AllRuns { get; }
+        public new MenuSpace.Menu.Runner[] AllRuns { get; }
 
         string[] Names { get; } = 
         {
