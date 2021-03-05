@@ -14,8 +14,13 @@ namespace TestQuick1
     {
         static void Main(string[] args)
         {
-            string path = @"E:\Program Files (x86)\Steam\steamapps\common\Gems of War";
-            DirMeth(path);
+            Console.OutputEncoding = Encoding.Unicode;
+            char c = '\u2500';
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 100; i++)
+            {
+                Console.Write(c++);
+            }            
         }
         static void DirMeth(string path)
         {
@@ -32,6 +37,5 @@ namespace TestQuick1
                 }
             }
         }
-
     }
 }
