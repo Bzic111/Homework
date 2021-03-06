@@ -4,8 +4,8 @@ namespace Lesson04
 {
     public class HomeWork : MenuSpace.Work
     {
-        string[] Names { get; } = 
-            { 
+        string[] Names { get; } =
+            {
             "Метод GetFullName();",
             "Метод возврата суммы чисел массива",
             "Метод по определению времени года",

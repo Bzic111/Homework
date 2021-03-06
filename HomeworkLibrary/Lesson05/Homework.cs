@@ -12,7 +12,7 @@ namespace Lesson05
         {
             return AllRuns;
         }
-        string[] Names { get; } = 
+        string[] Names { get; } =
         {
             "Сохранение введённой строки в файл",
             "Запись времени запуска в файл",

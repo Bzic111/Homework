@@ -41,7 +41,7 @@ namespace MenuSpace
             do
             {
                 Selector(menuHomework2, out selected, ref cursor);
-                if ((selected == menuHomework2[cursor])&(selected != "Exit"))
+                if ((selected == menuHomework2[cursor]) & (selected != "Exit"))
                 {
                     wrk.GetRunners()[cursor]();
                     cursor = 0;
@@ -61,7 +61,7 @@ namespace MenuSpace
             do
             {
                 Selector(mainMenu, out selected, ref cursor);
-                if ((selected == mainMenu[cursor])&(selected != "Exit"))
+                if ((selected == mainMenu[cursor]) & (selected != "Exit"))
                 {
                     HomeworkMenu(works[cursor], ref cursor);
                     cursor = 0;
@@ -70,7 +70,7 @@ namespace MenuSpace
                 }
             } while (selected != "Exit");
 
-            Print("Programm End...", mainMenu.Length+2, 0);
+            Print("Programm End...", mainMenu.Length + 2, 0);
         }
 
         public string[] CreateMenu(string[] str)
@@ -151,7 +151,7 @@ namespace MenuSpace
             else if ((move.Key == ConsoleKey.UpArrow) & (cursorRow == 0))
             {
                 Console.SetCursorPosition(0, cursorRow);
-                Console.Write(str[cursorRow]);                
+                Console.Write(str[cursorRow]);
                 cursorRow = str.Length - 1;
                 Print(str[cursorRow], cursorRow, 0);
             }

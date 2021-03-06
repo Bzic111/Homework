@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MenuSpace
+﻿namespace MenuSpace
 {
     public abstract class Work
     {

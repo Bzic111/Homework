@@ -33,7 +33,7 @@ namespace Lesson03
                 DiagonalRL
             };
             AllRuns = new MenuSpace.Menu.Runner[]
-            { 
+            {
                 ArrToDiagonal,
                 ContactList,
                 RewindString,

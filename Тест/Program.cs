@@ -54,7 +54,7 @@ static public void DiagonalRL(int[,] arr)
             int count = arr.Length - 1;
             for (int j = arr.GetLength(1) - 1; j >= 0; j--)
             {
-                for (int i = arr.GetLength(0)-1; i >= 0; i--)
+                for (int i = arr.GetLength(0) - 1; i >= 0; i--)
                 {
                     Console.WriteLine($"{("").PadLeft(count)}{arr[i, j]}");
                     count--;
@@ -110,7 +110,7 @@ static public void DiagonalRL(int[,] arr)
             }
             return selected;
         }
-        
+
         /// <summary>
         /// Метод отображения массива строк в виде меню. Выделенный пункт меню отображается с белым фоном и чёрным текстом.
         /// </summary>
@@ -273,7 +273,8 @@ static public void DiagonalRL(int[,] arr)
                             Console.Clear();
                             ArrPlay.DiagonalRL(arr);
                             Console.ReadLine();
-                        }else if(selected == "Показать исходный код")
+                        }
+                        else if (selected == "Показать исходный код")
                         {
                             Console.Clear();
                             Console.WriteLine(ArrPlay.ShowCode());
