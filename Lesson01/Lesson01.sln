@@ -12,6 +12,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeworkLibrary", "..\HomeworkLibrary\HomeworkLibrary.csproj", "{772FBF74-E869-4FAC-9433-C7CA22D96E9C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B2161587-D70D-48CE-ADFC-23AA4458F94E}"
+	ProjectSection(SolutionItems) = preProject
+		cr.snippet = cr.snippet
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestQuick1", "..\TestQuick1\TestQuick1.csproj", "{20AA6E36-E97C-417C-A893-4D046CCCC39D}"
 EndProject
