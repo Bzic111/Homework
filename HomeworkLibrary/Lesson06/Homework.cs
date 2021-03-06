@@ -164,6 +164,7 @@ namespace Lesson06
                     Console.WriteLine($"{done} {counter.ToString().PadLeft(2, '0')} {item.Title}");
                     counter++;
                 }
+                counter = 1;
                 do
                 {
                     int cursorTop = Console.CursorTop;
@@ -187,6 +188,7 @@ namespace Lesson06
                         Console.WriteLine($"{done} {counter.ToString().PadLeft(2, '0')} {item.Title}");
                         counter++;
                     }
+                    counter = 1;
                 } while (str != "0");
 
                 File.WriteAllText(path, JsonSerializer.Serialize<ToDo[]>(reList));
