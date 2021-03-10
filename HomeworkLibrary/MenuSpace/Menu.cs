@@ -196,6 +196,42 @@ namespace MenuSpace
             }
         }
 
+        public void Show(string[] str, string sort, int cols = 2)
+        {
+            int position = 0;
+            if (sort == "Vertical")
+            {
+                for (int i = 0; i < str.Length; i++)
+                {
+                    if (i < str.Length / 2)
+                    {
+                        Console.WriteLine(str[i]);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(50, position++);
+                        Console.Write(str[i]);
+                    }
+                }
+            }
+            else if (sort == "Horizontal")
+            {
+                for (int i = 0; i < str.Length - 1; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        Console.SetCursorPosition(0, position);
+                        Console.Write(str[i]);
+
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(50, position++);
+                        Console.Write(str[i]);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Цикл для отображения меню и выбора метода из колекции <paramref name="Dict"/>.
