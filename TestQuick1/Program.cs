@@ -10,6 +10,114 @@ using System.Collections.Generic;
 
 namespace TestQuick1
 {
+    class Game
+    {
+        int SizeX { get; }
+        int SizeY { get; }
+        char Empty { get; } = '_';
+        char PlayerOneDot { get; } = 'X';
+        char PlayerTwoDot { get; } = 'O';
+        int WinSerie { get; set; } = 3;
+        public Game()
+        {
+            char[,] field = GetField();
+            FillEmpty(ref field);
+        }
+        char[,] GetField()
+        {
+            return new char[SizeY, SizeX];
+        }
+        void FillEmpty(ref char[,] str)
+        {
+            for (int i = 0; i < str.GetLength(0); i++)
+            {
+                for (int j = 0; j < str.GetLength(1); j++)
+                {
+                    str[i, j] = Empty;
+                }
+            }
+        }
+        bool CheckWin(char playerChar, int[] lastDot, char[,] field)
+        {
+            StringBuilder sbD = new StringBuilder();
+            StringBuilder sbH = new StringBuilder();
+            StringBuilder sbV = new StringBuilder();
+            int Xmin = lastDot[1] - WinSerie;
+            int Xmax = lastDot[1] + WinSerie;
+            int Ymin = lastDot[0] - WinSerie;
+            int Ymax = lastDot[0] + WinSerie;
+
+            int counter = 0;
+            for (int i = Ymin, j = Xmin; (i < Ymax) & (j < Xmax); i++, j++)
+            {
+                if ((i! < field.GetLength(0)) & (i! > field.GetLength(0)))
+                {
+                    if ((j! < field.GetLength(1)) & (j! > field.GetLength(1)))
+                    {
+                        sbD.Append(field[i, j]);
+                    }
+                }
+            }
+            for (int i = Ymin; i < Ymax; i++)
+            {
+                if ((i! < field.GetLength(0)) & (i! > field.GetLength(0)))
+                {
+                    sbV.Append(field[i, lastDot[1]]);
+                }
+            }
+            for (int i = Xmin; i < Xmax; i++)
+            {
+                if ((i! < field.GetLength(0)) & (i! > field.GetLength(0)))
+                {
+                    sbH.Append(field[lastDot[0],i]);
+                }
+            }
+            return false;
+        }
+    }
+    class Menu
+    {
+        string[] Entryes { get; }
+        int Columns { get; }
+        int Rows { get; }
+
+
+        void Show()
+        {
+
+        }
+        string Select(int line) => Entryes[line];
+
+        void Selector(int maxX, int maxY)
+        {
+            int X = 0, Y = 0;
+            do
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                switch (key.Key)
+                {
+                    case ConsoleKey.Enter:
+                        break;
+                    case ConsoleKey.Escape:
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        X = (X > 0) ? X-- : X = maxX;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        Y = (Y > 0) ? Y-- : Y = maxY;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        X = (X < maxX) ? X++ : X = 0;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        Y = (Y < maxY) ? Y++ : Y = 0;
+                        break;
+                    default:
+                        break;
+                }
+            } while (true);
+        }
+    }
     class Programm
     {
         static void Main(string[] args)
@@ -45,7 +153,7 @@ namespace TestQuick1
             }
             else
             {
-                row = (str.Length / cols)+1;
+                row = (str.Length / cols) + 1;
             }
             string[,] newStr = new string[row, cols];
             int l = 0;
@@ -69,7 +177,7 @@ namespace TestQuick1
                     {
                         Print(str[i, j], i, j);
                     }
-                    else if (j>0)
+                    else if (j > 0)
                     {
                         Print(str[i, j], i, j * step);
                     }
@@ -91,7 +199,7 @@ namespace TestQuick1
             {
                 cursorCol = 50;
             }
-            else if ((move.Key == ConsoleKey.DownArrow) & (cursorRow < (str.Length - 1)/2))
+            else if ((move.Key == ConsoleKey.DownArrow) & (cursorRow < (str.Length - 1) / 2))
             {
                 Console.SetCursorPosition(0, cursorRow);
                 Console.Write(str[cursorRow]);
