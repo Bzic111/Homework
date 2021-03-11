@@ -127,46 +127,29 @@ namespace MenuSpace
             selected = null;
             Print(str[cursorRow], cursorRow, 0);
             var move = Console.ReadKey(false);
-            if ((move.Key == ConsoleKey.DownArrow) & (cursorRow < str.Length - 1))
+            switch (move.Key)
             {
-                Console.SetCursorPosition(0, cursorRow);
-                Console.Write(str[cursorRow]);
-                cursorRow++;
-                Print(str[cursorRow], cursorRow, 0);
-            }
-            else if ((move.Key == ConsoleKey.DownArrow) & (cursorRow == str.Length - 1))
-            {
-                Console.SetCursorPosition(0, cursorRow);
-                Console.Write(str[cursorRow]);
-                cursorRow = 0;
-                Print(str[cursorRow], cursorRow, 0);
-            }
-            else if ((move.Key == ConsoleKey.UpArrow) & (cursorRow > 0))
-            {
-                Console.SetCursorPosition(0, cursorRow);
-                Console.Write(str[cursorRow]);
-                cursorRow--;
-                Print(str[cursorRow], cursorRow, 0);
-            }
-            else if ((move.Key == ConsoleKey.UpArrow) & (cursorRow == 0))
-            {
-                Console.SetCursorPosition(0, cursorRow);
-                Console.Write(str[cursorRow]);
-                cursorRow = str.Length - 1;
-                Print(str[cursorRow], cursorRow, 0);
-            }
-            else if (move.Key == ConsoleKey.Enter)
-            {
-                selected = str[cursorRow];
-            }
-            else if (move.Key == ConsoleKey.Escape)
-            {
-                selected = "Exit";
-            }
-            else if (move.Key == ConsoleKey.Spacebar)
-            {
-                selected = str[cursorRow];
-            }
+                case ConsoleKey.DownArrow:
+                    Console.SetCursorPosition(0, cursorRow);
+                    Console.Write(str[cursorRow]);
+                    cursorRow = cursorRow < (str.Length - 1) ? ++cursorRow : 0;
+                    Print(str[cursorRow], cursorRow, 0);
+                    break;
+                case ConsoleKey.UpArrow:
+                    Console.SetCursorPosition(0, cursorRow);
+                    Console.Write(str[cursorRow]);
+                    cursorRow = cursorRow > 0? --cursorRow: (str.Length - 1);
+                    Print(str[cursorRow], cursorRow, 0);
+                    break;
+                case ConsoleKey.Enter:
+                    selected = str[cursorRow];
+                    break;
+                case ConsoleKey.Escape:
+                    selected = "Exit";
+                    break;
+                default:
+                    break;
+            }            
         }
 
         /// <summary>
