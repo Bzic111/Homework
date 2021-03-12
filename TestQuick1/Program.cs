@@ -11,12 +11,13 @@ using System.Collections.Generic;
 
 namespace TestQuick1
 {
-    enum EndGameType
+    enum GameStatus
     {
         Win,
         Lose,
         Draw,
-        Break
+        Break,
+        Play
     }
     class Game
     {
@@ -28,7 +29,7 @@ namespace TestQuick1
         char PlayerOneDot { get; } = 'X';
         char PlayerTwoDot { get; } = 'O';
         int WinSerie { get; set; } = 3;
-        bool GameStatus { get; set; } = true;
+        GameStatus Status { get; set; } = GameStatus.Play;
         void SetSize()
         {
             while (!Int32.TryParse(Console.ReadLine(), out int val))
@@ -51,12 +52,9 @@ namespace TestQuick1
             do
             {
 
-            } while (this.GameStatus);
+            } while (this.Status == GameStatus.Play);
         }
-        char[,] GetField()
-        {
-            return new char[SizeY, SizeX];
-        }
+        char[,] GetField() => new char[SizeY, SizeX];
         void FillEmpty(char[,] str)
         {
             for (int i = 0; i < str.GetLength(0); i++)
@@ -67,27 +65,24 @@ namespace TestQuick1
                 }
             }
         }
-        void ExitGame()
-        {
-            GameStatus = false;
-        }
-        bool EndGame(EndGameType type, string player)
+        void ExitGame() => Status = GameStatus.Break;
+        bool EndGame(GameStatus type, string player)
         {
             switch (type)
             {
-                case EndGameType.Win:
+                case GameStatus.Win:
                     Console.WriteLine($"Congratulation!!! Player {player} WIN!!!");
                     ExitGame();
                     break;
-                case EndGameType.Lose:
+                case GameStatus.Lose:
                     Console.WriteLine("Sorry. Maybe nex time you`ll win. ");
                     ExitGame();
                     break;
-                case EndGameType.Draw:
+                case GameStatus.Draw:
                     Console.WriteLine("It is DRAW.");
                     ExitGame();
                     break;
-                case EndGameType.Break:
+                case GameStatus.Break:
                     Console.WriteLine("Exit game without ending, progress not saved.");
                     ExitGame();
                     break;
