@@ -17,18 +17,158 @@ namespace TestQuick1
         Lose,
         Draw,
         Break,
-        Play
+        Play,
+        PlayerMove,
+        AIMove
     }
+
+
+
+    public struct FieldRange
+    {
+
+        public int StartPositionY;
+        public int StartPositionX;
+        public int EndPositionY;
+        public int EndPositionX;
+        public Coordinates2D[] DiagonalUp;
+        public Coordinates2D[] DiagonalDown;
+        public Coordinates2D[] Horizontal;
+        public Coordinates2D[] Vertical;
+        public FieldRange(int[] lastDot, int length)
+        {
+            Coordinates2D Zero = new Coordinates2D(0, 0);
+            Coordinates2D VectorX = new Coordinates2D(0, 1);
+            Coordinates2D VectorY = new Coordinates2D(1, 0);
+            Coordinates2D Vector2D = new Coordinates2D(1, 1);
+
+
+
+            StartPositionX = lastDot[1] - length;
+            EndPositionX = lastDot[1] + length;
+            StartPositionY = lastDot[0] - length;
+            EndPositionY = lastDot[0] + length;
+            
+            
+            DiagonalUp = new Coordinates2D[length * 2 - 1];
+            DiagonalDown = new Coordinates2D[length * 2 - 1];
+            Horizontal = new Coordinates2D[length * 2 - 1];
+            Vertical = new Coordinates2D[length * 2 - 1];
+            int counter = 0;
+            
+
+
+            for (int i = StartPositionX, j = StartPositionY; i <= EndPositionX & j <= EndPositionY; j++, i++, counter++)
+            {
+                DiagonalDown[counter] = new Coordinates2D(j, i);
+            }
+            counter = 0;
+            for (int i = StartPositionX, j = EndPositionY; i <= EndPositionX & j >= StartPositionY; i++)
+            {
+                DiagonalUp[counter] = new Coordinates2D(j, i);
+            }
+            counter = 0;
+            for (int i = StartPositionX; i <= EndPositionX; i++)
+            {
+                Horizontal[counter] = new Coordinates2D(lastDot[0], i);
+            }
+            counter = 0;
+            for (int i = StartPositionY; i < EndPositionY; i++)
+            {
+                Vertical[counter] = new Coordinates2D(i, lastDot[1]);
+            }
+
+        }
+    }
+    public struct Coordinates2D
+    {
+        public int X;
+        public int Y;
+        public Coordinates2D(int y, int x)
+        {
+            Y = y;
+            X = x;
+        }
+        public Coordinates2D(Coordinates2D cd)
+        {
+            Y = cd.Y;
+            X = cd.X;
+        }
+        public static bool operator >(Coordinates2D cd2dA, Coordinates2D cd2dB)
+        {
+            return cd2dA.X > cd2dB.X | cd2dA.Y > cd2dB.Y;
+        }
+        public static bool operator <(Coordinates2D cd2dA, Coordinates2D cd2dB)
+        {
+            return cd2dA.X < cd2dB.X | cd2dA.Y < cd2dB.Y;
+        }
+        public static bool operator !=(Coordinates2D cd2dA, Coordinates2D cd2dB)
+        {
+            return cd2dA.X != cd2dB.X || cd2dA.Y != cd2dB.Y;
+        }
+        public static bool operator ==(Coordinates2D cd2dA, Coordinates2D cd2dB)
+        {
+            return cd2dA.X == cd2dB.X & cd2dA.Y == cd2dB.Y;
+        }
+        public static Coordinates2D operator *(Coordinates2D cd2dA,int b)
+        {
+            return new Coordinates2D(cd2dA.Y * b, cd2dA.X * b);
+        }
+        public static Coordinates2D operator /(Coordinates2D cd2dA, int b)
+        {
+            return new Coordinates2D(cd2dA.Y / b, cd2dA.X / b);
+        }
+        public static Coordinates2D operator %(Coordinates2D cd2dA, int b)
+        {
+            return new Coordinates2D(cd2dA.Y % b, cd2dA.X % b);
+        }
+        public static Coordinates2D operator +(Coordinates2D cd2dA, Coordinates2D cd2dB)
+        {
+            int retY = cd2dA.Y + cd2dB.Y;
+            int retX = cd2dA.X + cd2dB.X;
+            return new Coordinates2D(retY, retX);
+        }
+        public static Coordinates2D operator -(Coordinates2D cd2dA, Coordinates2D cd2dB)
+        {
+            int retY = cd2dA.Y - cd2dB.Y;
+            int retX = cd2dA.X - cd2dB.X;
+            return new Coordinates2D(retY, retX);
+        }
+        public static Coordinates2D operator ++ (Coordinates2D cd2dA)
+        {
+            int retY = cd2dA.Y + 1;
+            int retX = cd2dA.X + 1;
+            return new Coordinates2D(retY, retX);
+        }
+        public static Coordinates2D operator --(Coordinates2D cd2dA)
+        {
+            int retY = cd2dA.Y - 1;
+            int retX = cd2dA.X - 1;
+            return new Coordinates2D(retY, retX);
+        }
+        public static string ToString(Coordinates2D cd2dA)
+        {
+            return $"{cd2dA.Y};{cd2dA.X}";
+        }
+        
+    }
+
     class Game
     {
-        int SizeX { get; set; }
-        int SizeY { get; set; }
+        int SizeX { get; set; } = 5;
+        int SizeY { get; set; } = 5;
+        Coordinates2D Zero = new Coordinates2D(0, 0);
+        Coordinates2D VectorX = new Coordinates2D(0, 1);
+        Coordinates2D VectorY = new Coordinates2D(1, 0);
+        Coordinates2D Vector2D = new Coordinates2D(1, 1);
+        Coordinates2D Max;
         int MoveCounter { get; set; }
-        char[,] Field { get; set; }
-        char Empty { get; } = '_';
+        char[,] Field;
+        int[,] IntField;
+        char Empty { get; } = ' ';
         char PlayerOneDot { get; } = 'X';
         char PlayerTwoDot { get; } = 'O';
-        int WinSerie { get; set; } = 3;
+        int WinSerie { get; set; } = 4;
         GameStatus Status { get; set; } = GameStatus.Play;
         void SetSize()
         {
@@ -40,21 +180,25 @@ namespace TestQuick1
         }
         public Game()
         {
-            SetSize();
             MoveCounter = SizeX * SizeY;
+            Max = new Coordinates2D(SizeY,SizeX);
             Field = GetField();
+            IntField = GetIntField();
             FillEmpty(Field);
-            Play(this);
         }
-        void Play(Game game)
+        public void Play(Game game)
         {
             Show();
+            int X = 0, Y = 0;
+            Status = GameStatus.PlayerMove;
             do
             {
-
-            } while (this.Status == GameStatus.Play);
+                Selector(this.SizeX, this.SizeY, ref Field, PlayerOneDot, ref X, ref Y);
+                AIRandom(this.SizeX, this.SizeY, ref Field, PlayerTwoDot);
+            } while (Status == GameStatus.PlayerMove | Status == GameStatus.AIMove);
         }
         char[,] GetField() => new char[SizeY, SizeX];
+        int[,] GetIntField() => new int[SizeY, SizeX];
         void FillEmpty(char[,] str)
         {
             for (int i = 0; i < str.GetLength(0); i++)
@@ -92,50 +236,57 @@ namespace TestQuick1
             return false;
         }
 
-        void Selector(int maxX, int maxY, ref char[,] chr, char dot)
+        void Selector(int maxX, int maxY, ref char[,] chr, char dot, ref int X, ref int Y)
         {
-            int X = 0, Y = 0;
+            ConsoleKeyInfo key;
+
             do
             {
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                key = Console.ReadKey(true);
                 switch (key.Key)
                 {
                     case ConsoleKey.Enter:
                         chr[Y, X] = dot;
+                        int[] last = { Y, X };
+                        if (CheckWin(PlayerOneDot, last, chr))
+                        {
+                            EndGame(GameStatus.Win, "Player One");
+                        }
+                        Status = GameStatus.AIMove;
                         break;
                     case ConsoleKey.Escape:
-
+                        ExitGame();
                         break;
                     case ConsoleKey.LeftArrow:
-                        PrintBlack(chr[Y,X], Y, X);
-                        X = (X > 0) ? --X : X = maxX;
+                        PrintBlack(chr[Y, X], Y, X);
+                        X = (X > 0) ? --X : X = maxX - 1;
                         PrintWhite(chr[Y, X], Y, X);
                         break;
                     case ConsoleKey.UpArrow:
                         PrintBlack(chr[Y, X], Y, X);
-                        Y = (Y > 0) ? --Y : Y = maxY;
+                        Y = (Y > 0) ? --Y : Y = maxY - 1;
                         PrintWhite(chr[Y, X], Y, X);
                         break;
                     case ConsoleKey.RightArrow:
                         PrintBlack(chr[Y, X], Y, X);
-                        X = (X < maxX) ? ++X : X = 0;
+                        X = (X < maxX - 1) ? ++X : X = 0;
                         PrintWhite(chr[Y, X], Y, X);
                         break;
                     case ConsoleKey.DownArrow:
                         PrintBlack(chr[Y, X], Y, X);
-                        Y = (Y < maxY) ? ++Y : Y = 0;
+                        Y = (Y < maxY - 1) ? ++Y : Y = 0;
                         PrintWhite(chr[Y, X], Y, X);
                         break;
                     default:
                         break;
                 }
-            } while (true);
+            } while (Status == GameStatus.PlayerMove);
         }
-        
+
         void PrintWhite(char chr, int Y, int X)
         {
-            Console.CursorLeft = X == 0 ? 1 : (X + 2);
-            Console.CursorTop = Y == 0 ? 1 : (Y + 2);
+            Console.CursorLeft = X == 0 ? 1 : (X * 2 + 1);
+            Console.CursorTop = Y == 0 ? 1 : (Y * 2 + 1);
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Write(chr);
@@ -144,10 +295,10 @@ namespace TestQuick1
         }
         void PrintBlack(char chr, int Y, int X)
         {
-            Console.CursorLeft = X == 0 ? 1 : (X + 2);
-            Console.CursorTop = Y == 0 ? 1 : (Y + 2);
+            Console.CursorLeft = X == 0 ? 1 : (X * 2 + 1);
+            Console.CursorTop = Y == 0 ? 1 : (Y * 2 + 1);
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;            
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(chr);
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
@@ -195,13 +346,89 @@ namespace TestQuick1
         {
             Random rnd = new Random();
             int Y, X;
+            int[] last;
             do
             {
                 Y = rnd.Next(0, maxY);
                 X = rnd.Next(0, maxX);
-            } while (str[Y, X] != 'X' & str[Y, X] != 'O');
+            } while (str[Y, X] == 'X' | str[Y, X] == 'O');
             str[Y, X] = playerDot;
+            PrintBlack(str[Y, X], Y, X);
+            last = new int[] { Y, X };
+            Status = GameStatus.PlayerMove;
+            if (CheckWin(playerDot, last, str))
+            {
+                Status = GameStatus.Lose;
+                EndGame(GameStatus.Lose, "Player One");
+            }
+
+
         }
+
+        bool CheckDiagonalUp(char playerChar, int[] lastDot, char[,] field)
+        {
+            FieldRange range = new FieldRange(lastDot, WinSerie);
+            StringBuilder sb = new StringBuilder();
+            string diagonalUp;
+            int Xmin = lastDot[1] - WinSerie;
+            int Xmax = lastDot[1] + WinSerie;
+            int Ymin = lastDot[0] - WinSerie;
+            int Ymax = lastDot[0] + WinSerie;
+
+            foreach (var rng in range.DiagonalUp)
+            {
+                if (rng>Zero & rng<Max)
+                {
+                    sb.Append(field[rng.Y, rng.X]);
+                }
+            }
+            diagonalUp = sb.ToString();
+
+
+
+            for (int i = Ymax, j = Xmin; (i > Ymin) & (j < Xmax); i--, j++)
+            {
+                if ((i >= 0) & (i < field.GetLength(0)))
+                {
+                    if ((j >= 0) & (j < field.GetLength(1)))
+                    {
+                        sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
+                        if (sb.Length == WinSerie)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        bool CheckDiagonalDown(char playerChar, int[] lastDot, char[,] field)
+        {
+            StringBuilder sb = new StringBuilder();
+            int Xmin = lastDot[1] - WinSerie;
+            int Xmax = lastDot[1] + WinSerie;
+            int Ymin = lastDot[0] - WinSerie;
+            int Ymax = lastDot[0] + WinSerie;
+            for (int i = Ymin, j = Xmin; (i < Ymax) & (j < Xmax); i++, j++)
+            {
+                if ((i >= 0) & (i < field.GetLength(0)))
+                {
+                    if ((j >= 0) & (j < field.GetLength(1)))
+                    {
+                        sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
+                        if (sb.Length == WinSerie)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+
+
         bool CheckWin(char playerChar, int[] lastDot, char[,] field)
         {
             bool result;
@@ -211,11 +438,27 @@ namespace TestQuick1
             int Ymin = lastDot[0] - WinSerie;
             int Ymax = lastDot[0] + WinSerie;
 
+            for (int i = Ymax, j = Xmin; (i > Ymin) & (j < Xmax); i--, j++)
+            {
+                if ((i >= 0) & (i < field.GetLength(0)))
+                {
+                    if ((j >= 0) & (j < field.GetLength(1)))
+                    {
+                        sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
+                        if (sb.Length == WinSerie)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            result = sb.Length == WinSerie;
+            sb.Clear();
             for (int i = Ymin, j = Xmin; (i < Ymax) & (j < Xmax); i++, j++)
             {
-                if ((i >= field.GetLength(0)) & (i <= field.GetLength(0)))
+                if ((i >= 0) & (i < field.GetLength(0)))
                 {
-                    if ((j >= field.GetLength(1)) & (j <= field.GetLength(1)))
+                    if ((j >= 0) & (j < field.GetLength(1)))
                     {
                         sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
                         if (sb.Length == WinSerie)
@@ -229,7 +472,7 @@ namespace TestQuick1
             sb.Clear();
             for (int i = Ymin; i < Ymax; i++)
             {
-                if ((i >= field.GetLength(0)) & (i <= field.GetLength(0)))
+                if ((i >= 0) & (i < field.GetLength(0)))
                 {
                     sb = field[i, lastDot[1]] == playerChar ? sb.Append(field[i, lastDot[1]]) : sb.Clear();
                     if (sb.Length == WinSerie)
@@ -242,7 +485,7 @@ namespace TestQuick1
             sb.Clear();
             for (int i = Xmin; i < Xmax; i++)
             {
-                if ((i >= field.GetLength(0)) & (i <= field.GetLength(0)))
+                if ((i >= 0) & (i < field.GetLength(0)))
                 {
                     sb = field[lastDot[0], i] == playerChar ? sb.Append(field[lastDot[0], i]) : sb.Clear();
                     if (sb.Length == WinSerie)
@@ -258,48 +501,78 @@ namespace TestQuick1
     }
     class Menu
     {
-        string[] Entryes { get; }
+        public string[] Entryes { get; set; }
         int Columns { get; }
         int Rows { get; }
 
 
-        void Show()
+        public void Show()
         {
-
+            foreach (var item in Entryes)
+            {
+                Console.WriteLine(item);
+            }
+        }
+        public void Show(Menu menu)
+        {
+            menu.Show();
         }
         string Select(string[] str, int line) => str[line];
 
-
-        void Selector(int maxX, int maxY, string[] str, ref string selected)
+        public void PrintWhite(string str, int Y, int X)
         {
-            int X = 0, Y = 0;
+            Console.CursorLeft = X;
+            Console.CursorTop = Y;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write(str);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void PrintBlack(string str, int Y, int X)
+        {
+            Console.CursorLeft = X;
+            Console.CursorTop = Y;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(str);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void Selector(int maxX, int maxY, string[] str, ref string selected, ref int[] YX)
+        {
+            ConsoleKeyInfo key;
             do
             {
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                key = Console.ReadKey(true);
                 switch (key.Key)
                 {
+                    case ConsoleKey.UpArrow:
+                        PrintBlack(str[YX[0]], YX[0], YX[1]);
+                        YX[0] = (YX[0] > 0) ? --YX[0] : YX[0] = maxY - 1;
+                        PrintWhite(str[YX[0]], YX[0], YX[1]);
+                        break;
+                    case ConsoleKey.DownArrow:
+                        PrintBlack(str[YX[0]], YX[0], YX[1]);
+                        YX[0] = (YX[0] < maxY - 1) ? ++YX[0] : YX[0] = 0;
+                        PrintWhite(str[YX[0]], YX[0], YX[1]);
+                        break;
                     case ConsoleKey.Enter:
-                        selected = Select(str, Y + (X * Rows));
+                        selected = Select(str, YX[0] + (YX[1] * Rows));
                         break;
                     case ConsoleKey.Escape:
                         selected = "Exit";
                         break;
-                    case ConsoleKey.LeftArrow:
-                        X = (X > 0) ? --X : X = maxX;
-                        break;
-                    case ConsoleKey.UpArrow:
-                        Y = (Y > 0) ? --Y : Y = maxY;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        X = (X < maxX) ? ++X : X = 0;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        Y = (Y < maxY) ? ++Y : Y = 0;
-                        break;
+                    //case ConsoleKey.LeftArrow:
+                    //    YX[1] = (YX[1] > 0) ? --YX[1] : YX[1] = maxX;
+                    //    break;
+                    //case ConsoleKey.RightArrow:
+                    //    YX[1] = (YX[1] < maxX) ? ++YX[1] : YX[1] = 0;
+                    //    break;
                     default:
                         break;
                 }
-            } while (true);
+            } while ((key.Key != ConsoleKey.Enter) & (key.Key != ConsoleKey.Escape));
         }
 
     }
@@ -307,30 +580,36 @@ namespace TestQuick1
     {
         static void Main(string[] args)
         {
-            Random rnd = new Random();
-            string[,] str = new string[10,10];
-            int colStart = 10;
             string selected = null;
-            int cursorRow = 0;
-
-            for (int i = 0; i < str.GetLength(0); i++)
+            int maxX = 0, maxY = 0;
+            int[] YX = { 0, 0 };
+            Menu Main = new Menu();
+            Menu Settings = new Menu();
+            Main.Entryes = new string[] { "Один игрок", "Два игрока", "Установки игры", "Exit" };
+            Settings.Entryes = new string[] { "Установить размер поля", "Установить рамер выигрышной строки", "Exit" };
+            Main.Show();
+            Main.PrintWhite(Main.Entryes[YX[0]], YX[0], YX[1]);
+            do
             {
-                for (int j = 0; j < str.GetLength(1); j++)
+                Main.Selector(0, Main.Entryes.Length, Main.Entryes, ref selected, ref YX);
+                switch (selected)
                 {
-                    str[i, j] = i.ToString();
+                    case "Один игрок":
+                        Game crossess = new Game();
+                        Console.Clear();
+                        crossess.Play(crossess);
+                        Console.Clear();
+                        Main.Show();
+                        Main.PrintWhite(Main.Entryes[YX[0]], YX[0], YX[1]);
+                        break;
+                    default:
+                        break;
                 }
-            }
+
+            } while (selected != "Exit");
 
 
 
-            
-            Show(str);
-
-
-            //do
-            //{
-            //    Selector(str, out selected, ref cursorRow, ref colStart);
-            //} while (selected!="Exit");
 
         }
         static public string[,] ColsMenu(string[] str, int cols = 2)
