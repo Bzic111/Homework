@@ -48,14 +48,14 @@ namespace TestQuick1
             EndPositionX = lastDot[1] + length;
             StartPositionY = lastDot[0] - length;
             EndPositionY = lastDot[0] + length;
-            
-            
+
+
             DiagonalUp = new Coordinates2D[length * 2 - 1];
             DiagonalDown = new Coordinates2D[length * 2 - 1];
             Horizontal = new Coordinates2D[length * 2 - 1];
             Vertical = new Coordinates2D[length * 2 - 1];
             int counter = 0;
-            
+
 
 
             for (int i = StartPositionX, j = StartPositionY; i <= EndPositionX & j <= EndPositionY; j++, i++, counter++)
@@ -110,7 +110,7 @@ namespace TestQuick1
         {
             return cd2dA.X == cd2dB.X & cd2dA.Y == cd2dB.Y;
         }
-        public static Coordinates2D operator *(Coordinates2D cd2dA,int b)
+        public static Coordinates2D operator *(Coordinates2D cd2dA, int b)
         {
             return new Coordinates2D(cd2dA.Y * b, cd2dA.X * b);
         }
@@ -134,7 +134,7 @@ namespace TestQuick1
             int retX = cd2dA.X - cd2dB.X;
             return new Coordinates2D(retY, retX);
         }
-        public static Coordinates2D operator ++ (Coordinates2D cd2dA)
+        public static Coordinates2D operator ++(Coordinates2D cd2dA)
         {
             int retY = cd2dA.Y + 1;
             int retX = cd2dA.X + 1;
@@ -150,7 +150,7 @@ namespace TestQuick1
         {
             return $"{cd2dA.Y};{cd2dA.X}";
         }
-        
+
     }
 
     class Game
@@ -181,10 +181,11 @@ namespace TestQuick1
         public Game()
         {
             MoveCounter = SizeX * SizeY;
-            Max = new Coordinates2D(SizeY,SizeX);
+            Max = new Coordinates2D(SizeY, SizeX);
             Field = GetField();
             IntField = GetIntField();
             FillEmpty(Field);
+            FillInts(IntField);
         }
         public void Play(Game game)
         {
@@ -206,6 +207,16 @@ namespace TestQuick1
                 for (int j = 0; j < str.GetLength(1); j++)
                 {
                     str[i, j] = Empty;
+                }
+            }
+        }
+        void FillInts(int[,] field)
+        {
+            for (int i = 0; i < field.GetLength(0); i++)
+            {
+                for (int j = 0; j < field.GetLength(1); j++)
+                {
+                    field[i, j] = 1;
                 }
             }
         }
@@ -342,50 +353,74 @@ namespace TestQuick1
                 }
             }
         }
-        void AIRandom(int maxX, int maxY, ref char[,] str, char playerDot)
+        void SetDot(int Y, int X, ref int[,] intField, ref char[,] Field, char playerDot)
+        {
+            intField[Y, X] = 0;
+            Field[Y, X] = playerDot;
+            for (int i = Y - 1; i <= Y + 1; i++)
+            {
+                for (int j = X - 1; j <= X + 1; j++)
+                {
+                    if (Y > 0 & Y < intField.GetLength(0))
+                    {
+                        if (X > 0 & X < intField.GetLength(1))
+                        {
+                            intField[i, j] += intField[i, j] == 0 ? 0 : 1;
+                        }
+                    }
+                }
+            }
+        }
+        bool IsEmpty(int Y, int X, char[,] chr)
+        {
+            return chr[Y, X] == Empty;
+        }
+        void AIRandom(int maxX, int maxY, ref char[,] str, ref int[,] intField, char playerDot, ref int X, ref int Y)
         {
             Random rnd = new Random();
-            int Y, X;
+            int aiY, aiX;
             int[] last;
             do
             {
-                Y = rnd.Next(0, maxY);
-                X = rnd.Next(0, maxX);
-            } while (str[Y, X] == 'X' | str[Y, X] == 'O');
-            str[Y, X] = playerDot;
-            PrintBlack(str[Y, X], Y, X);
-            last = new int[] { Y, X };
+                aiY = rnd.Next(0, maxY);
+                aiX = rnd.Next(0, maxX);
+            } while (str[aiY, aiX] == 'X' | str[aiY, aiX] == 'O');
+            str[aiY, aiX] = playerDot;
+            PrintBlack(str[aiY, aiX], aiY, aiX);
+            last = new int[] { aiY, aiX };
             Status = GameStatus.PlayerMove;
             if (CheckWin(playerDot, last, str))
             {
                 Status = GameStatus.Lose;
                 EndGame(GameStatus.Lose, "Player One");
             }
-
-
         }
-
+        int[] FindGoodPoint(ref int[,] intField)
+        {
+            int temp = 0;
+            int[] XY = new int[2];
+            for (int i = 0; i < intField.GetLength(0); i++)
+            {
+                for (int j = 0; j < intField.GetLength(1); j++)
+                {
+                    if (intField[i,j]>temp)
+                    {
+                        temp = intField[i, j];
+                        XY[0] = i;
+                        XY[1] = j;
+                    }
+                }
+            }
+            return XY;
+        }
         bool CheckDiagonalUp(char playerChar, int[] lastDot, char[,] field)
         {
-            FieldRange range = new FieldRange(lastDot, WinSerie);
             StringBuilder sb = new StringBuilder();
             string diagonalUp;
             int Xmin = lastDot[1] - WinSerie;
             int Xmax = lastDot[1] + WinSerie;
             int Ymin = lastDot[0] - WinSerie;
             int Ymax = lastDot[0] + WinSerie;
-
-            foreach (var rng in range.DiagonalUp)
-            {
-                if (rng>Zero & rng<Max)
-                {
-                    sb.Append(field[rng.Y, rng.X]);
-                }
-            }
-            diagonalUp = sb.ToString();
-
-
-
             for (int i = Ymax, j = Xmin; (i > Ymin) & (j < Xmax); i--, j++)
             {
                 if ((i >= 0) & (i < field.GetLength(0)))
@@ -402,7 +437,6 @@ namespace TestQuick1
             }
             return false;
         }
-
         bool CheckDiagonalDown(char playerChar, int[] lastDot, char[,] field)
         {
             StringBuilder sb = new StringBuilder();
@@ -426,63 +460,13 @@ namespace TestQuick1
             }
             return false;
         }
-
-
-
-        bool CheckWin(char playerChar, int[] lastDot, char[,] field)
+        bool CheckHorizontal(char playerChar, int[] lastDot, char[,] field)
         {
-            bool result;
             StringBuilder sb = new StringBuilder();
             int Xmin = lastDot[1] - WinSerie;
             int Xmax = lastDot[1] + WinSerie;
             int Ymin = lastDot[0] - WinSerie;
             int Ymax = lastDot[0] + WinSerie;
-
-            for (int i = Ymax, j = Xmin; (i > Ymin) & (j < Xmax); i--, j++)
-            {
-                if ((i >= 0) & (i < field.GetLength(0)))
-                {
-                    if ((j >= 0) & (j < field.GetLength(1)))
-                    {
-                        sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
-                        if (sb.Length == WinSerie)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            result = sb.Length == WinSerie;
-            sb.Clear();
-            for (int i = Ymin, j = Xmin; (i < Ymax) & (j < Xmax); i++, j++)
-            {
-                if ((i >= 0) & (i < field.GetLength(0)))
-                {
-                    if ((j >= 0) & (j < field.GetLength(1)))
-                    {
-                        sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
-                        if (sb.Length == WinSerie)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            result = sb.Length == WinSerie;
-            sb.Clear();
-            for (int i = Ymin; i < Ymax; i++)
-            {
-                if ((i >= 0) & (i < field.GetLength(0)))
-                {
-                    sb = field[i, lastDot[1]] == playerChar ? sb.Append(field[i, lastDot[1]]) : sb.Clear();
-                    if (sb.Length == WinSerie)
-                    {
-                        return true;
-                    }
-                }
-            }
-            result = sb.Length == WinSerie;
-            sb.Clear();
             for (int i = Xmin; i < Xmax; i++)
             {
                 if ((i >= 0) & (i < field.GetLength(0)))
@@ -494,9 +478,31 @@ namespace TestQuick1
                     }
                 }
             }
-            result = sb.Length == WinSerie;
-            sb.Clear();
-            return result;
+            return false;
+        }
+        bool CheckVertical(char playerChar, int[] lastDot, char[,] field)
+        {
+            StringBuilder sb = new StringBuilder();
+            int Xmin = lastDot[1] - WinSerie;
+            int Xmax = lastDot[1] + WinSerie;
+            int Ymin = lastDot[0] - WinSerie;
+            int Ymax = lastDot[0] + WinSerie;
+            for (int i = Ymin; i < Ymax; i++)
+            {
+                if ((i >= 0) & (i < field.GetLength(0)))
+                {
+                    sb = field[i, lastDot[1]] == playerChar ? sb.Append(field[i, lastDot[1]]) : sb.Clear();
+                    if (sb.Length == WinSerie)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        bool CheckWin(char playerChar, int[] lastDot, char[,] field)
+        {
+            return CheckVertical(playerChar, lastDot, field) | CheckHorizontal(playerChar, lastDot, field) | CheckDiagonalDown(playerChar, lastDot, field) | CheckDiagonalUp(playerChar, lastDot, field);
         }
     }
     class Menu
