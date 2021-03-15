@@ -22,146 +22,46 @@ namespace TestQuick1
         AIMove
     }
 
-
-
-    public struct FieldRange
+    public class Cell
     {
+        char Char { get; set; }
+        int Cost { get; set; }
+        int[] Coordinates;
+        static int MaxY;
+        static int MinY;
+        static int MaxX;
+        static int MinX;
 
-        public int StartPositionY;
-        public int StartPositionX;
-        public int EndPositionY;
-        public int EndPositionX;
-        public Coordinates2D[] DiagonalUp;
-        public Coordinates2D[] DiagonalDown;
-        public Coordinates2D[] Horizontal;
-        public Coordinates2D[] Vertical;
-        public FieldRange(int[] lastDot, int length)
+        public Cell(int y,int x)
         {
-            Coordinates2D Zero = new Coordinates2D(0, 0);
-            Coordinates2D VectorX = new Coordinates2D(0, 1);
-            Coordinates2D VectorY = new Coordinates2D(1, 0);
-            Coordinates2D Vector2D = new Coordinates2D(1, 1);
-
-
-
-            StartPositionX = lastDot[1] - length;
-            EndPositionX = lastDot[1] + length;
-            StartPositionY = lastDot[0] - length;
-            EndPositionY = lastDot[0] + length;
-
-
-            DiagonalUp = new Coordinates2D[length * 2 - 1];
-            DiagonalDown = new Coordinates2D[length * 2 - 1];
-            Horizontal = new Coordinates2D[length * 2 - 1];
-            Vertical = new Coordinates2D[length * 2 - 1];
-            int counter = 0;
-
-
-
-            for (int i = StartPositionX, j = StartPositionY; i <= EndPositionX & j <= EndPositionY; j++, i++, counter++)
+            Char = ' ';
+            Cost = 0;
+            Coordinates = new int[]{ y,x};
+        }
+        public void SetChar(char chr)
+        {
+            Char = chr;
+            Cost = 0;
+        }
+        public void Raise(char chr, Cell[,] cells)
+        {
+            for (int i = Coordinates[0]-1; i < Coordinates[0]+1; i++)
             {
-                DiagonalDown[counter] = new Coordinates2D(j, i);
-            }
-            counter = 0;
-            for (int i = StartPositionX, j = EndPositionY; i <= EndPositionX & j >= StartPositionY; i++)
-            {
-                DiagonalUp[counter] = new Coordinates2D(j, i);
-            }
-            counter = 0;
-            for (int i = StartPositionX; i <= EndPositionX; i++)
-            {
-                Horizontal[counter] = new Coordinates2D(lastDot[0], i);
-            }
-            counter = 0;
-            for (int i = StartPositionY; i < EndPositionY; i++)
-            {
-                Vertical[counter] = new Coordinates2D(i, lastDot[1]);
-            }
+                for (int j = Coordinates[1] - 1; j < Coordinates[1] + 1; j++)
+                {
+                    if (Game.InRange(i,j,cells))
+                    {
 
+                    }
+                }
+            }
+            
         }
     }
-    public struct Coordinates2D
-    {
-        public int X;
-        public int Y;
-        public Coordinates2D(int y, int x)
-        {
-            Y = y;
-            X = x;
-        }
-        public Coordinates2D(Coordinates2D cd)
-        {
-            Y = cd.Y;
-            X = cd.X;
-        }
-        public static bool operator >(Coordinates2D cd2dA, Coordinates2D cd2dB)
-        {
-            return cd2dA.X > cd2dB.X | cd2dA.Y > cd2dB.Y;
-        }
-        public static bool operator <(Coordinates2D cd2dA, Coordinates2D cd2dB)
-        {
-            return cd2dA.X < cd2dB.X | cd2dA.Y < cd2dB.Y;
-        }
-        public static bool operator !=(Coordinates2D cd2dA, Coordinates2D cd2dB)
-        {
-            return cd2dA.X != cd2dB.X || cd2dA.Y != cd2dB.Y;
-        }
-        public static bool operator ==(Coordinates2D cd2dA, Coordinates2D cd2dB)
-        {
-            return cd2dA.X == cd2dB.X & cd2dA.Y == cd2dB.Y;
-        }
-        public static Coordinates2D operator *(Coordinates2D cd2dA, int b)
-        {
-            return new Coordinates2D(cd2dA.Y * b, cd2dA.X * b);
-        }
-        public static Coordinates2D operator /(Coordinates2D cd2dA, int b)
-        {
-            return new Coordinates2D(cd2dA.Y / b, cd2dA.X / b);
-        }
-        public static Coordinates2D operator %(Coordinates2D cd2dA, int b)
-        {
-            return new Coordinates2D(cd2dA.Y % b, cd2dA.X % b);
-        }
-        public static Coordinates2D operator +(Coordinates2D cd2dA, Coordinates2D cd2dB)
-        {
-            int retY = cd2dA.Y + cd2dB.Y;
-            int retX = cd2dA.X + cd2dB.X;
-            return new Coordinates2D(retY, retX);
-        }
-        public static Coordinates2D operator -(Coordinates2D cd2dA, Coordinates2D cd2dB)
-        {
-            int retY = cd2dA.Y - cd2dB.Y;
-            int retX = cd2dA.X - cd2dB.X;
-            return new Coordinates2D(retY, retX);
-        }
-        public static Coordinates2D operator ++(Coordinates2D cd2dA)
-        {
-            int retY = cd2dA.Y + 1;
-            int retX = cd2dA.X + 1;
-            return new Coordinates2D(retY, retX);
-        }
-        public static Coordinates2D operator --(Coordinates2D cd2dA)
-        {
-            int retY = cd2dA.Y - 1;
-            int retX = cd2dA.X - 1;
-            return new Coordinates2D(retY, retX);
-        }
-        public static string ToString(Coordinates2D cd2dA)
-        {
-            return $"{cd2dA.Y};{cd2dA.X}";
-        }
-
-    }
-
     class Game
     {
         int SizeX { get; set; } = 5;
-        int SizeY { get; set; } = 5;
-        Coordinates2D Zero = new Coordinates2D(0, 0);
-        Coordinates2D VectorX = new Coordinates2D(0, 1);
-        Coordinates2D VectorY = new Coordinates2D(1, 0);
-        Coordinates2D Vector2D = new Coordinates2D(1, 1);
-        Coordinates2D Max;
+        int SizeY { get; set; } = 5;        
         int MoveCounter { get; set; }
         char[,] Field;
         int[,] IntField;
@@ -181,7 +81,6 @@ namespace TestQuick1
         public Game()
         {
             MoveCounter = SizeX * SizeY;
-            Max = new Coordinates2D(SizeY, SizeX);
             Field = GetField();
             IntField = GetIntField();
             FillEmpty(Field);
@@ -190,13 +89,40 @@ namespace TestQuick1
         public void Play(Game game)
         {
             Show();
+            Console.CursorVisible = false;
             int X = 0, Y = 0;
             Status = GameStatus.PlayerMove;
+            int[] last = { Y, X };
             do
             {
-                Selector(this.SizeX, this.SizeY, ref Field, PlayerOneDot, ref X, ref Y);
-                AIRandom(this.SizeX, this.SizeY, ref Field, PlayerTwoDot);
+                Selector(this.SizeX, this.SizeY, ref Field, ref IntField, PlayerOneDot, ref X, ref Y);
+                last[0] = Y;
+                last[1] = X;
+                SetCost(PlayerOneDot, last, Field, ref IntField);
+                if (CheckWin(PlayerOneDot, last, Field, ref IntField))
+                {
+                    EndGame(GameStatus.Win, "Player One");
+                    Console.ReadKey();
+                    goto EndPoint;
+                }
+                if (Status == GameStatus.Break)
+                {
+                    goto EndPoint;
+                }
+                AIMove(this.SizeX, this.SizeY, ref Field, ref IntField, PlayerTwoDot, ref X, ref Y);
+                last[0] = Y;
+                last[1] = X;
+                SetCost(PlayerTwoDot, last, Field, ref IntField);
+                
+                if (CheckWin(PlayerTwoDot, last, Field, ref IntField))
+                {
+                    EndGame(GameStatus.Win, "CPU");
+                    Console.ReadKey();
+                    goto EndPoint;
+                }
+                ReSetCost(Field, ref IntField);
             } while (Status == GameStatus.PlayerMove | Status == GameStatus.AIMove);
+        EndPoint:;
         }
         char[,] GetField() => new char[SizeY, SizeX];
         int[,] GetIntField() => new int[SizeY, SizeX];
@@ -220,7 +146,11 @@ namespace TestQuick1
                 }
             }
         }
-        void ExitGame() => Status = GameStatus.Break;
+        void ExitGame()
+        {
+            Status = GameStatus.Break;
+
+        }
         bool EndGame(GameStatus type, string player)
         {
             switch (type)
@@ -246,8 +176,7 @@ namespace TestQuick1
             }
             return false;
         }
-
-        void Selector(int maxX, int maxY, ref char[,] chr, char dot, ref int X, ref int Y)
+        void Selector(int maxX, int maxY, ref char[,] chr, ref int[,] IntField, char dot, ref int X, ref int Y)
         {
             ConsoleKeyInfo key;
 
@@ -256,14 +185,22 @@ namespace TestQuick1
                 key = Console.ReadKey(true);
                 switch (key.Key)
                 {
+                    case ConsoleKey.Spacebar:
+                        Console.CursorLeft = X == 0 ? 1 : (X * 2 + 1);
+                        Console.CursorTop = Y == 0 ? 1 : (Y * 2 + 1);
+                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write(IntField[Y, X]);
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Console.ForegroundColor = ConsoleColor.White;
+                        break;
                     case ConsoleKey.Enter:
-                        chr[Y, X] = dot;
-                        int[] last = { Y, X };
-                        if (CheckWin(PlayerOneDot, last, chr))
+                        if (IsEmpty(Y, X, chr))
                         {
-                            EndGame(GameStatus.Win, "Player One");
+                            SetDot(Y, X, ref IntField, ref chr, dot);
+                            PrintBlack(chr[Y, X], Y, X);
+                            Status = GameStatus.AIMove;
                         }
-                        Status = GameStatus.AIMove;
                         break;
                     case ConsoleKey.Escape:
                         ExitGame();
@@ -293,7 +230,6 @@ namespace TestQuick1
                 }
             } while (Status == GameStatus.PlayerMove);
         }
-
         void PrintWhite(char chr, int Y, int X)
         {
             Console.CursorLeft = X == 0 ? 1 : (X * 2 + 1);
@@ -361,12 +297,9 @@ namespace TestQuick1
             {
                 for (int j = X - 1; j <= X + 1; j++)
                 {
-                    if (Y > 0 & Y < intField.GetLength(0))
+                    if (InRange(i, j, Field))
                     {
-                        if (X > 0 & X < intField.GetLength(1))
-                        {
-                            intField[i, j] += intField[i, j] == 0 ? 0 : 1;
-                        }
+                        intField[i, j] += intField[i, j] == 0 ? 0 : 1;
                     }
                 }
             }
@@ -375,25 +308,14 @@ namespace TestQuick1
         {
             return chr[Y, X] == Empty;
         }
-        void AIRandom(int maxX, int maxY, ref char[,] str, ref int[,] intField, char playerDot, ref int X, ref int Y)
+        void AIMove(int maxX, int maxY, ref char[,] str, ref int[,] intField, char playerDot, ref int X, ref int Y)
         {
-            Random rnd = new Random();
-            int aiY, aiX;
-            int[] last;
-            do
-            {
-                aiY = rnd.Next(0, maxY);
-                aiX = rnd.Next(0, maxX);
-            } while (str[aiY, aiX] == 'X' | str[aiY, aiX] == 'O');
-            str[aiY, aiX] = playerDot;
-            PrintBlack(str[aiY, aiX], aiY, aiX);
-            last = new int[] { aiY, aiX };
+            int[] YX = FindGoodPoint(ref intField);
+            Y = YX[0];
+            X = YX[1];
+            SetDot(Y,X,ref IntField,ref str,playerDot);
+            PrintBlack(str[Y, X], Y, X);
             Status = GameStatus.PlayerMove;
-            if (CheckWin(playerDot, last, str))
-            {
-                Status = GameStatus.Lose;
-                EndGame(GameStatus.Lose, "Player One");
-            }
         }
         int[] FindGoodPoint(ref int[,] intField)
         {
@@ -403,7 +325,7 @@ namespace TestQuick1
             {
                 for (int j = 0; j < intField.GetLength(1); j++)
                 {
-                    if (intField[i,j]>temp)
+                    if (intField[i, j] > temp)
                     {
                         temp = intField[i, j];
                         XY[0] = i;
@@ -413,96 +335,218 @@ namespace TestQuick1
             }
             return XY;
         }
-        bool CheckDiagonalUp(char playerChar, int[] lastDot, char[,] field)
+        void ReSetCost(char[,] field, ref int[,] intField)
         {
-            StringBuilder sb = new StringBuilder();
-            string diagonalUp;
-            int Xmin = lastDot[1] - WinSerie;
-            int Xmax = lastDot[1] + WinSerie;
-            int Ymin = lastDot[0] - WinSerie;
-            int Ymax = lastDot[0] + WinSerie;
-            for (int i = Ymax, j = Xmin; (i > Ymin) & (j < Xmax); i--, j++)
+            for (int i = 0; i < field.GetLength(0); i++)
             {
-                if ((i >= 0) & (i < field.GetLength(0)))
+                for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    if ((j >= 0) & (j < field.GetLength(1)))
+                    if (field[i,j]==Empty)
                     {
-                        sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
-                        if (sb.Length == WinSerie)
-                        {
-                            return true;
-                        }
+                        intField[i, j] = 1;
                     }
                 }
             }
-            return false;
         }
-        bool CheckDiagonalDown(char playerChar, int[] lastDot, char[,] field)
+        void SetCost(char playerChar, int[] lastDot, char[,] field, ref int[,] intField)
         {
-            StringBuilder sb = new StringBuilder();
             int Xmin = lastDot[1] - WinSerie;
             int Xmax = lastDot[1] + WinSerie;
             int Ymin = lastDot[0] - WinSerie;
             int Ymax = lastDot[0] + WinSerie;
-            for (int i = Ymin, j = Xmin; (i < Ymax) & (j < Xmax); i++, j++)
+            int counter = 0;
+            for (int i = Ymin, j = Xmax; (i <= Ymax) & (j >= Xmin); i++, j--)
             {
-                if ((i >= 0) & (i < field.GetLength(0)))
+                if (InRange(i, j, field))
                 {
-                    if ((j >= 0) & (j < field.GetLength(1)))
+                    if (field[i, j] == playerChar)
                     {
-                        sb = field[i, j] == playerChar ? sb.Append(field[i, j]) : sb.Clear();
-                        if (sb.Length == WinSerie)
-                        {
-                            return true;
-                        }
+                        counter++;
+                    }
+                    if (field[i, j] == Empty & counter > 0)
+                    {
+                        intField[i, j] += counter;
+                        counter = 0;
                     }
                 }
             }
-            return false;
+            counter = 0;
+            for (int i = Ymax, j = Xmax; (i >= Ymin) & (j >= Xmin); i--, j--)
+            {
+                if (InRange(i, j, field))
+                {
+                    if (field[i, j] == playerChar)
+                    {
+                        counter++;
+                    }
+                    if (field[i, j] == Empty & counter > 0)
+                    {
+                        intField[i, j] += counter;
+                        counter = 0;
+                    }
+                }
+            }
+            counter = 0;
+            for (int i = Xmax; i >= Xmin; i--)
+            {
+                if (InRange(lastDot[0], i, field))
+                {
+                    if (field[lastDot[0], i] == playerChar)
+                    {
+                        counter++;
+                    }
+                    if (field[lastDot[0], i] == Empty & counter > 0)
+                    {
+                        intField[lastDot[0], i] += counter;
+                        counter = 0;
+                    }
+                }
+            }
+            counter = 0;
+            for (int i = Ymax; i >= Ymin; i--)
+            {
+                if (InRange(i, lastDot[1], field))
+                {
+                    if (field[i, lastDot[1]] == playerChar)
+                    {
+                        counter++;
+                    }
+                    if (field[i, lastDot[1]] == Empty & counter > 0)
+                    {
+                        intField[i, lastDot[1]] += counter;
+                        counter = 0;
+                    }
+                }
+            }
         }
-        bool CheckHorizontal(char playerChar, int[] lastDot, char[,] field)
+        bool CheckDiagonalUp(char playerChar, int[] lastDot, char[,] field, ref int[,] intField)
         {
-            StringBuilder sb = new StringBuilder();
             int Xmin = lastDot[1] - WinSerie;
             int Xmax = lastDot[1] + WinSerie;
             int Ymin = lastDot[0] - WinSerie;
             int Ymax = lastDot[0] + WinSerie;
-            for (int i = Xmin; i < Xmax; i++)
+            int counter = 0;
+            for (int i = Ymax, j = Xmin; (i >= Ymin) & (j <= Xmax); i--, j++)
             {
-                if ((i >= 0) & (i < field.GetLength(0)))
+                if (InRange(i, j, field))
                 {
-                    sb = field[lastDot[0], i] == playerChar ? sb.Append(field[lastDot[0], i]) : sb.Clear();
-                    if (sb.Length == WinSerie)
+                    if (field[i, j] == playerChar)
+                    {
+                        counter++;
+                    }
+                    if (counter == WinSerie)
                     {
                         return true;
                     }
+                    if (field[i, j] == Empty & counter > 0)
+                    {
+                        intField[i, j]+= counter;
+                        counter = 0;
+                    }
+
                 }
             }
             return false;
         }
-        bool CheckVertical(char playerChar, int[] lastDot, char[,] field)
+        bool CheckDiagonalDown(char playerChar, int[] lastDot, char[,] field, ref int[,] intField)
         {
-            StringBuilder sb = new StringBuilder();
             int Xmin = lastDot[1] - WinSerie;
             int Xmax = lastDot[1] + WinSerie;
             int Ymin = lastDot[0] - WinSerie;
             int Ymax = lastDot[0] + WinSerie;
-            for (int i = Ymin; i < Ymax; i++)
+            int counter = 0;
+            for (int i = Ymin, j = Xmin; (i <= Ymax) & (j <= Xmax); i++, j++)
             {
-                if ((i >= 0) & (i < field.GetLength(0)))
+                if (InRange(i, j, field))
                 {
-                    sb = field[i, lastDot[1]] == playerChar ? sb.Append(field[i, lastDot[1]]) : sb.Clear();
-                    if (sb.Length == WinSerie)
+                    if (field[i, j] == playerChar)
+                    {
+                        counter++;
+                    }
+                    if (counter == WinSerie)
                     {
                         return true;
+                    }
+                    if (field[i, j] == Empty & counter > 0)
+                    {
+                        intField[i, j]+= counter;
+                        counter = 0;
                     }
                 }
             }
             return false;
         }
-        bool CheckWin(char playerChar, int[] lastDot, char[,] field)
+        bool CheckHorizontal(char playerChar, int[] lastDot, char[,] field, ref int[,] intField)
         {
-            return CheckVertical(playerChar, lastDot, field) | CheckHorizontal(playerChar, lastDot, field) | CheckDiagonalDown(playerChar, lastDot, field) | CheckDiagonalUp(playerChar, lastDot, field);
+            int Xmin = lastDot[1] - WinSerie;
+            int Xmax = lastDot[1] + WinSerie;
+            int counter = 0;
+            for (int i = Xmin; i <= Xmax; i++)
+            {
+                if (InRange(lastDot[0], i, field))
+                {
+                    if (field[lastDot[0], i] == playerChar)
+                    {
+                        counter++;
+                    }
+                    if (counter == WinSerie)
+                    {
+                        return true;
+                    }
+                    if (field[lastDot[0], i] == Empty & counter > 0)
+                    {
+                        intField[lastDot[0], i] += counter;
+                        counter = 0;
+                    }
+                }
+            }
+            return false;
+        }
+        bool CheckVertical(char playerChar, int[] lastDot, char[,] field, ref int[,] intField)
+        {
+            int Ymin = lastDot[0] - WinSerie;
+            int Ymax = lastDot[0] + WinSerie;
+            int counter = 0;
+            for (int i = Ymin; i <= Ymax; i++)
+            {
+                if (InRange(i, lastDot[1], field))
+                {
+                    if (field[i, lastDot[1]] == playerChar)
+                    {
+                        counter++;
+                    }
+                    if (counter == WinSerie)
+                    {
+                        return true;
+                    }
+                    if (field[i, lastDot[1]] == Empty & counter > 0)
+                    {
+                        intField[i, lastDot[1]] += counter;
+                        counter = 0;
+                    }
+                }
+            }
+            return false;
+        }
+        bool CheckWin(char playerChar, int[] lastDot, char[,] field, ref int[,] intField)
+        {
+            bool ver = CheckVertical(playerChar, lastDot, field, ref intField);
+            bool hor = CheckHorizontal(playerChar, lastDot, field, ref intField);
+            bool up = CheckDiagonalUp(playerChar, lastDot, field, ref intField);
+            bool dn = CheckDiagonalDown(playerChar, lastDot, field, ref intField);
+            return ver | hor | up | dn;
+        }
+        public bool InRange(int Y, int X, char[,] arr)
+        {
+            return (Y >= 0 & Y < arr.GetLength(0)) & (X >= 0 & X < arr.GetLength(1));
+        }
+        static public bool InRange(int Y, int X, Cell[,] arr)
+        {
+            return (Y >= 0 & Y < arr.GetLength(0)) & (X >= 0 & X < arr.GetLength(1));
+        }
+        public bool InRange(int Y, int X, int lengthA, int lengthB)
+        {
+            return (Y >= 0 & Y < lengthA) & (X >= 0 & X < lengthB);
         }
     }
     class Menu
