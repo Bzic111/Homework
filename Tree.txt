@@ -1,0 +1,26 @@
+╚╦Homework
+ ╠═.git
+ ╠═.vs
+ ╠═ArrPlaySeaBattle
+ ╠═DopDZ
+ ╠═Enum Test
+ ╠═HomeworkLibrary
+ ╠═Lesson01
+ ╠═Lesson02
+ ╠═Lesson2.2
+ ╠═Lesson2.3
+ ╠═Lesson2.4
+ ╠═Lesson2.5
+ ╠═Lesson2.6
+ ╠═Lesson3.1
+ ╠═Lesson3.2
+ ╠═MainProgramHomework
+ ╠═TestQuick1
+ ╠═Тест
+ ╠═Тестовая комната
+ ╟─.gitattributes
+ ╟─.gitignore
+ ╟─FullTree.txt
+ ╟─README.md
+ ╟─Tree.txt
+ ╚══════
