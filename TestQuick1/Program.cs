@@ -11,60 +11,40 @@ namespace TestQuick1
         {
             Process[] ListOfProcesses = Process.GetProcesses();
             List<Process[]> lister = FrameList(ListOfProcesses);
-            string lineUp = "╔".PadRight(48, '═') + "╤".PadRight(11, '═') + "╦".PadRight(48, '═') + "╤".PadRight(11, '═') + "╗\n";
-            string border = "║ ".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║";
-            string lineDown = "╚".PadRight(48, '═') + "╧".PadRight(11, '═') + "╩".PadRight(48, '═') + "╧".PadRight(11, '═') + "╝\n";
-            int firstFrame = 3;
-            int secondFrame = 60;
-
-            Console.Write(lineUp);
-            for (int i = 0; i < lister.Count; i++)
+            int page = 0;
+            bool exit = false;
+            ShowFrame();
+            FillFrame(lister, page);
+            do
             {
-                for (int j = 0; j < lister[i].Length; j++)
-                {
-                    if (j==0)
-                    {
-                        Console.Write(border);
-                        Console.CursorLeft = 3;
-                        Console.Write(lister[i][j].ProcessName.PadRight(44).Remove(43));
-                        Console.CursorLeft = 50;
-                        Console.Write(lister[i][j].Id.ToString().PadLeft(8));
-                        //Console.CursorLeft = 118;
-                        //Console.WriteLine("");
-                    }
-                    else if (j % 2 == 0 & j == lister[i].Length - 1 & i == lister.Count - 1)
-                    {
-                        Console.Write(border);
-                        Console.CursorLeft = 3;
-                        Console.Write(lister[i][j].ProcessName.PadRight(44).Remove(43));
-                        Console.CursorLeft = 50;
-                        Console.Write(lister[i][j].Id.ToString().PadLeft(8));
-                        Console.CursorLeft = 117;
-                        Console.WriteLine("");
-                    }
-                    else if (j % 2 == 0)
-                    {
-                        Console.Write(border);
-                        Console.CursorLeft = 3;
-                        Console.Write(lister[i][j].ProcessName.PadRight(44).Remove(43));
-                        Console.CursorLeft = 50;
-                        Console.Write(lister[i][j].Id.ToString().PadLeft(8));
-                    }
-                    
-                    else if(j % 2 != 0)
-                    {
-                        //Console.Write(border);
-                        Console.CursorLeft = 61;
-                        Console.Write(lister[i][j].ProcessName.PadRight(44).Remove(43));
-                        Console.CursorLeft = 109;
-                        Console.Write(lister[i][j].Id.ToString().PadLeft(8));
-                        Console.CursorLeft = 117;
-                        Console.WriteLine("");
-                    }
 
+                switch (Console.ReadKey(false).Key)
+                {
+                    case ConsoleKey.PageDown:
+                        page++;
+                        if (page == lister.Count)
+                        {
+                            page = 0;
+                        }
+                        
+                        break;
+                    case ConsoleKey.PageUp:
+                        page--;
+                        if (page < 0)
+                        {
+                            page = lister.Count - 1;
+                        }
+                        break;
+                    case ConsoleKey.Escape:
+                        exit = true;
+                        break;
+                    default:
+                        break;
                 }
-            }
-            Console.Write(lineDown);
+                FillFrame(lister, page);
+            } while (!exit);
+
+
 
         }
 
@@ -73,30 +53,79 @@ namespace TestQuick1
             Process[] ListOfProcesses = Process.GetProcesses();
             List<Process[]> lister = FrameList(ListOfProcesses);
         }
-        static void FrameBuild(List<Process[]> lst)
+        static void ShowFrame()
         {
-            string lineUp = "╔".PadRight(48, '═') + "╤".PadRight(11, '═') + "╦".PadRight(48, '═') + "╤".PadRight(11, '═') + "╗\n";
-            string border = "║ ".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║\n";
-            string lineDown = "╚".PadRight(48, '═') + "╧".PadRight(11, '═') + "╩".PadRight(48, '═') + "╧".PadRight(11, '═') + "╝\n";
+            string lineUp = "╔".PadRight(48, '═') + "╤".PadRight(11, '═') + "╦".PadRight(48, '═') + "╤".PadRight(11, '═') + "╗";
+            string border = "║".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║";
+            string lineDown = "╚".PadRight(48, '═') + "╧".PadRight(11, '═') + "╩".PadRight(48, '═') + "╧".PadRight(11, '═') + "╝";
+            Console.WriteLine(lineUp);
+            for (int i = 0; i < 21; i++)
+            {
+                Console.WriteLine(border);
+            }
+            Console.WriteLine(lineDown);
+        }
+
+        static void FillFrame(List<Process[]> lst, int page)
+        {
+            int upper = 1;
+            int FFStart = 3;
+            int SFStart = 61;
+            int FFBorder = 50;
+            int SFBorder = 109;
+            int liner = 0;
+
+            for (int j = 0; j < lst[page].Length; j++)
+            {
+                if (j == 0)
+                {
+                    Console.SetCursorPosition(FFStart, upper + liner);
+                    Console.Write(lst[page][j].ProcessName.PadRight(44).Remove(43));
+                    Console.CursorLeft = 50;
+                    Console.Write(lst[page][j].Id.ToString().PadLeft(8));
+                }
+                else if (j % 2 == 0 & j == lst[page].Length - 1 & page == lst.Count - 1)
+                {
+                    Console.SetCursorPosition(FFStart, upper + liner);
+                    Console.Write(lst[page][j].ProcessName.PadRight(44).Remove(43));
+                    Console.SetCursorPosition(FFBorder, upper + liner);
+                    Console.Write(lst[page][j].Id.ToString().PadLeft(8));
+                }
+                else if (j % 2 == 0)
+                {
+                    Console.SetCursorPosition(FFStart, upper + liner);
+                    Console.Write(lst[page][j].ProcessName.PadRight(44).Remove(43));
+                    Console.SetCursorPosition(FFBorder, upper + liner);
+                    Console.Write(lst[page][j].Id.ToString().PadLeft(8));
+                }
+                else if (j % 2 != 0)
+                {
+                    Console.SetCursorPosition(SFStart, upper + liner);
+                    Console.Write(lst[page][j].ProcessName.PadRight(44).Remove(43));
+                    Console.SetCursorPosition(SFBorder, upper + liner);
+                    Console.Write(lst[page][j].Id.ToString().PadLeft(8));
+                    liner++;
+                }
+            }
         }
         static List<Process[]> FrameList(Process[] listOfProcesses)
         {
             List<Process[]> FrameList = new List<Process[]>();
             for (int i = 0; i < listOfProcesses.Length;)
             {
-                if (FrameList.Count == listOfProcesses.Length / 20)
+                if (FrameList.Count == listOfProcesses.Length / 40)
                 {
-                    FrameList.Add(new Process[listOfProcesses.Length % 20]);
-                    for (int j = 0; j < 20 & i < listOfProcesses.Length; j++, i++)
+                    FrameList.Add(new Process[listOfProcesses.Length % 40]);
+                    for (int j = 0; j < 40 & i < listOfProcesses.Length; j++, i++)
                     {
                         FrameList[^1][j] = listOfProcesses[i];
                     }
                 }
                 else
                 {
-                    FrameList.Add(new Process[20]);
+                    FrameList.Add(new Process[40]);
 
-                    for (int j = 0; j < 20 & i < listOfProcesses.Length; j++, i++)
+                    for (int j = 0; j < 40 & i < listOfProcesses.Length; j++, i++)
                     {
                         FrameList[^1][j] = listOfProcesses[i];
                     }
