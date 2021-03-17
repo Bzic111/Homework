@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace TestQuick1
+namespace Lesson07
 {
     enum GameStatus
     {
@@ -9,22 +11,39 @@ namespace TestQuick1
         Break,
         Play
     }
-    class Crosses
+    public class HomeWork : MenuSpace.Work
     {
-        public int SizeX;
-        public int SizeY;
-        int MoveCounter { get; set; }
+        public new MenuSpace.Menu.Runner[] AllRuns { get; }
+        string[] Names { get; } = { "Один игрок", "Два игрока", "Установить размер поля", "Установить рамер выигрышной строки"};
+        public override string[] GetNames() { return this.Names; }
+        public override MenuSpace.Menu.Runner[] GetRunners()
+        {
+            return AllRuns;
+        }
+        public HomeWork()
+        {
+            AllRuns = new MenuSpace.Menu.Runner[]
+            {
+                PlayOne,
+                PlayTwo,
+                SetSize,
+                SetWinSerie
+            };
+        }
+
+        int SizeX;
+        int SizeY;
         char[,] Field;
         int[,] IntField;
-        char Empty { get; } = ' ';
-        char PlayerOneDot { get; } = 'X';
-        char PlayerTwoDot { get; } = 'O';
-        int WinSerie { get; set; }
+        int WinSerie { get; set; } = 3;
+        char[] Symbols { get; } = { ' ', 'X', 'O' };
         GameStatus Status { get; set; } = GameStatus.Play;
-        public void SetSize()
+        int MoveCounter { get; set; }
+        void SetSize()
         {
+            Console.Clear();
             Console.WriteLine("Set Size of field");
-            if(Int32.TryParse(Console.ReadLine(), out int val))
+            if (Int32.TryParse(Console.ReadLine(), out int val))
             {
                 SizeY = val;
                 SizeX = val;
@@ -35,9 +54,11 @@ namespace TestQuick1
 
                 Console.ReadLine();
             }
+            Console.Clear();
         }
-        public void SetWinSerie()
+        void SetWinSerie()
         {
+            Console.Clear();
             Console.WriteLine("Set Line Length for win");
             if (Int32.TryParse(Console.ReadLine(), out int val))
             {
@@ -49,18 +70,23 @@ namespace TestQuick1
 
                 Console.ReadLine();
             }
+            Console.Clear();
         }
-        public void PlayOne()
+        void PlayOne()
         {
-            if (SizeX<3)
+            Console.Clear();
+            char PlayerOneDot = Symbols[1];
+            char PlayerTwoDot = Symbols[2];
+            if (SizeX < 3)
             {
                 SizeX = 3;
                 SizeY = 3;
             }
-            if (WinSerie> SizeX)
+            if (WinSerie > SizeX)
             {
                 WinSerie = SizeX;
             }
+
             MoveCounter = SizeX * SizeY;
             Field = GetField();
             IntField = GetIntField();
@@ -99,7 +125,9 @@ namespace TestQuick1
                     goto EndPoint;
                 }
                 ReSetCost(Field, ref IntField);
+                ReSetCost(Field, ref Ofield);
                 SetCost(PlayerOneDot, Field, ref IntField);
+                SetCost(PlayerTwoDot, Field, ref Ofield);
                 AIMove(SizeX, SizeY, ref Field, ref IntField, ref Ofield, PlayerTwoDot, ref aiX, ref aiY);
                 lastTwo[0] = aiY;
                 lastTwo[1] = aiX;
@@ -109,19 +137,20 @@ namespace TestQuick1
                     Console.ReadKey();
                     goto EndPoint;
                 }
-                ReSetCost(Field, ref Ofield);
-                SetCost(PlayerTwoDot, Field, ref Ofield);
                 moveCounter--;
                 if (moveCounter == 0)
                 {
                     Status = GameStatus.Draw;
                     goto EndPoint;
                 }
-        EndPoint:;
+            EndPoint:;
             } while (Status == GameStatus.Play);
         }
-        public void PlayTwo()
+        void PlayTwo()
         {
+            Console.Clear();
+            char PlayerOneDot = Symbols[1];
+            char PlayerTwoDot = Symbols[2];
             if (SizeX < 3)
             {
                 SizeX = 3;
@@ -155,7 +184,6 @@ namespace TestQuick1
                 if (WinCheck(PlayerOneDot, lastOne, Field, ref IntField))
                 {
                     EndGame(GameStatus.Win, "Player One");
-                    Console.ReadKey();
                     goto EndPoint;
                 }
                 moveCounter--;
@@ -175,7 +203,6 @@ namespace TestQuick1
                 if (WinCheck(PlayerTwoDot, lastTwo, Field, ref Ofield))
                 {
                     EndGame(GameStatus.Win, "Player Two");
-                    Console.ReadKey();
                     goto EndPoint;
                 }
                 moveCounter--;
@@ -184,7 +211,7 @@ namespace TestQuick1
                     Status = GameStatus.Draw;
                     goto EndPoint;
                 }
-        EndPoint:;
+            EndPoint:;
             } while (Status == GameStatus.Play);
         }
         char[,] GetField() => new char[SizeY, SizeX];
@@ -195,7 +222,7 @@ namespace TestQuick1
             {
                 for (int j = 0; j < str.GetLength(1); j++)
                 {
-                    str[i, j] = Empty;
+                    str[i, j] = Symbols[0];
                 }
             }
         }
@@ -208,31 +235,6 @@ namespace TestQuick1
                     field[i, j] = 0;
                 }
             }
-        }
-        void ExitGame()
-        {
-            Status = GameStatus.Break;
-        }
-        bool EndGame(GameStatus type, string player)
-        {
-            switch (type)
-            {
-                case GameStatus.Win:
-                    Console.WriteLine($"Congratulation!!! Player {player} WIN!!!");
-                    ExitGame();
-                    break;
-                case GameStatus.Draw:
-                    Console.WriteLine("It is DRAW.");
-                    ExitGame();
-                    break;
-                case GameStatus.Break:
-                    Console.WriteLine("Exit game without ending, progress not saved.");
-                    ExitGame();
-                    break;
-                default:
-                    break;
-            }
-            return false;
         }
         void Selector(int maxX, int maxY, ref char[,] chr, ref int[,] IntField, ref int[,] secondField, char dot, ref int X, ref int Y)
         {
@@ -252,7 +254,7 @@ namespace TestQuick1
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                     case ConsoleKey.Enter:
-                        if (chr[Y, X] == Empty)
+                        if (chr[Y, X] == Symbols[0])
                         {
                             SetDot(Y, X, ref IntField, ref secondField, ref chr, dot);
                             PrintBlack(chr[Y, X], Y, X);
@@ -365,6 +367,48 @@ namespace TestQuick1
                 }
             }
         }
+        void ExitGame()
+        {
+            Status = GameStatus.Break;
+            Console.Clear();
+            Console.WriteLine("Press Any Key to return in Menu.");
+        }
+        bool EndGame(GameStatus type, string player)
+        {
+            switch (type)
+            {
+                case GameStatus.Win:
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"Congratulation!!! Player {player} WIN!!!");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ReadKey(false);
+                    ExitGame();
+                    break;
+                case GameStatus.Draw:
+                    Console.BackgroundColor = ConsoleColor.Gray;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine("It is DRAW.");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ReadKey(false);
+                    ExitGame();
+                    break;
+                case GameStatus.Break:
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine("Exit game without ending, progress not saved.");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ReadKey(false);
+                    ExitGame();
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
         void SetDot(int Y, int X, ref int[,] intField, ref int[,] SecondField, ref char[,] Field, char playerDot)
         {
             intField[Y, X] = 0;
@@ -431,7 +475,7 @@ namespace TestQuick1
             {
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    if (field[i, j] == Empty)
+                    if (field[i, j] == Symbols[0])
                     {
                         intField[i, j] = 0;
                     }
@@ -445,7 +489,7 @@ namespace TestQuick1
             {
                 for (int fieldX = 0; fieldX < field.GetLength(1); fieldX++)
                 {
-                    if (field[fieldY, fieldX] == Empty)
+                    if (field[fieldY, fieldX] == Symbols[0])
                     {
                         Dot[0] = fieldY; Dot[1] = fieldX;
                         int NW = GetCostNW(Dot, field, intField, playerChar);
@@ -469,6 +513,10 @@ namespace TestQuick1
                     }
                 }
             }
+        }
+        public bool InRange(int Y, int X, char[,] arr)
+        {
+            return (Y >= 0 & Y < arr.GetLength(0)) & (X >= 0 & X < arr.GetLength(1));
         }
         int GetCostNW(int[] Dot, char[,] field, int[,] intField, char playerChar)
         {
@@ -782,122 +830,6 @@ namespace TestQuick1
             bool up = CheckDiagonalUp(playerChar, lastDot, field, ref intField);
             bool dn = CheckDiagonalDown(playerChar, lastDot, field, ref intField);
             return ver | hor | up | dn;
-        }
-        public bool InRange(int Y, int X, char[,] arr)
-        {
-            return (Y >= 0 & Y < arr.GetLength(0)) & (X >= 0 & X < arr.GetLength(1));
-        }
-    }
-    class Menu
-    {
-        public string[] Entryes { get; set; }
-        int Rows { get; }
-        public void Show()
-        {
-            foreach (var item in Entryes)
-            {
-                Console.WriteLine(item);
-            }
-        }
-        string Select(string[] str, int line) => str[line];
-        public void PrintWhite(string str, int Y, int X)
-        {
-            Console.CursorLeft = X;
-            Console.CursorTop = Y;
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write(str);
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        public void PrintBlack(string str, int Y, int X)
-        {
-            Console.CursorLeft = X;
-            Console.CursorTop = Y;
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(str);
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        public void Selector(int maxX, int maxY, string[] str, ref string selected, ref int[] YX)
-        {
-            ConsoleKeyInfo key;
-            do
-            {
-                key = Console.ReadKey(true);
-                switch (key.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        PrintBlack(str[YX[0]], YX[0], YX[1]);
-                        YX[0] = (YX[0] > 0) ? --YX[0] : YX[0] = maxY - 1;
-                        PrintWhite(str[YX[0]], YX[0], YX[1]);
-                        break;
-                    case ConsoleKey.DownArrow:
-                        PrintBlack(str[YX[0]], YX[0], YX[1]);
-                        YX[0] = (YX[0] < maxY - 1) ? ++YX[0] : YX[0] = 0;
-                        PrintWhite(str[YX[0]], YX[0], YX[1]);
-                        break;
-                    case ConsoleKey.Enter:
-                        selected = Select(str, YX[0] + (YX[1] * Rows));
-                        break;
-                    case ConsoleKey.Escape:
-                        selected = "Exit";
-                        break;
-                    default:
-                        break;
-                }
-            } while ((key.Key != ConsoleKey.Enter) & (key.Key != ConsoleKey.Escape));
-        }
-    }
-    class Programm
-    {
-        static void Main(string[] args)
-        {
-            string selected = null;
-            int[] YX = { 0, 0 };
-            Menu Main = new Menu();
-            Main.Entryes = new string[] { "Один игрок", "Два игрока", "Установить размер поля", "Установить рамер выигрышной строки", "Exit" };
-            Main.Show();
-            Main.PrintWhite(Main.Entryes[YX[0]], YX[0], YX[1]);
-            Crosses crossess = new Crosses();
-            do
-            {
-                Main.Selector(0, Main.Entryes.Length, Main.Entryes, ref selected, ref YX);
-                switch (selected)
-                {
-                    case "Один игрок":
-                        Console.Clear();
-                        crossess.PlayOne();
-                        Console.Clear();
-                        Main.Show();
-                        Main.PrintWhite(Main.Entryes[YX[0]], YX[0], YX[1]);
-                        break;
-                    case "Два игрока":
-                        Console.Clear();
-                        crossess.PlayTwo();
-                        Console.Clear();
-                        Main.Show();
-                        Main.PrintWhite(Main.Entryes[YX[0]], YX[0], YX[1]);
-                        break;
-                    case "Установить размер поля":
-                        Console.Clear();
-                        crossess.SetSize();
-                        Console.Clear();
-                        Main.Show();
-                        Main.PrintWhite(Main.Entryes[YX[0]], YX[0], YX[1]);
-                        break;
-                    case "Установить рамер выигрышной строки":
-                        Console.Clear();
-                        crossess.SetWinSerie();
-                        Console.Clear();
-                        Main.Show();
-                        Main.PrintWhite(Main.Entryes[YX[0]], YX[0], YX[1]);
-                        break;
-                    default:
-                        break;
-                }
-            } while (selected != "Exit");
         }
     }
 }
