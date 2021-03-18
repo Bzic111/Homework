@@ -4,68 +4,209 @@ using System.Collections.Generic;
 
 namespace TestQuick1
 {
-    class Preset
+    enum Mov
     {
-        public int line = 0;
-        public int lineUp = 1;
-        public int lineDown = 21;
-        public int currentLine = 1;
-        public int columnLength = 43;
-        public int index = 0;
-        public int[] Column = { 3, 61 };
-        public Preset()
-        {
-
-        }
+        Up, Down, Left, Right
     }
 
     class Programm
     {
+
         static void Main(string[] args)
         {
-            Preset pr = new Preset();
-            Process[] ListOfProcesses = Process.GetProcesses();
-            List<Process[]> lister = FrameList(ListOfProcesses);
+            int currentLine = 1;
+            int index = 0;
+            int currentColumn = 3;
             int page = 0;
             bool exit = false;
-            string PageSign = $"╡┃Страница {page + 1} из {lister.Count}┃╞";
+            Process[] ListOfProcesses = Process.GetProcesses();
+            List<Process[]> lister = FrameList(ListOfProcesses);
+
             ShowFrame();
             FillFrame(lister, page);
             do
             {
-                Selector(lister, ref page, ref pr, exit);
-
-                //switch (Console.ReadKey(false).Key)
-                //{
-                //    case ConsoleKey.PageDown:
-                //        page++;
-                //        if (page == lister.Count)
-                //        {
-                //            page = 0;
-                //        }
-
-                //        break;
-                //    case ConsoleKey.PageUp:
-                //        page--;
-                //        if (page < 0)
-                //        {
-                //            page = lister.Count - 1;
-                //        }
-                //        break;
-                //    case ConsoleKey.Escape:
-                //        exit = true;
-                //        break;
-                //    default:
-                //        break;
-                //}
-                //FillFrame(lister, page);
+                Selector(lister, ref page,ref index, ref currentLine, ref currentColumn, ref exit);
 
             } while (!exit);
-
-
-
         }
+        static void Selector(List<Process[]> lst, ref int page, ref int index, ref int cursorV, ref int cursorH, ref bool exit)
+        {
+            int liner = 1;
+            int LeftColumn = 3;
+            int RightColumn = 61;
+            Console.CursorVisible = false;
 
+            string PageSign = $"╡Страница {page + 1} из {lst.Count}╞";
+            PrintGreen(PageSign, 5, 0);
+            ConsoleKeyInfo key = Console.ReadKey();
+
+            switch (key.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintBlack(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
+                    if (index > 0)
+                    {
+                        index--;
+                    }
+                    else if (index == 0)
+                    {
+                        index = lst[page].Length - 1;
+                    }
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintWhite(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
+                    break;
+                case ConsoleKey.DownArrow:
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintBlack(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
+                    if (index < lst[page].Length-1)
+                    {
+                        index++;
+                    }
+                    else if(index== lst[page].Length - 1)
+                    {
+                        index = 0;
+                    }
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintWhite(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
+                    break;
+                case ConsoleKey.LeftArrow:
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintBlack(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
+
+                    if(index-20>=0)
+                    {
+                        index -= 20;
+                    }
+                    
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintWhite(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
+                    break;
+                case ConsoleKey.RightArrow:
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintBlack(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
+
+                    if (index + 20 <= lst[page].Length-1)
+                    {
+                        index += 20;
+                    }
+                    else if (true)
+                    {
+                        index = lst[page].Length - 1;
+                    }
+
+                    if (index > 19)
+                    {
+                        cursorH = RightColumn;
+                        cursorV = index - 20;
+                    }
+                    else
+                    {
+                        cursorH = LeftColumn;
+                        cursorV = index;
+                    }
+                    PrintWhite(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner); break;
+                case ConsoleKey.PageUp:
+                    if (page == 0)
+                    {
+                        page = lst.Count - 1;
+                    }
+                    else
+                    {
+                        page--;
+                    }
+                    index = 0;
+                    FillFrame(lst, page);
+                    break;
+                case ConsoleKey.PageDown:
+                    if (page == lst.Count - 1)
+                    {
+
+                        page = 0;
+                    }
+                    else
+                    {
+                         page++;
+                    }
+                    index = 0;
+                    FillFrame(lst, page);
+                    break;
+                case ConsoleKey.Tab:
+                    break;
+                case ConsoleKey.Enter:
+                    break;
+                case ConsoleKey.Escape:
+                    exit = true;
+                    break;
+                case ConsoleKey.Applications:
+                    break;
+                default: break;
+            }
+        }
         static void ShowProcesses()
         {
             Process[] ListOfProcesses = Process.GetProcesses();
@@ -171,159 +312,6 @@ namespace TestQuick1
             return FrameList;
         }
 
-        static void Selector(List<Process[]> lst, ref int page, ref Preset pr, bool exit = false)
-        {
-
-            Console.CursorVisible = false;
-            Console.SetCursorPosition(pr.index, pr.lineUp);
-            string PageSign = $"╡Страница {page + 1} из {lst.Count}╞";
-            PrintGreen(PageSign, 5, 0);
-            ConsoleKeyInfo key = Console.ReadKey();
-            PrintBlack(lst[page][pr.line].ProcessName.PadRight(pr.columnLength + 1, ' ').Remove(pr.columnLength), pr.Column[pr.index], pr.currentLine);
-            switch (key.Key)
-            {
-                case ConsoleKey.UpArrow:
-                    if (lst[page].Length > 20 & pr.index == 0)
-                    {
-                        pr.currentLine--;
-                        if (pr.currentLine < pr.lineUp)
-                        {
-                            pr.currentLine = pr.lineDown;
-                            pr.line += 19;
-                        }
-                        else
-                        {
-                            pr.line--;
-                        }
-                    }
-                    else if (lst[page].Length < 20)
-                    {
-                        pr.currentLine--;
-                        if (pr.currentLine< pr.lineUp)
-                        {
-                            pr.currentLine = lst[page].Length - 1;
-                            pr.line = lst[page].Length - 1;
-                        }
-                    }
-                    break;
-                case ConsoleKey.LeftArrow:
-                    if (lst[page].Length > 20)
-                    {
-                        pr.index--;
-                        if (pr.index < 0)
-                        {
-                            pr.index = pr.Column.Length - 1;
-                            pr.line += 20;
-                        }
-                        else
-                        {
-                            pr.line -= 20;
-                        }
-                    }
-                    else if (lst[page].Length > 20 & lst[page].Length < 40)
-                    {
-                        pr.index--;
-                        if (pr.index < 0)
-                        {
-                            pr.index = pr.Column.Length - 1;
-                            pr.line += 20;
-                            if (pr.line > lst[page].Length - 1)
-                            {
-                                pr.line = lst[page].Length - 1;
-                            }
-                        }
-                        else
-                        {
-                            pr.line -= 20;
-                        }
-                    }
-                    break;
-                case ConsoleKey.RightArrow:
-                    if (lst[page].Length > 20)
-                    {
-                        pr.index++;
-                        if (pr.index == pr.Column.Length)
-                        {
-                            pr.index = 0;
-                            pr.line -= 20;
-                        }
-                        else
-                        {
-                            pr.line += 20;
-                        }
-                    }
-                    else if (lst[page].Length > 20 & lst[page].Length < 40)
-                    {
-                        pr.index++;
-                        if (pr.index == pr.Column.Length - 1)
-                        {
-                            pr.line = lst[page].Length - 1;
-                        }
-                        else if (pr.index == pr.Column.Length)
-                        {
-                            pr.index = 0;
-                            pr.line -= 20;
-                        }
-                    }
-                    break;
-                case ConsoleKey.DownArrow:
-                    pr.currentLine++;
-                    if (pr.currentLine == lst[page].Length & pr.currentLine < pr.lineDown)
-                    {
-                        pr.currentLine = pr.lineUp;
-                        pr.line = 0;
-                    }
-                    else if (pr.currentLine > pr.lineDown)
-                    {
-                        pr.currentLine = pr.lineUp;
-                        pr.line -= 19;
-                    }
-                    else
-                    {
-                        pr.line++;
-                    }
-                    break;
-                case ConsoleKey.PageUp:
-                    page--;
-                    if (page < 0)
-                    {
-                        page = lst.Count - 1;
-                        pr.line = 0;
-                        pr.index = 0;
-                        pr.currentLine = pr.lineUp;
-                    }
-                    Console.SetCursorPosition(5, 0);
-                    Console.Write(PageSign);
-                    FillFrame(lst, page);
-                    PrintWhite(lst[page][pr.line].ProcessName.PadRight(pr.columnLength + 1, ' ').Remove(pr.columnLength), pr.Column[pr.index], pr.currentLine);
-                    break;
-                case ConsoleKey.PageDown:
-                    page++;
-                    if (page == lst.Count)
-                    {
-                        page = 0;
-                        pr.line = 0;
-                        pr.index = 0;
-                        pr.currentLine = pr.lineUp;
-                    }
-                    Console.SetCursorPosition(5, 0);
-                    Console.Write(PageSign);
-                    FillFrame(lst, page);
-                    PrintWhite(lst[page][pr.line].ProcessName.PadRight(pr.columnLength + 1, ' ').Remove(pr.columnLength), pr.Column[pr.index], pr.currentLine);
-                    break;
-                case ConsoleKey.Tab:
-                    break;
-                case ConsoleKey.Enter:
-                    break;
-                case ConsoleKey.Escape:
-                    exit = true;
-                    break;
-                case ConsoleKey.Applications:
-                    break;
-                default: break;
-            }
-            PrintWhite(lst[page][pr.line].ProcessName.PadRight(pr.columnLength + 1, ' ').Remove(pr.columnLength), pr.Column[pr.index], pr.currentLine);
-        }
         static void PrintWhite(string str, int left, int top)
         {
             Console.SetCursorPosition(left, top);
@@ -344,8 +332,7 @@ namespace TestQuick1
         }
         static void PrintRed(string str, int left, int top)
         {
-            Console.CursorLeft = left;
-            Console.CursorTop = top;
+            Console.SetCursorPosition(left, top);
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Write(str);
@@ -354,8 +341,7 @@ namespace TestQuick1
         }
         static void PrintGreen(string str, int left, int top)
         {
-            Console.CursorLeft = left;
-            Console.CursorTop = top;
+            Console.SetCursorPosition(left, top);
             Console.BackgroundColor = ConsoleColor.Green;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Write(str);
