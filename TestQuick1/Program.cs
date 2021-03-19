@@ -26,17 +26,16 @@ namespace TestQuick1
             FillFrame(lister, page);
             do
             {
-                Selector(lister, ref page, ref index, ref currentLine, ref currentColumn, ref exit);
+                Selector(ref lister, ref page, ref index, ref currentLine, ref currentColumn, ref exit);
 
             } while (!exit);
         }
-        static void Selector(List<Process[]> lst, ref int page, ref int index, ref int cursorV, ref int cursorH, ref bool exit)
+        static void Selector(ref List<Process[]> lst, ref int page, ref int index, ref int cursorV, ref int cursorH, ref bool exit)
         {
             int liner = 1;
             int LeftColumn = 3;
             int RightColumn = 61;
             Console.CursorVisible = false;
-            string[] entryes = { "Close", "Kill" };
 
             string PageSign = $"╡Страница {page + 1} из {lst.Count}╞";
             PrintGreen(PageSign, 5, 0);
@@ -195,32 +194,66 @@ namespace TestQuick1
                 case ConsoleKey.Tab:
                     break;
                 case ConsoleKey.Enter:
+                    Console.SetCursorPosition(0, 23);
+                    Console.WriteLine("Введите \"Close\" для нормального завершения процесса или \"Kill\" для снятия процесса:");
+                    ManualKillClose(ref lst, ref page, index);
                     break;
                 case ConsoleKey.Escape:
                     exit = true;
                     break;
                 case ConsoleKey.Applications:
-                    ShowContext(entryes, cursorH, cursorV);
+                    ContextMenuSelector(ref lst, ref page, index, cursorH, cursorV);
                     break;
                 default: break;
             }
         }
-        static void ShowProcesses()
+        static void ManualKillClose(ref List<Process[]> lst, ref int page, int procIndex)
         {
+            bool cycle = true;
+            do
+            {
+                switch (Console.ReadLine())
+                {
+                    case "Close":
+                    case "close":
+                        lst[page][procIndex].CloseMainWindow();
+                        lst[page][procIndex].Close();
+                        cycle = false;
+                        break;
+                    case "Kill":
+                    case "kill":
+                        lst[page][procIndex].Kill();
+                        cycle = false;
+                        break;
+                    case null:
+                    case "":
+                        cycle = false;
+                        break;
+                    default:
+                        break;
+                }
+            } while (cycle);
+            Console.ResetColor();
+            ShowFrame();
             Process[] ListOfProcesses = Process.GetProcesses();
-            List<Process[]> lister = FrameList(ListOfProcesses);
+            lst = FrameList(ListOfProcesses);
+            page = 0;
+            FillFrame(lst, page);
         }
+
         static void ShowFrame()
         {
+            Console.Clear();
             string lineUp = "╔".PadRight(48, '═') + "╤".PadRight(11, '═') + "╦".PadRight(48, '═') + "╤".PadRight(11, '═') + "╗";
             string border = "║".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║".PadRight(48, ' ') + "│".PadRight(11, ' ') + "║";
             string lineDown = "╚".PadRight(48, '═') + "╧".PadRight(11, '═') + "╩".PadRight(48, '═') + "╧".PadRight(11, '═') + "╝";
             Console.WriteLine(lineUp);
-            for (int i = 0; i < 21; i++)
+            for (int i = 0; i < 20; i++)
             {
                 Console.WriteLine(border);
             }
             Console.WriteLine(lineDown);
+
         }
         static void FillFrame(List<Process[]> lst, int page)
         {
@@ -231,8 +264,98 @@ namespace TestQuick1
             int SFBorder = 109;
             int linerLeft = 0;
             int linerRight = 0;
+            //int i = 0;
+            if (lst[page].Length == 40)
+            {
 
-            for (int j = 0; j < lst[page].Length; j++)
+                for (int i = 0; i < lst[page].Length; i++)
+                {
+                    if (linerLeft < 20 & i < 20)
+                    {
+                        Console.SetCursorPosition(FFStart, upper + linerLeft);
+                        Console.Write(lst[page][i].ProcessName.PadRight(44).Remove(43));
+                        Console.CursorLeft = FFBorder;
+                        Console.Write(lst[page][i].Id.ToString().PadLeft(8));
+                        linerLeft++;
+                    }
+                    if (i >= 20 & linerRight < 20)
+                    {
+                        Console.SetCursorPosition(SFStart, upper + linerRight);
+                        Console.Write(lst[page][i].ProcessName.PadRight(44).Remove(43));
+                        Console.SetCursorPosition(SFBorder, upper + linerRight);
+                        Console.Write(lst[page][i].Id.ToString().PadLeft(8));
+                        linerRight++;
+                    }
+                }
+            }
+            else if (lst[page].Length > 20 & lst[page].Length < 40)
+            {
+                for (int i = 0; i < 40; i++)
+                {
+
+                    if (linerLeft < 20 & i < 20)
+                    {
+                        Console.SetCursorPosition(FFStart, upper + linerLeft);
+                        Console.Write(lst[page][i].ProcessName.PadRight(44).Remove(43));
+                        Console.CursorLeft = FFBorder;
+                        Console.Write(lst[page][i].Id.ToString().PadLeft(8));
+                        linerLeft++;
+                    }
+                    else if (i >= 20 & linerRight < 20)
+                    {
+                        if (i < lst[page].Length)
+                        {
+
+                            Console.SetCursorPosition(SFStart, upper + linerRight);
+                            Console.Write(lst[page][i].ProcessName.PadRight(44).Remove(43));
+                            Console.SetCursorPosition(SFBorder, upper + linerRight);
+                            Console.Write(lst[page][i].Id.ToString().PadLeft(8));
+                            linerRight++;
+                        }
+                        else
+                        {
+                            Console.SetCursorPosition(SFStart, upper + linerRight);
+                            Console.Write(" ".PadRight(44, ' ').Remove(43));
+                            Console.SetCursorPosition(SFBorder, upper + linerRight);
+                            Console.Write(" ".PadLeft(8, ' '));
+                            linerRight++;
+                        }
+                    }
+                }
+            }
+            else if (lst[page].Length < 20)
+            {
+                for (int i = 0; i < 40; i++)
+                {
+                    if (i< lst[page].Length&linerLeft<20)
+                    {
+                        Console.SetCursorPosition(FFStart, upper + linerLeft);
+                        Console.Write(lst[page][i].ProcessName.PadRight(44).Remove(43));
+                        Console.CursorLeft = FFBorder;
+                        Console.Write(lst[page][i].Id.ToString().PadLeft(8));
+                        linerLeft++;
+                    }
+                    else if (i>= lst[page].Length&i<20 & linerLeft < 20)
+                    {
+                        Console.SetCursorPosition(FFStart, upper + linerLeft);
+                        Console.Write(" ".PadRight(44, ' ').Remove(43));
+                        Console.SetCursorPosition(FFBorder, upper + linerLeft);
+                        Console.Write(" ".PadLeft(8, ' '));
+                        linerLeft++;
+                    }
+                    else if (i>=20 & linerLeft < 20)
+                    {
+                        Console.SetCursorPosition(SFStart, upper + linerRight);
+                        Console.Write(" ".PadRight(44, ' ').Remove(43));
+                        Console.SetCursorPosition(SFBorder, upper + linerRight);
+                        Console.Write(" ".PadLeft(8, ' '));
+                        linerRight++;
+                    }
+                }
+            }
+
+            /*
+            for (int j = 0; j <= lst[page].Length - 1; j++)
             {
                 if (j < 20)
                 {
@@ -241,7 +364,7 @@ namespace TestQuick1
                     Console.CursorLeft = FFBorder;
                     Console.Write(lst[page][j].Id.ToString().PadLeft(8));
                     linerLeft++;
-                    if (j == lst[page].Length - 1 & lst[page].Length < 20)
+                    if (j == lst[page].Length - 1 & lst[page].Length <= 20)
                     {
                         for (int i = 0; i < 20 - lst[page].Length; i++)
                         {
@@ -261,27 +384,45 @@ namespace TestQuick1
                         }
                     }
                 }
-                else
+                else if (j >= 20 & j < lst[page].Length)
                 {
                     Console.SetCursorPosition(SFStart, upper + linerRight);
                     Console.Write(lst[page][j].ProcessName.PadRight(44).Remove(43));
                     Console.SetCursorPosition(SFBorder, upper + linerRight);
                     Console.Write(lst[page][j].Id.ToString().PadLeft(8));
                     linerRight++;
-                    if (lst[page].Length < 40)
+                    for (int i = 0; i < 40 - lst[page].Length; i++)
                     {
-                        for (int i = 0; i < 40 - lst[page].Length; i++)
-                        {
 
-                            Console.SetCursorPosition(SFStart, upper + linerRight);
-                            Console.Write(" ".PadRight(44, ' ').Remove(43));
-                            Console.SetCursorPosition(SFBorder, upper + linerRight);
-                            Console.Write(" ".PadLeft(8, ' '));
-                            linerRight++;
-                        }
+                        Console.SetCursorPosition(SFStart, upper + linerRight);
+                        Console.Write(" ".PadRight(44, ' ').Remove(43));
+                        Console.SetCursorPosition(SFBorder, upper + linerRight);
+                        Console.Write(" ".PadLeft(8, ' '));
+                        linerRight++;
                     }
                 }
+                //else if(j<40)
+                //{
+                //    Console.SetCursorPosition(SFStart, upper + linerRight);
+                //    Console.Write(lst[page][j].ProcessName.PadRight(44).Remove(43));
+                //    Console.SetCursorPosition(SFBorder, upper + linerRight);
+                //    Console.Write(lst[page][j].Id.ToString().PadLeft(8));
+                //    linerRight++;
+                //    if (j == lst[page].Length - 1 & lst[page].Length < 40)
+                //    {
+                //        for (int i = 0; i < 40 - lst[page].Length; i++)
+                //        {
+
+                //            Console.SetCursorPosition(SFStart, upper + linerRight);
+                //            Console.Write(" ".PadRight(44, ' ').Remove(43));
+                //            Console.SetCursorPosition(SFBorder, upper + linerRight);
+                //            Console.Write(" ".PadLeft(8, ' '));
+                //            linerRight++;
+                //        }
+                //    }
+                //}
             }
+            */
         }
         static List<Process[]> FrameList(Process[] listOfProcesses)
         {
@@ -310,10 +451,10 @@ namespace TestQuick1
             return FrameList;
         }
 
-        static void ShowContext(string[] entryes,int cursorH,int cursorV)
+        static void ShowContext(string[] entryes, int cursorH, int cursorV)
         {
             int currentLeft = cursorH;
-            int currentTop = cursorV+2;
+            int currentTop = cursorV + 2;
             for (int i = 0; i < entryes.Length; i++)
             {
                 Console.BackgroundColor = ConsoleColor.Gray;
@@ -323,22 +464,29 @@ namespace TestQuick1
             }
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(currentLeft, currentTop);
         }
-        static void ContextMenuSelector(Process proc)
+        static void ContextMenuSelector(ref List<Process[]> lst, ref int page, int procIndex, int cursorH, int cursorV)
         {
             int index = 0;
-            int currentLeft = Console.CursorLeft;
-            int currentTop = Console.CursorTop;
             bool cycle = true;
-            string[] entryes = { "Close", "Kill" };
-            //ShowContext(entryes);
+            string[] entryes = { "Close", "Kill " };
+            ShowContext(entryes, cursorH, cursorV);
+            Console.SetCursorPosition(cursorH + 10, cursorV + 2);
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(entryes[index]);
             do
             {
+                Console.CursorLeft = cursorH + 10;
                 switch (Console.ReadKey().Key)
                 {
                     case ConsoleKey.UpArrow:
+                        Console.CursorLeft = cursorH + 10;
+                        Console.BackgroundColor = ConsoleColor.Gray;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write(entryes[index]);
                         index--;
-                        
                         if (index < 0)
                         {
                             index = entryes.Length - 1;
@@ -346,43 +494,72 @@ namespace TestQuick1
                         }
                         else
                         {
-                            Console.CursorTop += 1;
+                            Console.CursorTop--;
                         }
+                        Console.CursorLeft = cursorH + 10;
+                        Console.BackgroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(entryes[index]);
                         break;
                     case ConsoleKey.DownArrow:
+                        Console.CursorLeft = cursorH + 10;
+                        Console.BackgroundColor = ConsoleColor.Gray;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write(entryes[index]);
                         index++;
                         if (index == entryes.Length)
                         {
                             index = 0;
+                            Console.CursorTop -= entryes.Length - 1;
                         }
+                        else
+                        {
+                            Console.CursorTop++;
+                        }
+                        Console.CursorLeft = cursorH + 10;
+                        Console.BackgroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(entryes[index]);
                         break;
                     case ConsoleKey.Enter:
-                        ContextMenuEnter(proc, index);
+                        ContextMenuEnter(ref lst, ref page, procIndex, index);
                         break;
                     case ConsoleKey.Escape:
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Console.ForegroundColor = ConsoleColor.White;
+                        FillFrame(lst, page);
                         cycle = false;
                         break;
                     default:
                         break;
                 }
-
+                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.Black;
             } while (cycle);
-            Console.Write("Kill");
+            Console.CursorLeft = cursorH;
+            Console.CursorTop = cursorV;
         }
-        static void ContextMenuEnter(Process proc, int entry)
+        static void ContextMenuEnter(ref List<Process[]> lst, ref int page, int procIndex, int entry)
         {
 
             switch (entry)
             {
                 case 0:
-                    proc.Close();
+                    lst[page][procIndex].CloseMainWindow();
+                    lst[page][procIndex].Close();
                     break;
                 case 1:
-                    proc.Kill();
+                    lst[page][procIndex].Kill();
                     break;
                 default:
                     break;
             }
+            Console.ResetColor();
+            ShowFrame();
+            Process[] ListOfProcesses = Process.GetProcesses();
+            lst = FrameList(ListOfProcesses);
+            page = 0;
+            FillFrame(lst, page);
         }
 
         static void PrintWhite(string str, int left, int top)
