@@ -26,7 +26,7 @@ namespace TestQuick1
             FillFrame(lister, page);
             do
             {
-                Selector(lister, ref page,ref index, ref currentLine, ref currentColumn, ref exit);
+                Selector(lister, ref page, ref index, ref currentLine, ref currentColumn, ref exit);
 
             } while (!exit);
         }
@@ -36,6 +36,7 @@ namespace TestQuick1
             int LeftColumn = 3;
             int RightColumn = 61;
             Console.CursorVisible = false;
+            string[] entryes = { "Close", "Kill" };
 
             string PageSign = $"╡Страница {page + 1} из {lst.Count}╞";
             PrintGreen(PageSign, 5, 0);
@@ -87,11 +88,11 @@ namespace TestQuick1
                         cursorV = index;
                     }
                     PrintBlack(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
-                    if (index < lst[page].Length-1)
+                    if (index < lst[page].Length - 1)
                     {
                         index++;
                     }
-                    else if(index== lst[page].Length - 1)
+                    else if (index == lst[page].Length - 1)
                     {
                         index = 0;
                     }
@@ -119,12 +120,10 @@ namespace TestQuick1
                         cursorV = index;
                     }
                     PrintBlack(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
-
-                    if(index-20>=0)
+                    if (index - 20 >= 0)
                     {
                         index -= 20;
                     }
-                    
                     if (index > 19)
                     {
                         cursorH = RightColumn;
@@ -149,8 +148,7 @@ namespace TestQuick1
                         cursorV = index;
                     }
                     PrintBlack(lst[page][index].ProcessName.PadRight(44, ' ').Remove(43), cursorH, cursorV + liner);
-
-                    if (index + 20 <= lst[page].Length-1)
+                    if (index + 20 <= lst[page].Length - 1)
                     {
                         index += 20;
                     }
@@ -158,7 +156,6 @@ namespace TestQuick1
                     {
                         index = lst[page].Length - 1;
                     }
-
                     if (index > 19)
                     {
                         cursorH = RightColumn;
@@ -190,7 +187,7 @@ namespace TestQuick1
                     }
                     else
                     {
-                         page++;
+                        page++;
                     }
                     index = 0;
                     FillFrame(lst, page);
@@ -203,6 +200,7 @@ namespace TestQuick1
                     exit = true;
                     break;
                 case ConsoleKey.Applications:
+                    ShowContext(entryes, cursorH, cursorV);
                     break;
                 default: break;
             }
@@ -310,6 +308,81 @@ namespace TestQuick1
 
             }
             return FrameList;
+        }
+
+        static void ShowContext(string[] entryes,int cursorH,int cursorV)
+        {
+            int currentLeft = cursorH;
+            int currentTop = cursorV+2;
+            for (int i = 0; i < entryes.Length; i++)
+            {
+                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(currentLeft + 10, currentTop + i);
+                Console.Write(entryes[i]);
+            }
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        static void ContextMenuSelector(Process proc)
+        {
+            int index = 0;
+            int currentLeft = Console.CursorLeft;
+            int currentTop = Console.CursorTop;
+            bool cycle = true;
+            string[] entryes = { "Close", "Kill" };
+            //ShowContext(entryes);
+            do
+            {
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        index--;
+                        
+                        if (index < 0)
+                        {
+                            index = entryes.Length - 1;
+                            Console.CursorTop += entryes.Length - 1;
+                        }
+                        else
+                        {
+                            Console.CursorTop += 1;
+                        }
+                        break;
+                    case ConsoleKey.DownArrow:
+                        index++;
+                        if (index == entryes.Length)
+                        {
+                            index = 0;
+                        }
+                        break;
+                    case ConsoleKey.Enter:
+                        ContextMenuEnter(proc, index);
+                        break;
+                    case ConsoleKey.Escape:
+                        cycle = false;
+                        break;
+                    default:
+                        break;
+                }
+
+            } while (cycle);
+            Console.Write("Kill");
+        }
+        static void ContextMenuEnter(Process proc, int entry)
+        {
+
+            switch (entry)
+            {
+                case 0:
+                    proc.Close();
+                    break;
+                case 1:
+                    proc.Kill();
+                    break;
+                default:
+                    break;
+            }
         }
 
         static void PrintWhite(string str, int left, int top)

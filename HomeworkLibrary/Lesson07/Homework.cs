@@ -4,15 +4,16 @@ using System.Text;
 
 namespace Lesson07
 {
-    enum GameStatus
-    {
-        Win,
-        Draw,
-        Break,
-        Play
-    }
+    
     public class HomeWork : MenuSpace.Work
     {
+        enum GameStatus
+        {
+            Win,
+            Draw,
+            Break,
+            Play
+        }
         public new MenuSpace.Menu.Runner[] AllRuns { get; }
         string[] Names { get; } = { "Один игрок", "Два игрока", "Установить размер поля", "Установить рамер выигрышной строки"};
         public override string[] GetNames() { return this.Names; }
