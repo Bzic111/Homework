@@ -15,7 +15,8 @@ namespace MainProgramHomework
                 new Lesson04.HomeWork(),
                 new Lesson05.HomeWork(),
                 new Lesson06.HomeWork(),
-                new Lesson07.HomeWork()
+                new Lesson07.HomeWork(),
+                new Lesson08.HomeWork()
             };
             mainMenu.MainMenu(works, "Homework");
         }
