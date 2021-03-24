@@ -11,7 +11,7 @@ namespace Lesson04
             "Метод по определению времени года",
             "Рекурсия Фибоначчи"
             };
-        public new MenuSpace.Menu.Runner[] AllRuns;
+        new MenuSpace.Menu.Runner[] AllRuns;
         public override MenuSpace.Menu.Runner[] GetRunners()
         {
             return AllRuns;

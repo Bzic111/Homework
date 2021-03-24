@@ -3,7 +3,7 @@ namespace Lesson03
 {
     public class HomeWork : MenuSpace.Work
     {
-        public string[] Names { get; } =
+        string[] Names { get; } =
             {
             "Вывод массива по диагонали.",
             "Список контактов.",

@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Lesson01.HomeWork">
+    <Position X="1.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAQAAAAAAAAAAAAAAACAAAAAACAAEAAAAAAA=</HashCode>
+      <FileName>Lesson01\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson02.HomeWork">
+    <Position X="5.75" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Lesson02.HomeWork.Mon" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Lesson02\Homework.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Lesson02.HomeWork.Months" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Lesson02\Homework.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Lesson02.HomeWork.Days" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Lesson02\Homework.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Lesson02.HomeWork.Time" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Lesson02\Homework.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QAACAAIAAAAAAAAgAAAAAARAACQAAAAACAABAAAAAgI=</HashCode>
+      <FileName>Lesson02\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson03.HomeWork">
+    <Position X="10.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgEAAAAACCAAAAAAAAAAAACAAAEAACQAQAQAgAIA=</HashCode>
+      <FileName>Lesson03\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson03.SelectorUDRL" Collapsed="true">
+    <Position X="8.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAIAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lesson03\SelectorUDRL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson03.Ships">
+    <Position X="8.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAgAABAAAAAAAAAIAAAQAIAAEAAAAAAQAAAAA=</HashCode>
+      <FileName>Lesson03\Ships.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson04.HomeWork">
+    <Position X="3.5" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Lesson04.HomeWork.Months" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Lesson04\Homework.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAASgAAAAAAAAADAAAAAAAAQAKAAAAAICgAAAAAEAAE=</HashCode>
+      <FileName>Lesson04\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson05.HomeWork">
+    <Position X="8" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAAAAAIAAAAAAAAAAACCAAAAACAAIAAAAAAA=</HashCode>
+      <FileName>Lesson05\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson06.HomeWork">
+    <Position X="12.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACgAAAAEAgBAAAAEACAgAgACAAAAACCgAAAAAAAAA=</HashCode>
+      <FileName>Lesson06\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson06.MyArrayDataException">
+    <Position X="5.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lesson06\MyArrayDataException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson06.MyArraySizeException">
+    <Position X="5.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lesson06\MyArraySizeException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson06.Person" Collapsed="true">
+    <Position X="10.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAIAgAEAAQAAAACAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lesson06\Person.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson06.ToDo">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lesson06\ToDo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson07.HomeWork">
+    <Position X="14.75" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Lesson07.HomeWork.GameStatus" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Lesson07\Homework.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>SoADhIAEgRFCEAACAAAKDIAAECAFAIgQKgAIARASgAA=</HashCode>
+      <FileName>Lesson07\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson08.HomeWork">
+    <Position X="17" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgEAAAgAAAAAAAAAAAAAAACAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Lesson08\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lesson08.Frame">
+    <Position X="7" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Lesson08\Homework.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuSpace.Menu">
+    <Position X="3.5" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="MenuSpace.Menu.Cycler">
+        <TypeIdentifier>
+          <NewMemberFileName>MenuSpace\Menu.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="MenuSpace.Menu.Runner">
+        <TypeIdentifier>
+          <NewMemberFileName>MenuSpace\Menu.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAACAAAAQAAAEAAAAAAAAAAAEACA=</HashCode>
+      <FileName>MenuSpace\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuSpace.Collection">
+    <Position X="3.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MenuSpace\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuSpace.Work">
+    <Position X="1.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAAAAAAAAAAAAAAAAACAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>MenuSpace\Work.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

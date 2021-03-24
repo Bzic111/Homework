@@ -3,7 +3,7 @@ namespace Lesson02
 {
     public class HomeWork : MenuSpace.Work
     {
-        public MenuSpace.Menu.Runner[] AllRuns { get; }
+        new MenuSpace.Menu.Runner[] AllRuns { get; }
         public override MenuSpace.Menu.Runner[] GetRunners()
         {
             return AllRuns;
